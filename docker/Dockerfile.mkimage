@@ -1,0 +1,13 @@
+FROM alpine:3.16
+
+RUN apk add alpine-sdk build-base apk-tools alpine-conf busybox fakeroot squashfs-tools sudo xz zstd
+RUN apk update
+
+# trust aarch64 keys
+RUN cp /usr/share/apk/keys/aarch64/* /etc/apk/keys/
+
+# give root user a signing key
+RUN abuild-keygen -i -a -n
+
+# use this repos mkimage extensions for the root user
+RUN ln -sf /work/mkimage /root/.mkimage

@@ -1,0 +1,26 @@
+#!/bin/sh
+
+set -euo pipefail
+
+script=$(readlink -f "$0")
+scriptdir=$(dirname "$script")
+repo=$(realpath "$scriptdir/..")
+
+build="$repo/build/mkimage"
+mkdir -p "$build"
+
+#uid=$(stat -c %u "$repo")
+#gid=$(stat -c %g "$repo")
+
+podman build \
+	-f "$repo/docker/Dockerfile.mkimage" \
+	--iidfile "$build/dockeriid" \
+	"$repo/docker"
+iid=$(cat "$build/dockeriid")
+
+exec podman run \
+	--rm \
+	-v "$repo:/work" \
+	-w /work \
+	"$iid" \
+	/work/scripts/mkimage "$@"
