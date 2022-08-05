@@ -1,0 +1,4 @@
+[submodule "third_party/aports"]
+	path = third_party/aports
+	url = https://github.com/alpinelinux/aports.git
+	branch = master
