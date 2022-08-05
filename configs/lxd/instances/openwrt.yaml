@@ -1,0 +1,28 @@
+devices:
+  config:
+    path: /media/config
+    readonly: "true"
+    shift: "true"
+    source: /media/config/openwrt
+    type: disk
+  eth0:
+    type: none
+  lan0:
+    name: lan0
+    nictype: macvlan
+    parent: lan0
+    type: nic
+  ppp:
+    source: /dev/ppp
+    type: unix-char
+  tun:
+    path: /dev/net/tun
+    type: unix-char
+  wan0:
+    name: wan0
+    nictype: physical
+    parent: wan0
+    type: nic
+
+config:
+  linux.kernel_modules: ip_tables,ip6_tables,pppoe,br_netfilter,act_ipt,sch_cake,sch_ingress,act_mirred,cls_fw,cls_flow,cls_u32,sch_htb,sch_hfsc,wireguard,tun,sit
