@@ -1,0 +1,144 @@
+devices:
+  config:
+    path: /media/config
+    readonly: "true"
+    shift: "true"
+    source: /media/config/pihole
+    type: disk
+  eth0:
+    hwaddr: 00:16:3e:ae:78:61
+    nictype: macvlan
+    parent: lan0
+    type: nic
+
+config:
+  cloud-init.user-data: |
+    #cloud-config
+    packages:
+      - apt-listchanges
+      - curl
+      - lighttpd-mod-openssl
+      - nftables
+      - unattended-upgrades
+
+    write_files:
+      - path: /etc/pihole/setupVars.conf
+        permissions: '0644'
+        content: |
+          PIHOLE_INTERFACE=eth0
+          PIHOLE_DNS_1=8.8.8.8
+          PIHOLE_DNS_2=8.8.4.4
+          QUERY_LOGGING=true
+          INSTALL_WEB_SERVER=true
+          INSTALL_WEB_INTERFACE=true
+          LIGHTTPD_ENABLED=true
+          CACHE_SIZE=10000
+          DNS_FQDN_REQUIRED=true
+          DNS_BOGUS_PRIV=true
+          DNSMASQ_LISTENING=local
+          BLOCKING_ENABLED=true
+          REV_SERVER=true
+          REV_SERVER_CIDR=192.168.0.0/16
+          REV_SERVER_TARGET=192.168.43.1
+          REV_SERVER_DOMAIN=home.arpa
+
+      - path: /etc/nftables.conf
+        permissions: '0755'
+        content: |
+          #!/usr/sbin/nft -f
+
+          flush ruleset
+
+          table inet filter {
+            chain input {
+              type filter hook input priority 0; policy drop;
+
+              ct state vmap { established : accept, related : accept, invalid : drop }
+              iifname lo accept
+              icmpv6 type { nd-router-solicit, nd-router-advert, nd-neighbor-solicit, nd-neighbor-advert } accept
+
+              meta l4proto { tcp, udp } th dport 53 accept comment "DNS"
+              tcp dport { 80, 443 } accept comment "webservice"
+            }
+
+            chain output {
+              type filter hook output priority 0; policy accept;
+            }
+
+            chain forward {
+              type filter hook forward priority 0; policy drop;
+            }
+          }
+
+      - path: /etc/systemd/system/lighttpd.service.d/override.conf
+        permissions: '0644'
+        content: |
+          [Unit]
+          Wants=lighttpd-keys.service
+          After=lighttpd-keys.service
+
+      - path: /lib/systemd/system/lighttpd-keys.service
+        permissions: '0644'
+        content: |
+          [Unit]
+          Description=SSL key installation
+
+          [Service]
+          ExecStart=mkdir -p /run/lighttpd
+          ExecStart=bash -euc 'cp /media/config/*.pem /run/lighttpd/'
+          ExecStart=bash -euc 'chown www-data:www-data /run/lighttpd/*.pem'
+          Type=oneshot
+
+      # based on: https://discourse.pi-hole.net/t/enabling-https-for-your-pi-hole-web-interface/5771
+      - path: /etc/lighttpd/external.conf
+        permissions: '0644'
+        content: |
+          server.modules += ( "mod_openssl" )
+
+          $HTTP["host"] == "pihole.home.arpa" {
+            # Ensure the Pi-hole Block Page knows that this is not a blocked domain
+            setenv.add-environment = ("fqdn" => "true")
+
+            # Enable the SSL engine with a LE cert, only for this specific host
+            $SERVER["socket"] == ":443" {
+              ssl.engine = "enable"
+              ssl.pemfile = "/run/lighttpd/combined.pem"
+              ssl.ca-file =  "/run/lighttpd/ca.pem"
+              ssl.honor-cipher-order = "enable"
+              ssl.cipher-list = "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH"
+            }
+
+            # Redirect HTTP to HTTPS
+            $HTTP["scheme"] == "http" {
+              $HTTP["host"] =~ ".*" {
+                url.redirect = (".*" => "https://%0$0")
+              }
+            }
+          }
+
+      - path: /etc/systemd/system/apt-daily-upgrade.service.d/override.conf
+        permissions: '0644'
+        content: |
+          [Service]
+          ExecStartPost=systemctl start --no-block pihole-update.service
+
+      - path: /lib/systemd/system/pihole-update.service
+        permissions: '0644'
+        content: |
+          [Unit]
+          Description=pihole update
+          ConditionACPower=true
+          After=network.target network-online.target systemd-networkd.service NetworkManager.service connman.service
+
+          [Service]
+          Type=oneshot
+          ExecStartPre=-/usr/lib/apt/apt-helper wait-online
+          ExecStart=pihole -up
+          KillMode=process
+          TimeoutStopSec=900
+
+    runcmd:
+      - systemctl daemon-reload
+      - systemctl enable nftables
+      - systemctl start nftables
+      - curl -sSL https://install.pi-hole.net | bash /dev/stdin --unattended

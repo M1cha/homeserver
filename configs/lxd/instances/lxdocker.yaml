@@ -1,0 +1,114 @@
+devices:
+  config:
+    path: /media/config
+    readonly: "true"
+    shift: "true"
+    source: /media/config/lxdocker
+    type: disk
+  specs:
+    path: /etc/lxdocker
+    readonly: "true"
+    shift: "true"
+    source: /media/config/public/lxdocker-specs
+    type: disk
+
+config:
+  cloud-init.user-data: |
+    #cloud-config
+    packages:
+      - apt-listchanges
+      # this is needed so lxdocker can copy it to the rootfs for the init script
+      - busybox-static
+      - curl
+      - jq
+      - nftables
+      - squashfs-tools
+      # this is needed so lxdocker can copy the default.script to the rootfs
+      - udhcpc
+      - unattended-upgrades
+
+    write_files:
+      - path: /etc/nftables.conf
+        permissions: '0755'
+        content: |
+          #!/usr/sbin/nft -f
+
+          flush ruleset
+
+          table inet filter {
+            chain input {
+              type filter hook input priority 0; policy drop;
+
+              ct state vmap { established : accept, related : accept, invalid : drop }
+              iifname lo accept
+              icmpv6 type { nd-router-solicit, nd-router-advert, nd-neighbor-solicit, nd-neighbor-advert } accept
+
+              tcp dport 443 accept comment "imgserver"
+            }
+
+            chain output {
+              type filter hook output priority 0; policy accept;
+            }
+
+            chain forward {
+              type filter hook forward priority 0; policy drop;
+            }
+          }
+
+      - path: /lib/systemd/system/lxdocker.timer
+        permissions: '0644'
+        content: |
+          [Unit]
+          Description=Daily lxdocker update
+          After=apt-daily.timer
+
+          [Timer]
+          OnCalendar=*-*-* 3:00
+          RandomizedDelaySec=60m
+          Persistent=true
+
+          [Install]
+          WantedBy=timers.target
+
+      - path: /lib/systemd/system/lxdocker.service
+        permissions: '0644'
+        content: |
+          [Unit]
+          Description=lxdocker update
+          After=network.target network-online.target
+
+          [Service]
+          Type=oneshot
+          ExecStart=lxdocker --cache /var/lib/lxdocker/cache --lxdimages /var/lib/lxdocker/images --specs /etc/lxdocker
+          KillMode=process
+
+      - path: /lib/systemd/system/imgserver.service
+        permissions: '0644'
+        content: |
+          [Unit]
+          Description=lxdocker image server
+          After=network.target network-online.target
+
+          [Service]
+          Type=simple
+          ExecStartPre=mkdir -p /var/lib/lxdocker
+          ExecStart=imgserver --cert /media/config/cert.pem --key /media/config/key.pem --lxdimages /var/lib/lxdocker/images --address :443
+          KillMode=process
+
+          [Install]
+          WantedBy=multi-user.target
+
+    runcmd:
+      - curl
+          $(curl -s https://api.github.com/repos/m1cha/lxdocker/releases/latest
+            | jq -r '.assets[] | select(.name|match("^lxdocker-linux-arm64.tar.gz$")) | .browser_download_url')
+          -L
+          | tar -C /usr/bin -xf-
+
+      - systemctl daemon-reload
+
+      - systemctl enable nftables.service
+      - systemctl start nftables.service
+
+      - systemctl enable imgserver.service lxdocker.timer
+      - systemctl start imgserver.service lxdocker.timer

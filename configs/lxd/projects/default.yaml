@@ -1,0 +1,7 @@
+config:
+  features.images: "true"
+  features.networks: "true"
+  features.profiles: "true"
+  features.storage.volumes: "true"
+description: Default LXD project
+name: default

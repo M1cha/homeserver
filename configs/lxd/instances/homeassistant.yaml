@@ -1,0 +1,15 @@
+devices:
+  config:
+    path: /config
+    pool: default
+    source: homeassistant-config
+    type: disk
+  roconfig:
+    path: /media/config
+    readonly: "true"
+    shift: "true"
+    source: /media/config/homeassistant
+    type: disk
+  zigbeetty:
+    source: /dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0
+    type: unix-char

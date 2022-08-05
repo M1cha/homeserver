@@ -1,0 +1,31 @@
+#!/usr/bin/busybox ash
+
+set -euo pipefail
+
+script=$(readlink -f "$0")
+scriptdir=$(dirname "$script")
+
+cd "$scriptdir"
+
+alias lxc='ssh root@192.168.43.2 lxc'
+
+lxc config show > config.yml
+
+networks=$(lxc network list --format yaml | yq -r '.[] | select(.managed) | .name')
+profiles=$(lxc profile list --format yaml | yq -r '.[].name')
+projects=$(lxc project list --format yaml | yq -r '.[].name')
+
+mkdir -p networks
+for network in $networks ; do
+	lxc network show "$network" | yq 'del(.used_by)' > "networks/$network.yaml"
+done
+
+mkdir -p projects
+for project in $projects ; do
+	lxc project show "$project" | yq 'del(.used_by)' > "projects/$project.yaml"
+done
+
+mkdir -p profiles
+for profile in $profiles ; do
+	lxc profile show "$profile" | yq 'del(.used_by)' > "profiles/$profile.yaml"
+done
