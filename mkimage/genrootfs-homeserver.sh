@@ -106,7 +106,7 @@ EOF
 
 makefile root:root 0644 "$tmp"/etc/resolv.conf <<EOF
 nameserver 8.8.8.8
-nameserver 8.8.4.4
+nameserver 192.168.43.1
 EOF
 
 # We never want anybody to communicate with the host interface because the host
