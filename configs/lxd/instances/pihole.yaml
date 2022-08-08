@@ -35,7 +35,7 @@ config:
           CACHE_SIZE=10000
           DNS_FQDN_REQUIRED=true
           DNS_BOGUS_PRIV=true
-          DNSMASQ_LISTENING=local
+          DNSMASQ_LISTENING=single
           BLOCKING_ENABLED=true
           REV_SERVER=true
           REV_SERVER_CIDR=192.168.0.0/16
