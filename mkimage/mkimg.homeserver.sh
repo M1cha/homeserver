@@ -21,16 +21,23 @@ build_homeserver() {
 		$_pkgs)
 }
 
+makearray() {
+	local arr=""
+	while IFS= read -r name; do
+		name=$(echo "$name" | sed 's/^\s*#.*$//g' | xargs)
+
+		if [ -z "$name" ]; then
+			continue;
+		fi
+
+		arr="$arr $name"
+	done
+
+	echo "$arr"
+}
+
 profile_homeserver() {
-while IFS= read -r name; do
-	name=$(echo "$name" | sed 's/^\s*#.*$//g' | xargs)
-
-	if [ -z "$name" ]; then
-		continue;
-	fi
-
-	rootfs_pkgs="$rootfs_pkgs $name"
-done <<	EOF
+rootfs_pkgs=$(makearray << EOF
 	# from profile_base
 	alpine-base
 	busybox
@@ -72,6 +79,7 @@ done <<	EOF
 	zfs
 	zfs-udev
 EOF
+)
 
 	title="homeserver"
 	desc="m1chas homeserver image"
