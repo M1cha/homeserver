@@ -49,6 +49,8 @@ if [ -z "$out_dir" ]; then
 	exit 1
 fi
 
+pkgs="$@"
+
 mkdir -p "$tmp"/etc/mkinitfs
 makefile root:root 0644 "$tmp"/etc/mkinitfs/mkinitfs.conf <<EOF
 features="base mmc nanopi-r4s squashfs"
@@ -70,7 +72,7 @@ EOF
 ${APK:-apk} add --keys-dir "$keys_dir" --no-cache \
 	--repositories-file "$repositories_file" \
 	--root "$tmp" --initdb --arch "$arch" \
-	"$@" linux-lts linux-firmware-none linux-firmware-rtl_nic xtables-addons-lts zfs-lts
+	$pkgs
 
 makefile root:root 0644 "$tmp"/etc/hostname <<EOF
 $hostname
@@ -355,7 +357,7 @@ EOF
 
 mkdir -p "$tmp"/etc/apk
 echo -n "" | makefile root:root 0644 "$tmp"/etc/apk/world
-for pkg in "$@"; do
+for pkg in $pkgs; do
 	echo "$pkg" >> "$tmp"/etc/apk/world
 done
 
