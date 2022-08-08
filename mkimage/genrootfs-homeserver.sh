@@ -32,14 +32,16 @@ arch="$(apk --print-arch)"
 repositories_file=/etc/apk/repositories
 keys_dir=/etc/apk/keys
 hostname=alpine
+initfs_features=""
 
-while getopts "a:r:k:o:h:" opt; do
+while getopts "a:r:k:o:h:F:" opt; do
 	case $opt in
 	a) arch="$OPTARG";;
 	r) repositories_file="$OPTARG";;
 	k) keys_dir="$OPTARG";;
 	o) out_dir="$OPTARG";;
 	h) hostname="$OPTARG";;
+	F) initfs_features="$OPTARG";;
 	esac
 done
 shift $(( $OPTIND - 1))
@@ -53,7 +55,7 @@ pkgs="$@"
 
 mkdir -p "$tmp"/etc/mkinitfs
 makefile root:root 0644 "$tmp"/etc/mkinitfs/mkinitfs.conf <<EOF
-features="base mmc nanopi-r4s squashfs"
+features="$initfs_features"
 EOF
 
 # those are needed to load the sdcard driver

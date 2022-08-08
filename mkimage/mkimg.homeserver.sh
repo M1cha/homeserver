@@ -16,6 +16,7 @@ build_homeserver() {
 		-o "$DESTDIR" \
 		-a "$ARCH" \
 		-h "$hostname" \
+		-F "$initfs_features" \
 		$_pkgs)
 }
 
@@ -76,6 +77,7 @@ EOF
 	image_ext="tar.gz"
 	arch="aarch64"
 	hostname="lxd"
+	initfs_features="base mmc nanopi-r4s squashfs"
 	rootfs_kernel_flavor="lts"
 	rootfs_kernel_addons="xtables-addons zfs"
 }
