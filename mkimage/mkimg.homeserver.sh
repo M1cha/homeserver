@@ -3,7 +3,7 @@ section_homeserver() {
 }
 
 build_homeserver() {
-	local _script=$(readlink -f "$HOME/.mkimage/genrootfs-homeserver.sh")
+	local _script=$(readlink -f "$HOME/.mkimage/genrootfs.common.sh")
 	local _pkgs="$rootfs_pkgs linux-$rootfs_kernel_flavor"
 
 	local _a
@@ -17,6 +17,7 @@ build_homeserver() {
 		-a "$ARCH" \
 		-h "$hostname" \
 		-F "$initfs_features" \
+		-x "$rootfs_extension" \
 		$_pkgs)
 }
 
@@ -80,4 +81,5 @@ EOF
 	initfs_features="base mmc nanopi-r4s squashfs"
 	rootfs_kernel_flavor="lts"
 	rootfs_kernel_addons="xtables-addons zfs"
+	rootfs_extension="homeserver"
 }
