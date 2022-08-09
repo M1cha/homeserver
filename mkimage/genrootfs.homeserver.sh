@@ -55,7 +55,7 @@ net.ipv6.conf.lan0.disable_ipv6=1
 EOF
 
 # This serves two purposes:
-# 1) give the lan and wan ports generic names so we don't have to device
+# 1) give the lan and wan ports generic names so we don't have to use device
 #    specific names or MACs anywhere else.
 # 2) swap WAN and LAN ports because R4S' LAN port uses a pretty bad realtek NIC
 #    that can't handle the macvlan setup.
