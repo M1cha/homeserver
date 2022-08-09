@@ -36,8 +36,8 @@ makearray() {
 	echo "$arr"
 }
 
-profile_homeserver() {
-rootfs_pkgs=$(makearray << EOF
+profile_homeserver_base() {
+	rootfs_pkgs=$(makearray << EOF
 	# from profile_base
 	alpine-base
 	busybox
@@ -64,9 +64,10 @@ rootfs_pkgs=$(makearray << EOF
 	irqbalance
 	irqbalance-openrc
 	linux-firmware-none
-	linux-firmware-rtl_nic
+	lsblk
 	lxcfs
 	lxd-feature
+	mount
 	nftables
 	prometheus-node-exporter
 	prometheus-node-exporter-openrc
@@ -74,19 +75,36 @@ rootfs_pkgs=$(makearray << EOF
 	qemu-img
 	qemu-system-aarch64
 	tcpdump
-	u-boot-tools
 	xtables-addons
 	zfs
 	zfs-udev
 EOF
 )
-
-	title="homeserver"
-	desc="m1chas homeserver image"
 	image_ext="tar.gz"
 	arch="aarch64"
 	hostname="lxd"
-	initfs_features="base mmc nanopi-r4s squashfs"
+	initfs_features="base homeserver-mount mmc squashfs"
+	rootfs_extension="homeserver"
+}
+
+profile_rpilxdnode() {
+	profile_homeserver_base
+
+	rootfs_pks="$rootfs_pkgs raspberrypi-bootloader raspberrypi-bootloader-common"
+	title="RPI LXD node"
+	desc="m1chas RPI LXD node image"
+	rootfs_kernel_flavor="rpi4"
+	rootfs_kernel_addons="zfs"
+	rootfs_extension="lxdnode"
+}
+
+profile_homeserver() {
+	profile_homeserver_base
+
+	rootfs_pks="$rootfs_pkgs linux-firmware-rtl_nic u-boot-tools"
+	title="homeserver"
+	desc="m1chas homeserver image"
+	initfs_features="$initfs_features nanopi-r4s"
 	rootfs_kernel_flavor="lts"
 	rootfs_kernel_addons="xtables-addons zfs"
 	rootfs_extension="homeserver"

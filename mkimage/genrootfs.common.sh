@@ -58,6 +58,12 @@ fi
 
 pkgs="$@"
 
+# use util-linux mount so we can use PARTLABEL in the root cmdline
+mkdir -p "$tmp"/etc/mkinitfs/features.d
+makefile root:root 0644 "$tmp"/etc/mkinitfs/features.d/homeserver-mount.files <<EOF
+/bin/mount
+EOF
+
 mkdir -p "$tmp"/etc/mkinitfs
 makefile root:root 0644 "$tmp"/etc/mkinitfs/mkinitfs.conf <<EOF
 features="$initfs_features"
