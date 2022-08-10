@@ -1,0 +1,20 @@
+devices:
+  ssl:
+    path: /etc/nginx/ssl
+    readonly: "true"
+    shift: "true"
+    source: /media/config/tls-proxy
+    type: disk
+
+  defaultconf:
+    path: /etc/nginx/conf.d/default.conf
+    readonly: "true"
+    shift: "true"
+    source: /media/config/public/nginx-configs/tls-proxy.conf
+    type: disk
+
+profiles:
+  - private
+
+config:
+  volatile.eth0.hwaddr: 00:16:3e:f3:8f:b6
