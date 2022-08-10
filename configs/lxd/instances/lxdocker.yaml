@@ -12,6 +12,9 @@ devices:
     source: /media/config/public/lxdocker-specs
     type: disk
 
+profiles:
+  - private
+
 config:
   cloud-init.user-data: |
     #cloud-config
