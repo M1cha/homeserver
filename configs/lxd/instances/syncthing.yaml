@@ -1,0 +1,15 @@
+devices:
+  data:
+    path: /var/syncthing
+    pool: default
+    source: syncthing
+    type: disk
+
+profiles:
+  - private
+
+config:
+  volatile.eth0.hwaddr: 00:16:3e:6d:7f:d8
+  environment.PUID: 0
+  environment.PGID: 0
+  environment.STGUIADDRESS: "0.0.0.0:443"
