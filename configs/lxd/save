@@ -14,6 +14,7 @@ lxc config show > config.yml
 networks=$(lxc network list --format yaml | yq -r '.[] | select(.managed) | .name')
 profiles=$(lxc profile list --format yaml | yq -r '.[].name')
 projects=$(lxc project list --format yaml | yq -r '.[].name')
+storages=$(lxc storage list --format yaml | yq -r '.[].name')
 
 mkdir -p networks
 for network in $networks ; do
@@ -28,4 +29,21 @@ done
 mkdir -p profiles
 for profile in $profiles ; do
 	lxc profile show "$profile" | yq 'del(.used_by)' > "profiles/$profile.yaml"
+done
+
+mkdir -p storages
+for storage in $storages ; do
+	lxc storage show "$storage" | yq 'del(.used_by)' > "storages/$storage.yaml"
+
+	storagedir="storages/$storage"
+	mkdir -p "$storagedir"
+
+	volumes=$(lxc storage volume list --format yaml "$storage" \
+		| yq -r \
+		'.[] | select(.type == "custom") | select(.name | contains("/") | not) | .name')
+	for volume in $volumes ; do
+		lxc storage volume show "$storage" "custom/$volume" \
+			| yq 'del(.used_by)' \
+			> "$storagedir/$volume.yaml"
+	done
 done

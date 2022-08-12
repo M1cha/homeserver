@@ -1,0 +1,10 @@
+config:
+  source: default
+  volatile.initial_source: /dev/sda4
+  zfs.pool_name: default
+description: ""
+name: default
+driver: zfs
+status: Created
+locations:
+  - none

@@ -1,0 +1,8 @@
+config:
+  volatile.idmap.last: '[{"Isuid":true,"Isgid":false,"Hostid":393216,"Nsid":0,"Maprange":65536},{"Isuid":false,"Isgid":true,"Hostid":393216,"Nsid":0,"Maprange":65536}]'
+  volatile.idmap.next: '[{"Isuid":true,"Isgid":false,"Hostid":393216,"Nsid":0,"Maprange":65536},{"Isuid":false,"Isgid":true,"Hostid":393216,"Nsid":0,"Maprange":65536}]'
+description: ""
+name: googlephotos-backup
+type: custom
+location: none
+content_type: filesystem

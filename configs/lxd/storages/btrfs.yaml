@@ -1,0 +1,9 @@
+config:
+  source: /dev/sda3
+  volatile.initial_source: /dev/sda3
+description: ""
+name: btrfs
+driver: btrfs
+status: Created
+locations:
+  - none

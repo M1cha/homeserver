@@ -1,0 +1,8 @@
+config:
+  volatile.idmap.last: '[{"Isuid":true,"Isgid":false,"Hostid":1065536,"Nsid":0,"Maprange":65536},{"Isuid":false,"Isgid":true,"Hostid":1065536,"Nsid":0,"Maprange":65536}]'
+  volatile.idmap.next: '[{"Isuid":true,"Isgid":false,"Hostid":1065536,"Nsid":0,"Maprange":65536},{"Isuid":false,"Isgid":true,"Hostid":1065536,"Nsid":0,"Maprange":65536}]'
+description: ""
+name: homeassistant-config
+type: custom
+location: none
+content_type: filesystem
