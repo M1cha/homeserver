@@ -54,6 +54,8 @@ profile_homeserver_base() {
 	apparmor
 	apparmor-profiles
 	apparmor-utils
+	# busyboxs blkid produces output that lxd doesn't like
+	blkid
 	btrfs-progs
 	btrfs-progs-extra
 	dbus
