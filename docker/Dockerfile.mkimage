@@ -1,6 +1,16 @@
 FROM alpine:3.16
 
-RUN apk add alpine-sdk build-base apk-tools alpine-conf busybox fakeroot squashfs-tools sudo xz zstd
+RUN apk add \
+	alpine-sdk \
+	build-base \
+	apk-tools \
+	alpine-conf \
+	busybox \
+	fakeroot \
+	squashfs-tools \
+	sudo \
+	xz \
+	zstd
 RUN apk update
 
 # trust aarch64 keys
