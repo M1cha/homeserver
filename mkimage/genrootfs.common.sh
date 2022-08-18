@@ -27,6 +27,13 @@ rc_add() {
 	ln -sf /etc/init.d/"$1" "$tmp"/etc/runlevels/"$2"/"$1"
 }
 
+_apk() {
+	${APK:-apk} --keys-dir "$keys_dir" --no-cache \
+		--repositories-file "$repositories_file" \
+		--root "$tmp" --arch "$arch" \
+		"$@"
+}
+
 tmp="$(mktemp -d)"
 trap cleanup EXIT
 chmod 0755 "$tmp"
@@ -69,10 +76,7 @@ makefile root:root 0644 "$tmp"/etc/mkinitfs/mkinitfs.conf <<EOF
 features="$initfs_features"
 EOF
 
-${APK:-apk} add --keys-dir "$keys_dir" --no-cache \
-	--repositories-file "$repositories_file" \
-	--root "$tmp" --initdb --arch "$arch" \
-	$pkgs
+_apk add --initdb $pkgs
 
 makefile root:root 0644 "$tmp"/etc/hostname <<EOF
 $hostname
