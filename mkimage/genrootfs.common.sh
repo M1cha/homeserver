@@ -36,6 +36,7 @@ _apk() {
 
 install_shiftfs() {
 	local builddir="$tmp"/build
+	local shiftfsdir="$builddir/shiftfs"
 	local kver
 	local makeargs
 
@@ -46,7 +47,40 @@ install_shiftfs() {
 
 	_apk add "linux-$kflavor-dev"
 
-	git clone https://github.com/toby63/shiftfs-dkms.git -b k5.18 "$builddir/shiftfs"
+	mkdir "$shiftfsdir"
+makefile root:root 0644 "$shiftfsdir"/Makefile <<EOF
+modname := shiftfs
+obj-m := \$(modname).o
+
+KVERSION ?= \$(shell uname -r)
+KDIR ?= /lib/modules/\$(KVERSION)/build
+PWD := "\$\$(pwd)"
+
+ifdef DEBUG
+CFLAGS_\$(obj-m) := -DDEBUG
+endif
+
+EXTRA_CFLAGS := -DSHIFTFS_MAGIC=0x6a656a62 -DCONFIG_SHIFT_FS_POSIX_ACL=1
+
+default:
+	\$(MAKE) -C \$(KDIR) M=\$(PWD) EXTRA_CFLAGS="\${EXTRA_CFLAGS}" modules
+EOF
+
+makefile root:root 0644 "$shiftfsdir"/dkms.conf <<EOF
+PACKAGE_NAME="shiftfs"
+PACKAGE_VERSION="#MODULE_VERSION#"
+MAKE[0]="make KVERSION=\$kernelver"
+CLEAN="make clean"
+BUILT_MODULE_NAME[0]="shiftfs"
+DEST_MODULE_LOCATION[0]="/kernel/fs/"
+BUILD_EXCLUSIVE_KERNEL="^5.(15|16).*"
+AUTOINSTALL="yes"
+EOF
+
+	curl -Lo "$shiftfsdir"/shiftfs.c \
+		"https://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/kinetic/plain/fs/shiftfs.c?h=lowlatency-next&id=16009ac0f589bc3d1914d7a63f427de0e4698d63"
+	patch -d "$shiftfsdir" -p1 < "$scriptdir/shiftfs-rename.patch"
+	patch -d "$shiftfsdir" -p1 < "$scriptdir/shiftfs-idmapped.patch"
 
 	makeargs=$(echo \
 		KVERSION="$kver" \

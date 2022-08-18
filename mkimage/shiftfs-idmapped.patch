@@ -1,0 +1,24 @@
+diff --git a/shiftfs.c b/shiftfs.c
+index 46a7d05..d219019 100644
+--- a/shiftfs.c
++++ b/shiftfs.c
+@@ -2083,6 +2083,19 @@ static int shiftfs_fill_super(struct super_block *sb, void *raw_data,
+ 			cap_lower(cred_tmp->cap_effective, CAP_SYS_RESOURCE);
+ 			sbinfo->creator_cred = cred_tmp;
+ 		}
++
++		/*
++		 * Supporting idmapped lower layers requires a decent amount of
++		 * rework that involves passing down the mnt_userns from the
++		 * lower layer into vfs_*() helpers.
++		 * However, shiftfs logic is still relying on the fact that these functions
++		 * need to use the main filesystem namespace.
++		 */
++		if (is_idmapped_mnt(sbinfo->mnt)) {
++			err = -EINVAL;
++			printk(KERN_ERR "shiftfs: idmapped lower layers not supported\n");
++			goto out_put_path;
++		}
+ 	} else {
+ 		/*
+ 		 * This leg executes if we're admin capable in the namespace,
