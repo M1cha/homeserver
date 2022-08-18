@@ -34,6 +34,37 @@ _apk() {
 		"$@"
 }
 
+install_shiftfs() {
+	local builddir="$tmp"/build
+	local kver
+	local makeargs
+
+	mkdir -p "$builddir"
+
+	kver=$(basename $(ls -d "$tmp"/lib/modules/*))
+	local kflavor=${kver##*-}
+
+	_apk add "linux-$kflavor-dev"
+
+	git clone https://github.com/toby63/shiftfs-dkms.git -b k5.18 "$builddir/shiftfs"
+
+	makeargs=$(echo \
+		KVERSION="$kver" \
+		KDIR="$tmp"/usr/src/linux-headers-$kver \
+		CROSS_COMPILE=/usr/aarch64-zephyr-elf/bin/aarch64-zephyr-elf- \
+		ARCH=arm64 \
+		-C "$builddir/shiftfs"
+	)
+
+	make $makeargs
+	cp "$builddir/shiftfs/shiftfs.ko" "$tmp/lib/modules/$kver/"
+	depmod -b "$tmp" -a "$kver"
+
+	_apk del "linux-$kflavor-dev"
+
+	rm -r "$builddir"
+}
+
 tmp="$(mktemp -d)"
 trap cleanup EXIT
 chmod 0755 "$tmp"
@@ -225,6 +256,8 @@ rc_add udev-postmount default
 rc_add killprocs shutdown
 rc_add mount-ro shutdown
 rc_add savecache shutdown
+
+install_shiftfs
 
 if [ -n "$rootfs_extension" ]; then
 	source "$scriptdir/genrootfs.$rootfs_extension.sh"
