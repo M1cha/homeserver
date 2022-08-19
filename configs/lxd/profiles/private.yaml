@@ -1,4 +1,5 @@
 config:
+  environment.LXDOCKER_UDHCPC_NOPREFIXROUTE: "1"
   security.idmap.isolated: "true"
 description: private network config
 devices:
