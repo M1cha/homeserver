@@ -1,0 +1,691 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "rjl7EP47k"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "watt"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "hidden",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.1.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "rjl7EP47k"
+          },
+          "query": "from(bucket: \"home-assistant\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> group(columns: [\"entity_id\", \"friendly_name_str\"])\n  |> filter(fn: (r) => r.device_class_str == \"power\")\n  |> filter(fn: (r) => r.entity_id == \"smartmeter_power\")\n  |> map(fn: (r) => ({\n      _time: r._time,\n      entity_id: r.entity_id,\n      friendly_name_str: r.friendly_name_str,\n      _value: r.value,\n    }))",
+          "queryType": "randomWalk",
+          "refId": "A"
+        }
+      ],
+      "title": "Power consumption",
+      "transformations": [
+        {
+          "disabled": true,
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "_time"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*friendly_name_str=\"(.*)\".*",
+            "renamePattern": "$1"
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "rjl7EP47k"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.1.2",
+      "targets": [
+        {
+          "query": "from(bucket: \"home-assistant\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> group(columns: [\"entity_id\", \"friendly_name_str\"])\n  |> filter(fn: (r) => r.device_class_str == \"humidity\")\n  |> map(fn: (r) => ({\n      _time: r._time,\n      entity_id: r.entity_id,\n      friendly_name_str: r.friendly_name_str,\n      _value: r.value,\n    }))",
+          "queryType": "randomWalk",
+          "refId": "A"
+        }
+      ],
+      "title": "Humidities",
+      "transformations": [
+        {
+          "disabled": true,
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "_time"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*friendly_name_str=\"(.*)\".*",
+            "renamePattern": "$1"
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "rjl7EP47k"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.1.2",
+      "targets": [
+        {
+          "query": "temp = from(bucket: \"home-assistant\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> group(columns: [\"entity_id\", \"friendly_name_str\"])\n  |> filter(fn: (r) => r.device_class_str == \"temperature\")\n  |> map(fn: (r) => ({\n      _time: r._time,\n      entity_id: r.entity_id,\n      friendly_name_str: r.friendly_name_str,\n      _value: r.value,\n    }))\n\nclimate = from(bucket: \"home-assistant\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> group(columns: [\"entity_id\", \"friendly_name_str\"])\n  |> filter(fn: (r) => r.domain == \"climate\")\n    |> map(fn: (r) => ({\n      _time: r._time,\n      entity_id: r.entity_id,\n      friendly_name_str: r.friendly_name_str,\n      _value: r.current_temperature,\n    }))\n\nunion(tables:[temp, climate])",
+          "queryType": "randomWalk",
+          "refId": "A"
+        }
+      ],
+      "title": "Temperatures",
+      "transformations": [
+        {
+          "disabled": true,
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "_time"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*friendly_name_str=\"(.*)\".*",
+            "renamePattern": "$1"
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "rjl7EP47k"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "pressurehpa"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.1.2",
+      "targets": [
+        {
+          "query": "from(bucket: \"home-assistant\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> group(columns: [\"entity_id\", \"friendly_name_str\"])\n  |> filter(fn: (r) => r.device_class_str == \"pressure\")\n  |> map(fn: (r) => ({\n      _time: r._time,\n      entity_id: r.entity_id,\n      friendly_name_str: r.friendly_name_str,\n      _value: r.value,\n    }))",
+          "queryType": "randomWalk",
+          "refId": "A"
+        }
+      ],
+      "title": "Pressures",
+      "transformations": [
+        {
+          "disabled": true,
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "_time"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*friendly_name_str=\"(.*)\".*",
+            "renamePattern": "$1"
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "rjl7EP47k"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 16
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.1.2",
+      "targets": [
+        {
+          "query": "from(bucket: \"home-assistant\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> group(columns: [\"entity_id\", \"friendly_name_str\"])\n  |> filter(fn: (r) => r.device_class_str == \"battery\")\n  |> map(fn: (r) => ({\n      _time: r._time,\n      entity_id: r.entity_id,\n      friendly_name_str: r.friendly_name_str,\n      _value: r.value,\n    }))",
+          "queryType": "randomWalk",
+          "refId": "A"
+        }
+      ],
+      "title": "Batteries",
+      "transformations": [
+        {
+          "disabled": true,
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "_time"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*friendly_name_str=\"(.*)\".*",
+            "renamePattern": "$1"
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "rjl7EP47k"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ppm"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 24
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "hidden",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.1.2",
+      "targets": [
+        {
+          "query": "from(bucket: \"home-assistant\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> group(columns: [\"entity_id\", \"friendly_name_str\"])\n  |> filter(fn: (r) => r.device_class_str == \"carbon_dioxide\")\n  |> map(fn: (r) => ({\n      _time: r._time,\n      entity_id: r.entity_id,\n      friendly_name_str: r.friendly_name_str,\n      _value: r.value,\n    }))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean)",
+          "queryType": "randomWalk",
+          "refId": "A"
+        }
+      ],
+      "title": "CO2",
+      "transformations": [
+        {
+          "disabled": true,
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "_time"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*friendly_name_str=\"(.*)\".*",
+            "renamePattern": "$1"
+          }
+        }
+      ],
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "1m",
+  "schemaVersion": 35,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Home Assistant",
+  "uid": "Oo0XiQ47z",
+  "version": 1,
+  "weekStart": ""
+}
