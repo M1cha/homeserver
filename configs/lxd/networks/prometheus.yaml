@@ -1,0 +1,13 @@
+config:
+  dns.mode: none
+  ipv4.address: 10.76.70.1/24
+  ipv4.nat: "false"
+  ipv6.address: fd42:cd0a:84e9:4386::1/64
+  ipv6.nat: "false"
+description: ""
+name: prometheus
+type: bridge
+managed: true
+status: Created
+locations:
+  - none
