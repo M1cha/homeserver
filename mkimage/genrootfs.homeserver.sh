@@ -63,6 +63,7 @@ define if_lan_dummy = "lan0_dummy"
 define if_lan = "lan0_host"
 define if_lxd = "lxdbr0"
 define if_lxdpriv = "lxdpriv0"
+define if_prometheus = "prometheus"
 
 # not flushing all the rules prevents flushing LXDs bridge filter rules on reload
 # disabled because they fail if the tables don't exist
@@ -72,6 +73,14 @@ define if_lxdpriv = "lxdpriv0"
 flush ruleset
 
 table inet filter {
+	chain lxd_dns {
+		ip protocol { tcp, udp } th dport 53 accept comment "DNS"
+	}
+
+	chain lxd_dhcp {
+		udp dport { 67, 547 } accept comment "DHCP"
+	}
+
 	chain inbound_lan {
 		tcp dport 22 accept
 
@@ -80,15 +89,18 @@ table inet filter {
 	}
 
 	chain inbound_lxd {
-		# LXD provides dnsmasq to containers
-		ip protocol { tcp, udp } th dport 53 accept comment "DNS"
-		udp dport { 67, 547 } accept comment "DHCP"
+		jump lxd_dns
+		jump lxd_dhcp
 	}
 
- 	chain inbound_lxdpriv {
-		# LXD provides dnsmasq to containers
-		ip protocol { tcp, udp } th dport 53 accept comment "DNS"
-		udp dport { 67, 547 } accept comment "DHCP"
+	chain inbound_lxdpriv {
+		jump lxd_dns
+		jump lxd_dhcp
+	}
+
+	chain inbound_prometheus {
+		jump lxd_dhcp
+		tcp dport { 9100, 9101 } accept comment "prometheus node exporter"
 	}
 
 	chain input {
@@ -106,6 +118,7 @@ table inet filter {
 		iifname \$if_lan jump inbound_lan
 		iifname \$if_lxd jump inbound_lxd
 		iifname \$if_lxdpriv jump inbound_lxdpriv
+		iifname \$if_prometheus jump inbound_prometheus
 
 		log flags all prefix "dropped input: "
 	}
