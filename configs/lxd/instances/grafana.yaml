@@ -1,0 +1,47 @@
+devices:
+  config:
+    path: /media/config
+    readonly: "true"
+    shift: "true"
+    source: /media/config/grafana
+    type: disk
+  provisioning:
+    path: /etc/grafana/provisioning
+    readonly: "true"
+    shift: "true"
+    source: /media/config/public/grafana/provisioning
+    type: disk
+  dashboards:
+    path: /usr/share/grafana/conf/dashboards
+    readonly: "true"
+    shift: "true"
+    source: /media/config/public/grafana/dashboards
+    type: disk
+  third_party:
+    path: /usr/share/grafana/conf/third_party
+    readonly: "true"
+    shift: "true"
+    source: /media/config/public/grafana/third_party
+    type: disk
+
+profiles:
+  - private
+
+config:
+  environment.GF_SERVER_DOMAIN: grafana.home.arpa
+  environment.GF_SERVER_PROTOCOL: https
+  environment.GF_SERVER_CERT_FILE: /media/config/server.crt
+  environment.GF_SERVER_CERT_KEY: /media/config/server.key
+  environment.LXDOCKER_ENVFILE: /media/config/env.sh
+  volatile.eth0.hwaddr: 00:16:3e:1c:81:d5
+
+  user.lxdocker_init_script: |
+    #!/bin/sh
+
+    # influxdb uses TLS
+    ln -sf /media/config/ca.crt /usr/local/share/ca-certificates/lxd-ca.crt
+    update-ca-certificates
+
+    # we don't need any persistent state
+    mkdir -p /var/lib/grafana
+    mount -t tmpfs tmpfs /var/lib/grafana
