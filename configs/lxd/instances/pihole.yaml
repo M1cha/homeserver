@@ -139,6 +139,6 @@ config:
 
     runcmd:
       - systemctl daemon-reload
-      - systemctl enable nftables
-      - systemctl start nftables
+      - systemctl enable nftables systemd-networkd
+      - systemctl start nftables systemd-networkd
       - curl -sSL https://install.pi-hole.net | bash /dev/stdin --unattended
