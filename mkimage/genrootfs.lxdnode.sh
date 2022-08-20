@@ -10,6 +10,11 @@ makefile root:root 0644 "$tmp"/etc/udev/rules.d/90-network.rules << EOF
 SUBSYSTEM=="net", ACTION=="add", KERNEL=="eth0", RUN+="/bin/sh -c \"cat /sys/class/net/\$name/address > /tmp/\$name.address\"", RUN+="/sbin/ip link set dev \$name address 42:42:42:42:42:42"
 EOF
 
+makefile root:root 0644 "$tmp"/etc/udev/rules.d/99-restic-hdd.rules << EOF
+SUBSYSTEM=="block", ACTION=="add", ENV{PARTNAME}=="restic-backup", RUN+="/usr/bin/lxc start restic-backup-2"
+SUBSYSTEM=="block", ACTION=="remove", ENV{PARTNAME}=="restic-backup", RUN+="/usr/bin/lxc stop -f restic-backup-2"
+EOF
+
 makefile root:root 0644 "$tmp"/etc/network/interfaces <<EOF
 auto lo
 iface lo inet loopback
