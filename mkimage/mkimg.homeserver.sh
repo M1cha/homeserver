@@ -106,7 +106,7 @@ profile_rpilxdnode() {
 profile_homeserver() {
 	profile_homeserver_base
 
-	rootfs_pkgs="$rootfs_pkgs curl linux-firmware-rtl_nic socat u-boot-tools"
+	rootfs_pkgs="$rootfs_pkgs curl git linux-firmware-rtl_nic socat u-boot-tools"
 	title="homeserver"
 	desc="m1chas homeserver image"
 	initfs_features="$initfs_features nanopi-r4s"
