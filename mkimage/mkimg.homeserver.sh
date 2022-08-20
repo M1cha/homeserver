@@ -69,6 +69,7 @@ profile_homeserver_base() {
 	lsblk
 	lxcfs
 	lxd-feature
+	# busyboxs mount doesn't support stuff like UUID=
 	mount
 	nftables
 	prometheus-node-exporter
