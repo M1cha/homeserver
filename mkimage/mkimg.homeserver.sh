@@ -92,7 +92,7 @@ EOF
 profile_rpilxdnode() {
 	profile_homeserver_base
 
-	rootfs_pkgs="$rootfs_pkgs raspberrypi-bootloader raspberrypi-bootloader-common"
+	rootfs_pkgs="$rootfs_pkgs raspberrypi-bootloader raspberrypi-bootloader-common sudo"
 	title="RPI LXD node"
 	desc="m1chas RPI LXD node image"
 	rootfs_kernel_flavor="rpi4"

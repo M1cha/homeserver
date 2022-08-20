@@ -186,3 +186,21 @@ sed -i "s|^\\\\(root=PARTLABEL=rootfs\\\\)[01]|\1\${next_slot}|g" /boot/cmdline.
 
 error "done"
 EOF
+
+echo "rpoweroff:x:1000:1000:remote poweroff,,,:/home/rpoweroff:/home/rpoweroff/loginaction" >> "$tmp"/etc/passwd
+echo "rpoweroff:*:19222:0:99999:7:::" >> "$tmp"/etc/shadow
+echo "rpoweroff:x:1000:" >> "$tmp"/etc/group
+
+mkdir -p "$tmp"/home/rpoweroff/.ssh
+makefile root:root 0644 "$tmp"/home/rpoweroff/.ssh/authorized_keys <<EOF
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDK5CQ0guL4cJGYJTijwKy4P/PPk1InTEiL6NqgorHw5FYNmrEs2X1hCAQvlXA1FyThPtEuT/hvGMxM59W9RPt5wdQ3DUEFLy+vM/8kmwAxgZM1hvSHgPMQopJ/CFPxUeZen0TaSmPk94vryeUle6Pv2rjKAyulwT+ftyWP9bOMxHzOsAHb8mww6i6ji6E2LEr32IHDZnOpf3AjcHE6eTshxB6KilQTzvzA1phLtfrXTEd4CLMd+uFGoZteBGbibR+h5pcJcaZLMBpVxl4JTCRVEUsnflxOL4sadtDuJ+no+CESxFRMK3FmiRjkPn72ux+qb1jbK1PCSj3aVMJd+DnYmGlgTerbVcsrItQZNOtVMwyC1JXJ3KabqgDEC+nJbBPsfeBgD7HKhZ/YYXDj/vnLYEakevqaH1eZRnlHIdFdvrjMI27TD0yxJIR6kzhaFVrrn47v8k4EOJ15WL3HaZ2XvVqIej0Shf6RhPxgwq36E6c4K198nmKsr05xLKYOEcs= root@homeassistant
+EOF
+
+makefile root:root 0644 "$tmp"/etc/sudoers.d/rpoweroff <<EOF
+rpoweroff ALL=NOPASSWD:/sbin/poweroff
+EOF
+
+makefile root:root 0755 "$tmp"/home/rpoweroff/loginaction <<EOF
+#!/bin/sh
+exec sudo /sbin/poweroff
+EOF
