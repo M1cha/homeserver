@@ -92,7 +92,7 @@ EOF
 profile_rpilxdnode() {
 	profile_homeserver_base
 
-	rootfs_pks="$rootfs_pkgs raspberrypi-bootloader raspberrypi-bootloader-common"
+	rootfs_pkgs="$rootfs_pkgs raspberrypi-bootloader raspberrypi-bootloader-common"
 	title="RPI LXD node"
 	desc="m1chas RPI LXD node image"
 	rootfs_kernel_flavor="rpi4"
@@ -103,7 +103,7 @@ profile_rpilxdnode() {
 profile_homeserver() {
 	profile_homeserver_base
 
-	rootfs_pks="$rootfs_pkgs linux-firmware-rtl_nic u-boot-tools"
+	rootfs_pkgs="$rootfs_pkgs linux-firmware-rtl_nic u-boot-tools"
 	title="homeserver"
 	desc="m1chas homeserver image"
 	initfs_features="$initfs_features nanopi-r4s"
