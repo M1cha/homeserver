@@ -45,7 +45,7 @@ install_shiftfs() {
 	kver=$(basename $(ls -d "$tmp"/lib/modules/*))
 	local kflavor=${kver##*-}
 
-	_apk add "linux-$kflavor-dev"
+	_apk add gcc "linux-$kflavor-dev"
 
 	mkdir "$shiftfsdir"
 makefile root:root 0644 "$shiftfsdir"/Makefile <<EOF
@@ -82,19 +82,18 @@ EOF
 	patch -d "$shiftfsdir" -p1 < "$scriptdir/shiftfs-rename.patch"
 	patch -d "$shiftfsdir" -p1 < "$scriptdir/shiftfs-idmapped.patch"
 
-	makeargs=$(echo \
-		KVERSION="$kver" \
-		KDIR="$tmp"/usr/src/linux-headers-$kver \
-		CROSS_COMPILE=/usr/aarch64-zephyr-elf/bin/aarch64-zephyr-elf- \
-		ARCH=arm64 \
-		-C "$builddir/shiftfs"
-	)
 
-	make $makeargs
+	KVERSION="$kver" \
+	KDIR="$tmp"/usr/src/linux-headers-$kver \
+	CROSS_COMPILE="$tmp"/usr/bin/ \
+	ARCH=arm64 \
+	LD_LIBRARY_PATH="$tmp/lib:$tmp/usr/lib" \
+		make -C "$builddir/shiftfs"
+
 	cp "$builddir/shiftfs/shiftfs.ko" "$tmp/lib/modules/$kver/"
 	depmod -b "$tmp" -a "$kver"
 
-	_apk del "linux-$kflavor-dev"
+	_apk del gcc "linux-$kflavor-dev"
 
 	rm -r "$builddir"
 }

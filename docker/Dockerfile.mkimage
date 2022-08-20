@@ -28,8 +28,3 @@ RUN ln -sf /work/mkimage /root/.mkimage
 RUN curl -L \
 	https://dl-cdn.alpinelinux.org/alpine/v3.16/main/aarch64/musl-1.2.3-r0.apk \
 	| tar -xzf- -C / lib/ld-musl-aarch64.so.1
-
-# install GCC12 aarch64 cross compiler
-RUN curl -L \
-	https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.15.0-rc2/toolchain_linux-x86_64_aarch64-zephyr-elf.tar.gz \
-	| tar -xzf- -C /usr aarch64-zephyr-elf
