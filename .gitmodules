@@ -2,3 +2,7 @@
 	path = third_party/aports
 	url = https://github.com/alpinelinux/aports.git
 	branch = master
+[submodule "grafana/third_party/rfrail3-grafana-dashboards"]
+	path = grafana/third_party/rfrail3-grafana-dashboards
+	url = https://github.com/rfrail3/grafana-dashboards.git
+	branch = master
