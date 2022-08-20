@@ -175,4 +175,40 @@ cat >> "$tmp/etc/inittab" <<EOF
 console::respawn:/sbin/getty -L console 1500000 vt100
 EOF
 
+makefile root:root 0755 "$tmp/usr/bin/lxdmetrics" <<EOF
+#!/bin/sh
+
+set -euo pipefail
+
+read msg
+
+data=\$(curl -s --unix-socket /var/lib/lxd/unix.socket http://lxd/1.0/metrics)
+
+echo -ne "HTTP/1.1 200 OK\r\n"
+echo -ne "Content-Length: \${#data}\r\n"
+echo -ne "\r\n"
+
+echo -n "\$data"
+EOF
+
+makefile root:root 0755 "$tmp/etc/init.d/lxdmetrics" <<EOF
+#!/sbin/openrc-run
+supervisor=supervise-daemon
+
+command="/usr/bin/socat"
+command_args="tcp-listen:9101,reuseaddr,fork system:/usr/bin/lxdmetrics"
+command_background="yes"
+group="lxd"
+user="root"
+
+pidfile="/var/run/\${SVCNAME}.pid"
+start_stop_daemon_args="--user \$user --group \$group"
+
+depend() {
+        need net
+        after firewall
+}
+EOF
+
 rc_add homeserver-bridge boot
+rc_add lxdmetrics default
