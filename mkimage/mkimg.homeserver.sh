@@ -71,6 +71,8 @@ profile_homeserver_base() {
 	lxd-feature
 	# busyboxs mount doesn't support stuff like UUID=
 	mount
+	nano
+	nano-syntax
 	nftables
 	prometheus-node-exporter
 	prometheus-node-exporter-openrc

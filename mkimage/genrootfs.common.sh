@@ -246,6 +246,9 @@ cp "$tmp/bin/busybox" "$tmp/bin/gzip"
 # make sure root login is disabled
 sed -i -e 's/^root::/root:*:/' "$tmp"/etc/shadow
 
+# enable nano colors
+sed -i 's|# \(include "/usr/share/nano/\*.nanorc"\)|\1|' "$tmp/etc/nanorc"
+
 branch=edge
 VERSION_ID=$(awk -F= '$1=="VERSION_ID" {print $2}'  "$tmp"/etc/os-release)
 case $VERSION_ID in
