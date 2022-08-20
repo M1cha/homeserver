@@ -1,16 +1,3 @@
-# those are needed to load the sdcard driver
-mkdir -p "$tmp"/etc/mkinitfs/features.d
-makefile root:root 0644 "$tmp"/etc/mkinitfs/features.d/nanopi-r4s.modules <<EOF
-kernel/drivers/clk/clk-rk808.ko*
-kernel/drivers/gpio/gpio-rockchip.ko*
-kernel/drivers/i2c/busses/i2c-rk3x.ko*
-kernel/drivers/mfd/rk808.ko*
-kernel/drivers/pwm/pwm-rockchip.ko*
-kernel/drivers/regulator/fixed.ko*
-kernel/drivers/regulator/rk808-regulator.ko*
-kernel/drivers/rtc/rtc-rk808.ko*
-EOF
-
 # DEVICE_SPECIFIC: change the UUIDs
 cat >> "$tmp"/etc/fstab << EOF
 UUID=20337b56-0ad1-403a-8e9c-f59655509c93 /var ext4 rw,relatime 0 1
