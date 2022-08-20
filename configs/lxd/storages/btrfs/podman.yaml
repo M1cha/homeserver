@@ -6,3 +6,4 @@ name: podman
 type: custom
 location: none
 content_type: filesystem
+project: default

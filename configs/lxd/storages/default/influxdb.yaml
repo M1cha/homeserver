@@ -7,3 +7,4 @@ name: influxdb
 type: custom
 location: none
 content_type: filesystem
+project: default
