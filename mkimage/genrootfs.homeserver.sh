@@ -1,7 +1,8 @@
-# DEVICE_SPECIFIC: change the UUIDs
 cat >> "$tmp"/etc/fstab << EOF
-UUID=20337b56-0ad1-403a-8e9c-f59655509c93 /var ext4 rw,relatime 0 1
-UUID=d436b29f-3f13-4508-9f20-3ae9f54271f3 none swap sw 0 0
+PARTLABEL=var /var ext4 rw,relatime 0 1
+# NOTE: busyboxs swapon doesn't support partlabel and `util-linux-misc`
+#       is quite big
+/dev/disk/by-partlabel/swap none swap sw 0 0
 PARTLABEL=boot /boot vfat defaults 0 0
 PARTLABEL=config /media/config ext4 defaults,ro 0 0
 EOF
