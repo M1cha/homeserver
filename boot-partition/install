@@ -8,25 +8,21 @@ error() {
         echo "$@" >&2
 }
 
-current_rootpart=$(cat /proc/cmdline | tr ' ' '\n' | grep -m1 '^root=/dev/mmcblk1p' | sed 's|^root=/dev/mmcblk1p||')
-case $current_rootpart in
-        6)
-                current_slot=0
+current_slot=$(cat /proc/cmdline | tr ' ' '\n' | grep -m1 '^root=PARTLABEL=rootfs' | sed 's|^root=PARTLABEL=rootfs||')
+case $current_slot in
+        0)
                 next_slot=1
-                next_part=7
                 ;;
-        7)
-                current_slot=1
+        1)
                 next_slot=0
-                next_part=6
                 ;;
         *)
-                error "invalid rootpart: $current_rootpart"
+                error "invalid slot: $current_slot"
                 exit 1
                 ;;
 esac
 
-echo "$current_slot(mmcblk1p$current_rootpart) -> $next_slot(mmcblk1p$next_part)"
+echo "$current_slot -> $next_slot"
 
 error "mount boot partition rw"
 mount -o rw,remount /boot
@@ -42,11 +38,10 @@ tar -C /boot -xf "$targz" ./boot
 mv /boot/boot "$boot_dir"
 
 error "extract new rootfs"
-tar -O  -xf "$targz" ./root.squashfs | dd bs=10M of="/dev/mmcblk1p${next_part}"
+tar -O  -xf "$targz" ./root.squashfs | dd bs=10M of="/dev/disk/by-partlabel/rootfs${next_slot}"
 
 error "update boot.txt"
 sed -i "s/^\\(setenv slot\\)\\s[0-9]\\s*/\\1 ${next_slot}/g" /boot/boot.txt
-sed -i "s/^\\(setenv slot_mmcblk\\)\\s[0-9]\\s*/\\1 ${next_part}/g" /boot/boot.txt
 (cd /boot && ./mkscr)
 
 error "done"

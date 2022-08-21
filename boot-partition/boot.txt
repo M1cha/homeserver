@@ -1,14 +1,13 @@
 # After modifying, run ./mkscr
 
 setenv slot 0
-setenv slot_mmcblk 6
 
 # MAC address (use spaces instead of colons)
 # DEVICE_SPECIFIC: change this MAC address
 setenv macaddr 68 27 19 ac db 26
 
 part uuid ${devtype} ${devnum}:${bootpart} uuid
-setenv bootargs earlyprintk debug root=/dev/mmcblk1p${slot_mmcblk} overlaytmpfs loglevel=9 earlycon console=ttyS2,1500000 lsm=landlock,lockdown,yama,loadpin,safesetid,integrity,apparmor,bpf
+setenv bootargs earlyprintk debug root=PARTLABEL=rootfs${slot} overlaytmpfs loglevel=9 earlycon console=ttyS2,1500000 lsm=landlock,lockdown,yama,loadpin,safesetid,integrity,apparmor,bpf
 setenv fdtfile rockchip/rk3399-nanopi-r4s.dtb
 setenv kernel_flavor lts
 setenv kernel_comp_addr_r 0x0a000000
