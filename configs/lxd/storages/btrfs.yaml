@@ -1,6 +1,6 @@
 config:
-  source: /dev/sda3
-  volatile.initial_source: /dev/sda3
+  source: /dev/disk/by-partlabel/btrfs
+  volatile.initial_source: /dev/disk/by-partlabel/btrfs
 description: ""
 name: btrfs
 driver: btrfs

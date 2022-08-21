@@ -1,6 +1,6 @@
 config:
   source: default
-  volatile.initial_source: /dev/sda4
+  volatile.initial_source: /dev/disk/by-partlabel/zfs
   zfs.pool_name: default
 description: ""
 name: default
