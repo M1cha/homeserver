@@ -11,22 +11,13 @@ makefile root:root 0644 "$tmp"/etc/network/interfaces <<EOF
 auto lo
 iface lo inet loopback
 
-auto lan0
-iface lan0 inet manual
+auto brlan0
+iface brlan0 inet static
+	bridge-ports lan0
+	bridge-stp 0
 
-auto lan0_host
-iface lan0_host inet static
 	address 192.168.43.2/24
 	gateway 192.168.43.1
-	pre-up ip link add link lan0 name lan0_host type macvlan mode bridge
-
-	# the macvlan bridge is only up if there are at least two devices on it.
-	# to be able to communicate with the LXD host without any LXD containers
-	# running we need to add a second, unused port.
-	pre-up ip link add link lan0 name lan0_dummy type macvlan mode bridge
-	pre-up sysctl -w net.ipv6.conf.lan0_dummy.autoconf=0
-	pre-up sysctl -w net.ipv6.conf.lan0_dummy.disable_ipv6=1
-	pre-up ip link set dev lan0_dummy up
 EOF
 
 makefile root:root 0644 "$tmp"/etc/resolv.conf <<EOF
@@ -34,9 +25,7 @@ nameserver 8.8.8.8
 nameserver 192.168.43.1
 EOF
 
-# We never want anybody to communicate with the host interface because the host
-# is not reachable for the VMs through it.
-# We cannot disable or remove it's MAC though so simply remove all addresses.
+# addresses on a bridged interface don't make any sense
 makefile root:root 0644 "$tmp"/etc/sysctl.d/99-lan0.conf << EOF
 net.ipv6.conf.lan0.autoconf=0
 net.ipv6.conf.lan0.disable_ipv6=1
@@ -52,16 +41,14 @@ EOF
 mkdir -p "$tmp"/etc/udev/rules.d
 makefile root:root 0644 "$tmp"/etc/udev/rules.d/90-network.rules << EOF
 # give our interfaces proper names
-SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="68:27:19:ac:db:26", RUN+="/sbin/ip link set dev \$name address 42:42:42:42:42:42", NAME="lan0"
+SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="68:27:19:ac:db:26", RUN+="/sbin/ip link set dev \$name address 6a:27:19:ac:db:26", NAME="lan0"
 SUBSYSTEM=="net", ACTION=="add", NAME=="enp1s0", RUN+="/sbin/ip link set dev \$name address 68:27:19:ac:db:26", NAME="wan0"
 EOF
 
 makefile root:root 0755 "$tmp"/etc/nftables.nft << EOF
 #!/usr/bin/nft -f
 
-define if_lan_lower = "lan0"
-define if_lan_dummy = "lan0_dummy"
-define if_lan = "lan0_host"
+define if_lan = "brlan0"
 define if_lxd = "lxdbr0"
 define if_lxdpriv = "lxdpriv0"
 define if_prometheus = "prometheus"
@@ -107,8 +94,6 @@ table inet filter {
 	chain input {
 		type filter hook input priority 0; policy drop;
 
-		iifname { \$if_lan_lower, \$if_lan_dummy } drop;
-
 		ct state invalid drop
 		ct state { established, related } accept
 
@@ -127,9 +112,6 @@ table inet filter {
 	chain forward {
 		type filter hook forward priority 0; policy drop;
 
-		iifname { \$if_lan_lower, \$if_lan_dummy } drop;
-		oifname { \$if_lan_lower, \$if_lan_dummy } drop;
-
 		# internet access for LXD containers on the default bridge
 		iifname \$if_lxd oifname \$if_lan accept
 		iifname \$if_lan oifname \$if_lxd ct state related,established accept
@@ -140,13 +122,13 @@ table inet filter {
 		#       to be isolated
 		iifname "lxdpriv0" oifname "lxdpriv0" accept
 
+		iifname "brlan0" oifname "brlan0" accept
+
 		log flags all prefix "dropped forward: "
 	}
 
 	chain output {
 		type filter hook output priority 0; policy accept;
-
-		oifname { \$if_lan_lower, \$if_lan_dummy } drop;
 	}
 }
 
