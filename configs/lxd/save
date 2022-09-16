@@ -17,8 +17,15 @@ projects=$(lxc project list --format yaml | yq -r '.[].name')
 storages=$(lxc storage list --format yaml | yq -r '.[].name')
 
 mkdir -p networks
+mkdir -p networks/forwards
 for network in $networks ; do
 	lxc network show "$network" | yq 'del(.used_by)' > "networks/$network.yaml"
+	forwards=$(lxc network forward list "$network" --format yaml)
+	num_forwards=$(echo "$forwards" | yq '. | length')
+
+	if [ "$num_forwards" != "0" ]; then
+		echo -n "$forwards" > "networks/forwards/$network.yaml"
+	fi
 done
 
 mkdir -p projects
