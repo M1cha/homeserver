@@ -1,6 +1,6 @@
 cat >> "$tmp"/etc/fstab << EOF
 PARTLABEL=var /var ext4 rw,relatime 0 1
-# NOTE: busyboxs swapon doesn't support partlabel and `util-linux-misc`
+# NOTE: busyboxs swapon doesn't support partlabel and \`util-linux-misc\`
 #       is quite big
 /dev/disk/by-partlabel/swap none swap sw 0 0
 PARTLABEL=boot /boot vfat defaults,ro 0 0
