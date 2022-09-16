@@ -41,8 +41,8 @@ EOF
 mkdir -p "$tmp"/etc/udev/rules.d
 makefile root:root 0644 "$tmp"/etc/udev/rules.d/90-network.rules << EOF
 # give our interfaces proper names
-SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="68:27:19:ac:db:26", RUN+="/sbin/ip link set dev \$name address 6a:27:19:ac:db:26", NAME="lan0"
-SUBSYSTEM=="net", ACTION=="add", NAME=="enp1s0", RUN+="/sbin/ip link set dev \$name address 68:27:19:ac:db:26", NAME="wan0"
+SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="68:27:19:ac:db:26", NAME="wan0"
+SUBSYSTEM=="net", ACTION=="add", NAME=="enp1s0", RUN+="/sbin/ip link set dev \$name address 6a:27:19:ac:db:26", NAME="lan0"
 EOF
 
 makefile root:root 0755 "$tmp"/etc/nftables.nft << EOF
