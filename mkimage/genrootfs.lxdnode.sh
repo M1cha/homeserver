@@ -158,7 +158,7 @@ case \$current_slot in
                 next_slot=0
                 ;;
         *)
-                error "invalid rootpart: \$current_rootpart"
+                error "invalid slot: \$current_slot"
                 exit 1
                 ;;
 esac
