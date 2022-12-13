@@ -1,9 +1,0 @@
-config:
-  source: /dev/disk/by-partlabel/btrfs
-  volatile.initial_source: /dev/disk/by-partlabel/btrfs
-description: ""
-name: btrfs
-driver: btrfs
-status: Created
-locations:
-  - none

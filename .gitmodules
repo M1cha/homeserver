@@ -1,12 +1,4 @@
-[submodule "third_party/aports"]
-	path = third_party/aports
-	url = https://github.com/alpinelinux/aports.git
-	branch = master
-[submodule "grafana/third_party/rfrail3-grafana-dashboards"]
-	path = grafana/third_party/rfrail3-grafana-dashboards
+[submodule "files/opt/grafana/third_party/rfrail3-grafana-dashboards"]
+	path = files/opt/grafana/third_party/rfrail3-grafana-dashboards
 	url = https://github.com/rfrail3/grafana-dashboards.git
 	branch = master
-[submodule "third_party/aardvark-dns"]
-	path = third_party/aardvark-dns
-	url = https://github.com/M1cha/aardvark-dns.git
-	branch = homeserver

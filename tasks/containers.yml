@@ -1,0 +1,21 @@
+---
+- name: Sync container files
+  ansible.posix.synchronize:
+    src: files/opt/
+    dest: /opt/container-files
+    checksum: true
+    delete: true
+    recursive: true
+    rsync_opts:
+      - "--chown=root:root"
+
+- name: Sync systemd container units
+  ansible.posix.synchronize:
+    src: files/containers/
+    dest: /etc/containers/systemd
+    checksum: true
+    delete: true
+    recursive: true
+    rsync_opts:
+      - "--chown=root:root"
+  notify: reload_systemd

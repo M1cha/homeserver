@@ -1,0 +1,42 @@
+---
+- name: Create mount service
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/run-media-resticbackup.mount
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      [Unit]
+      Description=Restic backup mount
+
+      [Mount]
+      What=/dev/disk/by-partlabel/restic-backup
+      Where=/run/media/resticbackup
+      Type=ext4
+      Options=defaults
+
+      [Install]
+      WantedBy=multi-user.target
+  notify: reload_systemd
+
+- name: Create restic socket
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/restic.socket
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      [Unit]
+      Description=restic socket
+
+      [Socket]
+      ListenStream = 2443
+
+      [Install]
+      WantedBy = sockets.target
+  notify: reload_systemd
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+

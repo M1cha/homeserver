@@ -1,0 +1,101 @@
+---
+- name: Create macvlan network
+  containers.podman.podman_network:
+    name: macvlan
+    driver: macvlan
+    # We must only use static IPs with this network so we don't create
+    # conflicts with IPs assigned by the DHCP-server.
+    subnet: 192.168.43.0/24
+
+# the macvlan above relies on this
+- name: Enable promisc mode
+  ansible.builtin.copy:
+    dest: /etc/NetworkManager/dispatcher.d/50-promisc
+    owner: root
+    group: root
+    mode: '0744'
+    content: |
+      #!/usr/bin/bash
+
+      interface="${1}"
+      action="${2}"
+
+      if [[ "$action" == "up" ]] && [[ "$interface" == "eth0" ]]; then
+        ip link set dev "$interface" promisc on
+      fi
+
+- name: Add VLAN 100
+  community.general.nmcli:
+    conn_name: eth0.100
+    ifname: eth0.100
+    vlandev: eth0
+    vlanid: 100
+    type: vlan
+    state: present
+
+- name: Install containers.conf
+  ansible.builtin.copy:
+    dest: /etc/containers/containers.conf
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      [containers]
+      userns = "auto"
+
+- name: Create podman network
+  ansible.builtin.copy:
+    dest: /etc/containers/networks/podman.json
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      {
+           "name": "podman",
+           "id": "2f259bab93aaaaa2542ba43ef33eb990d0999ee1b9924b557b7be53c0b7a1bb9",
+           "driver": "bridge",
+           "network_interface": "podman0",
+           "created": "2022-12-04T06:31:25.169911599Z",
+           "subnets": [
+               {
+                    "subnet": "10.88.0.0/16",
+                   "gateway": "10.88.0.1"
+               }
+           ],
+           "ipv6_enabled": false,
+           "internal": false,
+           "dns_enabled": true,
+           "ipam_options": {
+               "driver": "host-local"
+           }
+      }
+
+- name: Install subuid
+  ansible.builtin.copy:
+    dest: /etc/subuid
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      containers:100000:1000000000
+
+- name: Install subgid
+  ansible.builtin.copy:
+    dest: /etc/subgid
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      containers:100000:1000000000
+
+# This is needed for forwarding devices to containers
+# I'm not using `ansible.posix.seboolean` because I don't want to install the
+# `selinux` python module
+- name: Enable container_use_devices
+  ansible.builtin.command: setsebool -P container_use_devices=true
+
+- name: Start podman-auto-update.timer
+  ansible.builtin.systemd:
+    name: podman-auto-update.timer
+    enabled: true
+    state: started

@@ -1,0 +1,36 @@
+[Unit]
+Description=Grafana
+After=network.target influxdb.service
+
+[Container]
+ContainerName=grafana
+Image=docker.io/grafana/grafana-oss:latest
+User=0
+Label=io.containers.autoupdate=registry
+Network=podman:mac=00:16:3e:42:42:04,ip=10.88.42.52
+
+# secrets
+PodmanArgs=--mount type=bind,src=/opt/container-secrets/grafana,dst=/media/config,ro,idmap,relabel=shared
+PodmanArgs=--env-file=/opt/container-secrets/grafana/env
+
+# grafana configs
+PodmanArgs=--mount type=bind,src=/opt/container-files/grafana/provisioning,dst=/etc/grafana/provisioning,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/opt/container-files/grafana/dashboards,dst=/usr/share/grafana/conf/dashboards,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/opt/container-files/grafana/third_party,dst=/usr/share/grafana/conf/third_party,ro,idmap,relabel=shared
+
+# pre-init script
+PodmanArgs=--mount type=bind,src=/opt/container-files/ca.crt,dst=/usr/local/share/ca-certificates/homeserver-ca.crt,ro,idmap,relabel=shared
+PodmanArgs=--entrypoint /user-init
+PodmanArgs=--mount type=bind,src=/opt/container-files/grafana/user-init,dst=/user-init,ro,idmap,relabel=shared
+
+Environment=GF_SERVER_DOMAIN=grafana.home.arpa
+Environment=GF_SERVER_PROTOCOL=https
+Environment=GF_SERVER_CERT_FILE=/media/config/server.crt
+Environment=GF_SERVER_CERT_KEY=/media/config/server.key
+
+[Service]
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

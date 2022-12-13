@@ -1,0 +1,182 @@
+---
+# the default service flushes podmans rules on restart
+- name: Replace nftables.service
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/nftables.service
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      [Unit]
+      Description=Netfilter Tables
+      Documentation=man:nft(8)
+      Wants=network-pre.target
+      Before=network-pre.target
+
+      [Service]
+      Type=oneshot
+      ProtectSystem=full
+      ProtectHome=true
+      ExecStart=/sbin/nft -f /etc/sysconfig/nftables.conf
+      ExecReload=/sbin/nft -f /etc/sysconfig/nftables.conf
+      RemainAfterExit=yes
+
+      [Install]
+      WantedBy=multi-user.target
+  notify: reload_systemd
+
+- name: Install nftables variables
+  ansible.builtin.copy:
+    dest: /etc/nftables/homeserver_vars.nft
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      {% for name, ip in container_ips %}
+      define ip4_{{ name }} = {{ ip }}
+
+      {% set ip_pub = ip | regex_replace('^10\.88\.42\.(\d+)$', '192.168.43.\\1') %}
+      {% if ip_pub != ip %}
+      define ip4pub_{{ name }} = {{ ip_pub }}
+      {% endif%}
+
+      {% endfor %}
+
+      {% for name, mac in container_macs %}
+      define mac_{{ name }} = {{ mac }}
+      {% endfor %}
+  notify: reload_nft
+
+- name: Install main nftables config
+  ansible.builtin.copy:
+    dest: /etc/sysconfig/nftables.conf
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      define if_lan = "eth0"
+      define if_podman = "podman*"
+
+      include "/etc/nftables/homeserver_vars.nft"
+
+      # reset
+      table inet homeserver_filter
+      table ip homeserver_nat
+      table bridge homeserver_brfilter
+      delete table inet homeserver_filter
+      delete table ip homeserver_nat
+      delete table bridge homeserver_brfilter
+
+      table inet homeserver_filter {
+        chain inbound_lan {
+          tcp dport 22 accept comment "SSH"
+          tcp dport 2443 accept comment "restic"
+
+          # for debug purposes
+          icmp type echo-request limit rate 5/second accept
+        }
+
+        chain inbound_podman {
+          # netavarks DNS server
+          ip protocol { tcp, udp } th dport 53 accept comment "DNS"
+        }
+
+        chain input {
+          type filter hook input priority 0; policy drop;
+
+          ct state invalid drop
+          ct state { established, related } accept
+
+          # SLAAC
+          icmpv6 type { nd-router-solicit, nd-router-advert, nd-neighbor-solicit, nd-neighbor-advert } accept
+
+          iifname lo accept
+          iifname $if_lan jump inbound_lan
+          iifname $if_podman jump inbound_podman
+
+          log flags all prefix "dropped input: "
+        }
+
+        chain lan_to_podman {
+          # It was an input packet but is now going to podman.
+          # This means it was forwarded and we want to accept it.
+          meta mark & 0x1 == 0x1 accept
+        }
+
+        chain tlsproxy_to_mgmt {
+          ip daddr 192.168.42.1 tcp dport 8080 accept comment "modem"
+          ip daddr 192.168.42.2 tcp dport 80 accept comment "switch0"
+          ip daddr 192.168.42.3 tcp dport 80 accept comment "switch1"
+          ip daddr 192.168.42.4 tcp dport 80 accept comment "switch2"
+        }
+
+        chain forward {
+          type filter hook forward priority 0; policy drop;
+
+          ct state invalid drop
+          ct state { established, related } accept
+
+          iifname $if_lan oifname $if_podman jump lan_to_podman
+
+          # example for giving internet access
+          #iifname $if_podman oifname $if_lan ether saddr $mac_homeassistant accept
+          iifname $if_podman oifname eth0.100 ether saddr $mac_tls-proxy jump tlsproxy_to_mgmt
+
+          log flags all prefix "dropped forward: "
+        }
+
+        chain output {
+          type filter hook output priority 0; policy accept;
+        }
+
+        chain prerouting {
+          type filter hook prerouting priority -200; policy accept;
+
+          # mark everything that is intended for one of our IPs
+          iifname $if_lan fib daddr . iif type == { local, broadcast, multicast } meta mark set mark or 0x1
+        }
+      }
+
+      table ip homeserver_nat {
+        chain prerouting {
+          type nat hook prerouting priority -100;
+
+          iifname $if_lan ip daddr $ip4pub_grafana tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_grafana:3000
+          iifname $if_lan ip daddr $ip4pub_homeassistant tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_homeassistant:8123
+          iifname $if_lan ip daddr $ip4pub_syncthing tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_syncthing:8384
+          iifname $if_lan ip daddr $ip4pub_syncthing tcp dport 22000 meta mark set mark or 0x1 dnat to $ip4_syncthing
+          iifname $if_lan ip daddr $ip4pub_syncthing udp dport 22000 meta mark set mark or 0x1 dnat to $ip4_syncthing
+          iifname $if_lan ip daddr $ip4pub_tls-proxy tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_tls-proxy
+        }
+
+        chain postrouting {
+          type nat hook postrouting priority 100; policy accept;
+
+          oifname $if_lan masquerade
+        }
+      }
+
+      table bridge homeserver_brfilter {
+        chain forward {
+          type filter hook forward priority filter; policy drop;
+
+          ct state invalid drop
+          ct state { established, related } accept
+
+          # ARP is needed for IP discovery between containers
+          ether type arp accept
+
+          # communication rules for all containers
+          ether saddr $mac_homeassistant ether daddr $mac_influxdb accept
+          ether saddr $mac_grafana ether daddr $mac_influxdb accept
+
+          log flags all prefix "dropped forward(bridge): "
+        }
+      }
+  notify: reload_nft
+
+- name: Start nftables service
+  ansible.builtin.systemd:
+    name: nftables.service
+    enabled: true
+    state: started

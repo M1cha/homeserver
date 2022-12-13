@@ -1,0 +1,53 @@
+---
+- name: Install arp-reply config
+  ansible.builtin.copy:
+    dest: /etc/arp-reply.yaml
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      ---
+      {% for name, ip in container_ips %}
+      {% set ip_pub = ip | regex_replace('^10\.88\.42\.(\d+)$', '192.168.43.\\1') %}
+      {% if ip_pub != ip %}
+      - {{ ip_pub }}
+      {% endif%}
+      {% endfor %}
+
+- name: Install arp-reply binary
+  ansible.builtin.copy:
+    src: arp-reply/target/aarch64-unknown-linux-gnu/release/arp-reply
+    dest: /usr/local/bin/arp-reply
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Install arp-reply.service
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/arp-reply.service
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      [Unit]
+      Description=arp-reply
+      After=network.target
+
+      [Service]
+      Type=Simple
+      ProtectSystem=full
+      ProtectHome=true
+      ExecStart=/usr/local/bin/arp-reply -i eth0
+
+      [Install]
+      WantedBy=multi-user.target
+  notify: reload_systemd
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Start arp-reply service
+  ansible.builtin.systemd:
+    name: arp-reply.service
+    enabled: true
+    state: restarted

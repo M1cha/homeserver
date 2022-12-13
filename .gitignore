@@ -1,1 +1,3 @@
-/build
+*.ign
+/arp-reply
+__pycache__
