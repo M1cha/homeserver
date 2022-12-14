@@ -91,7 +91,7 @@
 # This is needed for forwarding devices to containers
 # I'm not using `ansible.posix.seboolean` because I don't want to install the
 # `selinux` python module
-- name: Enable container_use_devices
+- name: Enable container_use_devices # noqa: no-changed-when
   ansible.builtin.command: setsebool -P container_use_devices=true
 
 - name: Start podman-auto-update.timer

@@ -38,7 +38,7 @@
       {% set ip_pub = ip | regex_replace('^10\.88\.42\.(\d+)$', '192.168.43.\\1') %}
       {% if ip_pub != ip %}
       define ip4pub_{{ name }} = {{ ip_pub }}
-      {% endif%}
+      {% endif %}
 
       {% endfor %}
 

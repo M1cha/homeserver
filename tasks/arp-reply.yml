@@ -11,7 +11,7 @@
       {% set ip_pub = ip | regex_replace('^10\.88\.42\.(\d+)$', '192.168.43.\\1') %}
       {% if ip_pub != ip %}
       - {{ ip_pub }}
-      {% endif%}
+      {% endif %}
       {% endfor %}
 
 - name: Install arp-reply binary
