@@ -38,6 +38,8 @@
       ProtectSystem=full
       ProtectHome=true
       ExecStart=/usr/local/bin/arp-reply -i eth0
+      Restart=always
+      RestartSec=10
 
       [Install]
       WantedBy=multi-user.target
