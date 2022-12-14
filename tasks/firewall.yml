@@ -142,6 +142,7 @@
           type nat hook prerouting priority -100;
 
           iifname $if_lan ip daddr $ip4pub_grafana tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_grafana:3000
+          iifname $if_lan ip daddr $ip4pub_gotify tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_gotify
           iifname $if_lan ip daddr $ip4pub_homeassistant tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_homeassistant:8123
           iifname $if_lan ip daddr $ip4pub_syncthing tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_syncthing:8384
           iifname $if_lan ip daddr $ip4pub_syncthing tcp dport 22000 meta mark set mark or 0x1 dnat to $ip4_syncthing
@@ -167,8 +168,8 @@
           ether type arp accept
 
           # communication rules for all containers
-          ether saddr $mac_homeassistant ether daddr $mac_influxdb accept
-          ether saddr $mac_grafana ether daddr $mac_influxdb accept
+          ether saddr $mac_homeassistant ether daddr { $mac_influxdb, $mac_gotify } accept
+          ether saddr $mac_grafana ether daddr { $mac_influxdb, $mac_gotify } accept
 
           log flags all prefix "dropped forward(bridge): "
         }
