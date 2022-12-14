@@ -16,6 +16,7 @@ Network=macvlan:mac=00:16:3e:42:42:01
 PodmanArgs=--ip 192.168.43.3
 PodmanArgs=--sysctl=net.ipv4.ip_forward=0
 PodmanArgs=--sysctl=net.ipv6.conf.all.forwarding=0
+PodmanArgs=--no-hosts
 
 Environment=PIHOLE_INTERFACE=eth0
 Environment=PIHOLE_DNS_1=8.8.8.8

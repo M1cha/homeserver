@@ -5,6 +5,7 @@
     container_ips: "{{ lookup('container_query', 'containers', pattern='^Network=.*ip=(\\d+\\.\\d+\\.\\d+\\.\\d+).*$') }}"
 
   tasks:
+    - import_tasks: tasks/systemd-failure-notification.yml
     - import_tasks: tasks/podman.yml
     - import_tasks: tasks/firewall.yml
     - import_tasks: tasks/arp-reply.yml
