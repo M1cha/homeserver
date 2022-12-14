@@ -9,6 +9,12 @@ Network=podman:mac=00:16:3e:42:42:03,ip=10.88.42.50
 PodmanArgs=--mount type=bind,src=/opt/container-secrets/homeassistant,dst=/media/config,ro,idmap,relabel=shared
 PodmanArgs=--mount type=bind,src=/var/containerbind/homeassistant_config,dst=/config,rw,idmap,relabel=shared
 
+# pre-init script
+PodmanArgs=--mount type=bind,src=/opt/container-secrets/homeassistant/ca.crt,dst=/usr/local/share/ca-certificates/homeserver-ca.crt,ro,idmap,relabel=shared
+PodmanArgs=--entrypoint /user-init
+PodmanArgs=--mount type=bind,src=/opt/container-files/homeassistant/user-init,dst=/user-init,ro,idmap,relabel=shared
+Environment=REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+
 # zigbee dongle
 AddDevice=/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0:/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0:rwm
 # HACK: make podman chown the device to the container UID

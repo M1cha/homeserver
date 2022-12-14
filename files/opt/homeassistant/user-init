@@ -1,0 +1,7 @@
+#!/bin/sh
+
+set -euo pipefail
+
+update-ca-certificates
+
+exec /init
