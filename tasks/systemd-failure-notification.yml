@@ -34,12 +34,24 @@
       #!/bin/bash
       set -uo pipefail
 
+      unit="$1"
       status=1
+      podman_unit=$(journalctl -u "$unit" -t podman -n10 | sed -n 's/.*PODMAN_SYSTEMD_UNIT=\([a-zA-Z0-9:-_.]\+\),.*/\1/p' | tail -n1)
+
+      extra=""
+      if [ "$podman_unit" != "" ]; then
+          extra="${extra}($podman_unit)"
+      fi
 
       # even if the service is up, it may not be listening to the port yet.
       # # So lets retry a few times
       for i in {1..3}; do
-          curl "https://gotify.home.arpa/message?token=${GOTIFY_APP_TOKEN}" "$@" && status=0 && break
+          curl \
+              "https://gotify.home.arpa/message?token=${GOTIFY_APP_TOKEN}" \
+              -F "title=homeserver systemd" \
+              -F "message=${unit}${extra} failed" \
+              -F "priority=5" \
+          && status=0 && break
           sleep 2
       done
 
@@ -60,7 +72,7 @@
       [Service]
       EnvironmentFile=/opt/container-secrets/gotify/systemd-token.env
       Type=simple
-      ExecStart=/usr/local/bin/failure-notification -F "title=homeserver systemd" -F "message=%i failed" -F "priority=5"
+      ExecStart=/usr/local/bin/failure-notification "%i"
 
   notify: reload_systemd
 
