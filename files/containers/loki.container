@@ -1,0 +1,19 @@
+[Unit]
+Description=Loki
+After=network.target loki-minio.service
+Requires=loki-minio.service
+
+[Container]
+ContainerName=loki
+Image=docker.io/grafana/loki:latest
+Exec=-config.file=/etc/loki/config.yaml
+Label=io.containers.autoupdate=registry
+Network=podman:mac=00:16:3e:42:42:08
+PodmanArgs=--mount type=bind,src=/opt/container-files/loki,dst=/etc/loki,ro,idmap,relabel=shared
+
+[Service]
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

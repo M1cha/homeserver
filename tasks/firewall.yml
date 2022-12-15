@@ -169,7 +169,9 @@
 
           # communication rules for all containers
           ether saddr $mac_homeassistant ether daddr { $mac_influxdb, $mac_gotify } accept
-          ether saddr $mac_grafana ether daddr { $mac_influxdb, $mac_gotify } accept
+          ether saddr $mac_grafana ether daddr { $mac_influxdb, $mac_gotify, $mac_loki } accept
+          ether saddr $mac_loki ether daddr { $mac_loki-minio } accept
+          ether saddr $mac_promtail ether daddr { $mac_loki } accept
 
           log flags all prefix "dropped forward(bridge): "
         }

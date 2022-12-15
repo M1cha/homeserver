@@ -1,0 +1,24 @@
+[Unit]
+Description=Loki minio
+After=network.target
+
+[Container]
+ContainerName=loki-minio
+Image=docker.io/minio/minio:latest
+Label=io.containers.autoupdate=registry
+Network=podman:mac=00:16:3e:42:42:09
+PodmanArgs=--mount type=bind,src=/var/containerbind/loki-minio,dst=/data,rw,idmap,relabel=shared
+
+PodmanArgs=--entrypoint='["sh", "-euc", "mkdir -p /data/loki-data /data/loki-ruler && minio server /data"]'
+
+Environment=MINIO_ACCESS_KEY=loki
+Environment=MINIO_SECRET_KEY=supersecret
+Environment=MINIO_PROMETHEUS_AUTH_TYPE=public
+Environment=MINIO_UPDATE=off
+
+[Service]
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target
