@@ -16,6 +16,8 @@
       tags: [arp-reply]
     - import_tasks: tasks/containers.yml
       tags: [containers]
+    - import_tasks: tasks/syncthing-rsync.yml
+      tags: [syncthing-rsync]
     - import_tasks: tasks/restic.yml
       tags: [restic]
 
