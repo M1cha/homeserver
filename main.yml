@@ -1,5 +1,6 @@
 ---
 - hosts: homeserver
+  gather_facts: false
   vars:
     container_macs: "{{ lookup('container_query', 'containers', pattern='^Network=.*mac=(([a-zA-Z0-9]{2}:){5}[a-zA-Z0-9]{2}).*$') }}"
     container_ips: "{{ lookup('container_query', 'containers', pattern='^Network=.*ip=(\\d+\\.\\d+\\.\\d+\\.\\d+).*$') }}"
