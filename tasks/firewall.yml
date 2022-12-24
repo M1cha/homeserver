@@ -110,6 +110,12 @@
           ip daddr 192.168.42.4 tcp dport 80 accept comment "switch2"
         }
 
+        chain homeassistant_to_lan {
+          ip daddr 192.168.178.1 accept comment "fritzbox smart home"
+          ip daddr { 192.168.178.61, 192.168.178.77 } icmp type echo-request accept comment "lxd-2 and restic-backup-2 online status"
+          ip daddr 192.168.178.61 tcp dport 22 accept comment "lxd-2 rpoweroff"
+        }
+
         chain forward {
           type filter hook forward priority 0; policy drop;
 
@@ -117,10 +123,8 @@
           ct state { established, related } accept
 
           iifname $if_lan oifname $if_podman jump lan_to_podman
-
-          # example for giving internet access
-          #iifname $if_podman oifname $if_lan ether saddr $mac_homeassistant accept
           iifname $if_podman oifname eth0.100 ether saddr $mac_tls-proxy jump tlsproxy_to_mgmt
+          iifname $if_podman oifname $if_lan ether saddr $mac_homeassistant jump homeassistant_to_lan
 
           log flags all prefix "dropped forward: "
         }
