@@ -7,11 +7,17 @@
 
   tasks:
     - import_tasks: tasks/systemd-failure-notification.yml
+      tags: [sfn]
     - import_tasks: tasks/podman.yml
+      tags: [podman]
     - import_tasks: tasks/firewall.yml
+      tags: [firewall]
     - import_tasks: tasks/arp-reply.yml
+      tags: [arp-reply]
     - import_tasks: tasks/containers.yml
+      tags: [containers]
     - import_tasks: tasks/restic.yml
+      tags: [restic]
 
   handlers:
     - name: reload_nft
