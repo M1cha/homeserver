@@ -7,34 +7,25 @@
     mode: '0644'
     content: |
       [Unit]
-      Description=Restic backup mount
+      Description=Restic backup mount¸
+      After=systemd-fsck@dev-disk-by\x2dpartlabel-restic\x2dbackup.service
+      Requires=systemd-fsck@dev-disk-by\x2dpartlabel-restic\x2dbackup.service
+      # the documentation says this is implicit but `systemctl show` disagreed
+      BindsTo=dev-disk-by\x2dpartlabel-restic\x2dbackup.device
+      PartOf=restic.service
+      StopWhenUnneeded=true
 
       [Mount]
       What=/dev/disk/by-partlabel/restic-backup
       Where=/run/media/resticbackup
       Type=ext4
-      Options=defaults
-
-      [Install]
-      WantedBy=multi-user.target
-  notify: reload_systemd
-
-- name: Create restic socket
-  ansible.builtin.copy:
-    dest: /etc/systemd/system/restic.socket
-    owner: root
-    group: root
-    mode: '0644'
-    content: |
-      [Unit]
-      Description=restic socket
-
-      [Socket]
-      ListenStream = 2443
-
-      [Install]
-      WantedBy = sockets.target
+      Options=defaults,data=journal
   notify: reload_systemd
 
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers
+
+- name: Enable restic service
+  ansible.builtin.systemd:
+    name: restic.service
+    enabled: true

@@ -1,0 +1,23 @@
+[Unit]
+Description=Restic powerup
+After=network.target
+
+[Container]
+ContainerName=restic-powerup
+Image=ghcr.io/m1cha/restic-powerup:latest
+Label=io.containers.autoupdate=registry
+Network=podman:mac=00:16:3e:42:42:0c,ip=10.88.42.56
+Exec=sh -euc 'update-ca-certificates && socat -u tcp-listen:8001,fork system:/opt/restic-powerup/run'
+
+PodmanArgs=--mount type=bind,src=/opt/container-secrets/homeassistant/ca.crt,dst=/usr/local/share/ca-certificates/homeassistant-ca.crt,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/opt/container-files/restic-powerup,dst=/opt/restic-powerup,ro,idmap,relabel=shared
+
+# secrets
+PodmanArgs=--mount type=bind,src=/opt/container-secrets/restic-powerup,dst=/media/config,ro,idmap,relabel=shared
+
+[Service]
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

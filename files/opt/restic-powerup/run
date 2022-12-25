@@ -1,0 +1,29 @@
+#!/bin/sh
+
+set -euo pipefail
+
+read -r host
+
+token=$(cat /media/config/homeassistant-token)
+
+case "$host" in
+restic-backup-1.home.arpa)
+    entity_id="switch.ikea_of_sweden_tradfri_control_outlet_fe7916fe_on_off"
+    ;;
+restic-backup-2.home.arpa)
+    entity_id="switch.michael_dect"
+    ;;
+*)
+    echo "unsupported host: $host"
+    exit 1
+    ;;
+esac
+
+echo "powerup $host"
+exec curl \
+	-f --silent \
+	-X POST \
+	-H "Authorization: Bearer $token" \
+	-H "Content-Type: application/json" \
+	--data "{\"entity_id\":\"$entity_id\"}" \
+	https://homeassistant.home.arpa:8123/api/services/switch/turn_on

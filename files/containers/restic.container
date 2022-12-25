@@ -1,13 +1,13 @@
 [Unit]
 Description=restic rest server
 After=network.target run-media-resticbackup.mount
-Requires=run-media-resticbackup.mount
+BindsTo=run-media-resticbackup.mount
 
 [Container]
 ContainerName=restic
 Image=ghcr.io/m1cha/restic-rest-server:latest
 Label=io.containers.autoupdate=registry
-Network=none
+Network=podman:mac=00:16:3e:42:42:0b,ip=10.88.42.55
 
 PodmanArgs=--mount type=bind,src=/opt/container-secrets/restic,dst=/media/config,ro,idmap,relabel=shared
 PodmanArgs=--mount type=bind,src=/run/media/resticbackup,dst=/media/data,rw,idmap,relabel=shared
@@ -15,3 +15,6 @@ PodmanArgs=--mount type=bind,src=/run/media/resticbackup,dst=/media/data,rw,idma
 Environment=DATA_DIRECTORY=/media/data/1200
 Environment=DISABLE_AUTHENTICATION=1
 Environment="OPTIONS=--tls --tls-cacert /media/config/ca.pem --tls-cert /media/config/ssl_cert.pem --tls-key /media/config/ssl_key.pem --inactivity-timeout 10m"
+
+[Install]
+WantedBy=dev-disk-by\x2dpartlabel-restic\x2dbackup.device
