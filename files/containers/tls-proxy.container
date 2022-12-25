@@ -4,7 +4,7 @@ After=network.target
 
 [Container]
 ContainerName=tls-proxy
-Image=docker.io/library/nginx
+Image=docker.io/library/nginx:latest
 Label=io.containers.autoupdate=registry
 Network=podman:mac=00:16:3e:42:42:05,ip=10.88.42.51
 PodmanArgs=--mount type=bind,src=/opt/container-secrets/tls-proxy,dst=/etc/nginx/ssl,ro,idmap,relabel=shared
