@@ -70,7 +70,6 @@
       table inet homeserver_filter {
         chain inbound_lan {
           tcp dport 22 accept comment "SSH"
-          tcp dport 2443 accept comment "restic"
 
           # for debug purposes
           icmp type echo-request limit rate 5/second accept
