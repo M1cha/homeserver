@@ -1,0 +1,27 @@
+[Unit]
+Description=Restic autobackup
+After=network.target restic-powerup.service
+Requires=restic-powerup.service
+
+[Container]
+ContainerName=restic-autobackup
+Image=ghcr.io/m1cha/restic-autobackup:latest
+Label=io.containers.autoupdate=registry
+Network=podman:mac=00:16:3e:42:42:0d
+Exec=/opt/restic-autobackup/run
+PodmanArgs=--hostname homeserver
+
+# scripts
+PodmanArgs=--mount type=bind,src=/opt/container-files/restic-autobackup,dst=/opt/restic-autobackup,ro,idmap,relabel=shared
+
+# persistent cache
+PodmanArgs=--mount type=bind,src=/var/containerbind/restic-autobackup-cache,dst=/media/cache,idmap,relabel=shared
+Environment=XDG_CACHE_HOME=/media/cache
+
+# secrets
+PodmanArgs=--mount type=bind,src=/opt/container-secrets/restic-autobackup,dst=/media/config,ro,idmap,relabel=shared
+
+# backup sources
+PodmanArgs=--mount type=bind,src=/var/containerbind/googlephotos_backup,dst=/media/data/googlephotos_backup,ro,idmap,relabel=shared
+#PodmanArgs=--mount type=bind,src=/var/containerbind/homeassistant_config,dst=/media/data/homeassistant_config,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/var/containerbind/synced_photos,dst=/media/data/synced_photos,ro,idmap,relabel=shared

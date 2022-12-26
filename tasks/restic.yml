@@ -22,5 +22,30 @@
       Options=defaults,data=journal
   notify: reload_systemd
 
+- name: Replace syncthing-rsync.timer
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/restic-autobackup.timer
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      [Unit]
+      Description=Starts restic autobackup
+
+      [Timer]
+      OnCalendar=weekly
+      RandomizedDelaySec=900
+      Persistent=true
+
+      [Install]
+      WantedBy=timers.target
+  notify: reload_systemd
+
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers
+
+- name: Start restic-autobackup.timer
+  ansible.builtin.systemd:
+    name: restic-autobackup.timer
+    enabled: true
+    state: started

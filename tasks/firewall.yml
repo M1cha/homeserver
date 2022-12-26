@@ -124,6 +124,7 @@
           iifname $if_lan oifname $if_podman jump lan_to_podman
           iifname $if_podman oifname eth0.100 ether saddr $mac_tls-proxy jump tlsproxy_to_mgmt
           iifname $if_podman oifname $if_lan ether saddr $mac_homeassistant jump homeassistant_to_lan
+          iifname $if_podman ether saddr $mac_restic-autobackup ip daddr 192.168.178.77 tcp dport 8000 accept comment "restic-backup-2"
 
           log flags all prefix "dropped forward: "
         }
@@ -179,6 +180,7 @@
           ether saddr $mac_grafana ether daddr { $mac_influxdb, $mac_gotify, $mac_loki } accept
           ether saddr $mac_loki ether daddr { $mac_loki-minio } accept
           ether saddr $mac_promtail ether daddr { $mac_loki } accept
+          ether saddr $mac_restic-autobackup ether daddr { $mac_restic-powerup, $mac_restic-backup-1 } accept
           ether saddr $mac_restic-powerup ether daddr $mac_homeassistant accept
 
           log flags all prefix "dropped forward(bridge): "
