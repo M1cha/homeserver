@@ -1,0 +1,22 @@
+[Unit]
+Description=Photoprism traefik
+After=network.target photoprism.service
+Requires=photoprism.service
+
+[Container]
+ContainerName=photoprism-traefik
+Image=docker.io/traefik:latest
+Network=podman:mac=00:16:3e:42:42:10,ip=10.88.42.58
+
+# config
+PodmanArgs=--mount type=bind,src=/opt/container-files/photoprism-traefik,dst=/etc/traefik,ro,idmap,relabel=shared
+
+# secrets
+PodmanArgs=--mount type=bind,src=/opt/container-secrets/photoprism-traefik,dst=/media/config,ro,idmap,relabel=shared
+
+[Service]
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

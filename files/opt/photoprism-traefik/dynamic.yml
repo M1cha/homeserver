@@ -1,0 +1,22 @@
+tls:
+  certificates:
+    - certFile: /media/config/photoprism.crt
+      keyFile: /media/config/photoprism.key
+  options:
+    default:
+      sniStrict: true
+
+http:
+  routers:
+    router0:
+      entryPoints:
+        - websecure
+      service: service-photoprism
+      rule: Host(`photoprism.home.arpa`)
+      tls: {}
+
+  services:
+    service-photoprism:
+      loadBalancer:
+        servers:
+          - url: http://photoprism:2342/

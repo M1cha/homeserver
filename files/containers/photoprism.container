@@ -1,0 +1,54 @@
+[Unit]
+Description=Photoprism
+After=network.target photoprism-mariadb.service
+Requires=photoprism-mariadb.service
+
+[Container]
+ContainerName=photoprism
+Image=docker.io/photoprism/photoprism:latest
+Network=podman:mac=00:16:3e:42:42:0f
+
+# storage
+PodmanArgs=--mount type=bind,src=/var/containerbind/photoprism,dst=/photoprism/storage,rw,idmap,relabel=shared
+
+# originals
+PodmanArgs=--mount type=bind,src=/var/containerbind/googlephotos_backup,dst=/photoprism/originals/googlephotos_backup,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/var/containerbind/synced_photos,dst=/photoprism/originals/synced_photos,ro,idmap,relabel=shared
+
+PodmanArgs=--env-file=/opt/container-secrets/photoprism/env
+Environment=PHOTOPRISM_ADMIN_USER=admin
+Environment=PHOTOPRISM_ADMIN_PASSWORD=insecure
+Environment=PHOTOPRISM_AUTH_MODE=password
+Environment=PHOTOPRISM_SITE_URL=https://photoprism.home.arpa/
+Environment=PHOTOPRISM_ORIGINALS_LIMIT=5000
+Environment=PHOTOPRISM_HTTP_COMPRESSION=gzip
+Environment=PHOTOPRISM_LOG_LEVEL=info
+Environment=PHOTOPRISM_READONLY=true
+Environment=PHOTOPRISM_EXPERIMENTAL=false
+Environment=PHOTOPRISM_DISABLE_CHOWN=false
+Environment=PHOTOPRISM_DISABLE_WEBDAV=false
+Environment=PHOTOPRISM_DISABLE_SETTINGS=false
+Environment=PHOTOPRISM_DISABLE_PLACES=true
+Environment=PHOTOPRISM_DISABLE_TENSORFLOW=false
+Environment=PHOTOPRISM_DISABLE_FACES=false
+Environment=PHOTOPRISM_DISABLE_CLASSIFICATION=false
+Environment=PHOTOPRISM_DISABLE_RAW=false
+Environment=PHOTOPRISM_RAW_PRESETS=false
+Environment=PHOTOPRISM_JPEG_QUALITY=85
+Environment=PHOTOPRISM_DETECT_NSFW=false
+Environment=PHOTOPRISM_UPLOAD_NSFW=true
+Environment=PHOTOPRISM_DATABASE_DRIVER=mysql
+Environment=PHOTOPRISM_DATABASE_SERVER=photoprism-mariadb:3306
+Environment=PHOTOPRISM_DATABASE_NAME=photoprism
+Environment=PHOTOPRISM_DATABASE_USER=photoprism
+Environment=PHOTOPRISM_DATABASE_PASSWORD=insecure
+Environment=PHOTOPRISM_SITE_CAPTION=AI-Powered Photos App
+Environment=PHOTOPRISM_SITE_DESCRIPTION=
+Environment=PHOTOPRISM_SITE_AUTHOR=
+
+[Service]
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

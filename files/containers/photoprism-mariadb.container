@@ -1,0 +1,25 @@
+[Unit]
+Description=photoprism database
+After=network.target
+
+[Container]
+ContainerName=photoprism-mariadb
+Image=docker.io/mariadb:10.10
+Label=io.containers.autoupdate=registry
+Exec=mysqld --innodb-buffer-pool-size=512M --transaction-isolation=READ-COMMITTED --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-connections=512 --innodb-rollback-on-timeout=OFF --innodb-lock-wait-timeout=120
+Network=podman:mac=00:16:3e:42:42:0e
+PodmanArgs=--mount type=bind,src=/var/containerbind/photoprism-mariadb,dst=/var/lib/mysql,rw,idmap,relabel=shared
+
+Environment=MARIADB_AUTO_UPGRADE=1
+Environment=MARIADB_INITDB_SKIP_TZINFO=1
+Environment=MARIADB_DATABASE=photoprism
+Environment=MARIADB_USER=photoprism
+Environment=MARIADB_PASSWORD=insecure
+Environment=MARIADB_ROOT_PASSWORD=insecure
+
+[Service]
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

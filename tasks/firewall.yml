@@ -148,6 +148,7 @@
           iifname $if_lan ip daddr $ip4pub_grafana tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_grafana:3000
           iifname $if_lan ip daddr $ip4pub_gotify tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_gotify
           iifname $if_lan ip daddr $ip4pub_homeassistant tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_homeassistant:8123
+          iifname $if_lan ip daddr $ip4pub_photoprism-traefik tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_photoprism-traefik
           iifname $if_lan ip daddr $ip4pub_restic-backup-1 tcp dport 8000 meta mark set mark or 0x1 dnat to $ip4_restic-backup-1
           iifname $if_lan ip daddr $ip4pub_restic-backup-1 icmp type echo-request meta mark set mark or 0x1 dnat to $ip4_restic-backup-1
           iifname $if_lan fib daddr . iif type == { local, broadcast, multicast } tcp dport 8001 meta mark set mark or 0x1 dnat to $ip4_restic-powerup
@@ -179,6 +180,8 @@
           ether saddr $mac_homeassistant ether daddr { $mac_influxdb, $mac_gotify } accept
           ether saddr $mac_grafana ether daddr { $mac_influxdb, $mac_gotify, $mac_loki } accept
           ether saddr $mac_loki ether daddr { $mac_loki-minio } accept
+          ether saddr $mac_photoprism ether daddr $mac_photoprism-mariadb accept
+          ether saddr $mac_photoprism-traefik ether daddr $mac_photoprism accept
           ether saddr $mac_promtail ether daddr { $mac_loki } accept
           ether saddr $mac_restic-autobackup ether daddr { $mac_restic-powerup, $mac_restic-backup-1 } accept
           ether saddr $mac_restic-powerup ether daddr $mac_homeassistant accept
