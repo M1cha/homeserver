@@ -24,8 +24,3 @@
 
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers
-
-- name: Enable restic service
-  ansible.builtin.systemd:
-    name: restic.service
-    enabled: true
