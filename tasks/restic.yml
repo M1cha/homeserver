@@ -12,7 +12,7 @@
       Requires=systemd-fsck@dev-disk-by\x2dpartlabel-restic\x2dbackup.service
       # the documentation says this is implicit but `systemctl show` disagreed
       BindsTo=dev-disk-by\x2dpartlabel-restic\x2dbackup.device
-      PartOf=restic.service
+      PartOf=restic-backup-1.service
       StopWhenUnneeded=true
 
       [Mount]
