@@ -7,7 +7,7 @@
     mode: '0644'
     content: |
       [Unit]
-      Description=Restic backup mount¸
+      Description=Restic backup mount
       After=systemd-fsck@dev-disk-by\x2dpartlabel-restic\x2dbackup.service
       Requires=systemd-fsck@dev-disk-by\x2dpartlabel-restic\x2dbackup.service
       # the documentation says this is implicit but `systemctl show` disagreed
