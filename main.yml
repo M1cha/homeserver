@@ -18,6 +18,8 @@
       tags: [containers]
     - import_tasks: tasks/syncthing-rsync.yml
       tags: [syncthing-rsync]
+    - import_tasks: tasks/photoprism.yml
+      tags: [photoprism]
     - import_tasks: tasks/restic.yml
       tags: [restic]
 
