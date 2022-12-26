@@ -1,6 +1,6 @@
 [Unit]
 Description=Grafana
-After=network.target influxdb.service
+After=network.target influxdb.service loki.service
 
 [Container]
 ContainerName=grafana

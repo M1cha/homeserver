@@ -1,6 +1,6 @@
 [Unit]
 Description=home assistant
-After=network.target influxdb.service
+After=network.target gotify.service influxdb.service
 
 [Container]
 ContainerName=homeassistant

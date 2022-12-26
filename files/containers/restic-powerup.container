@@ -1,6 +1,7 @@
 [Unit]
 Description=Restic powerup
-After=network.target
+After=network.target homeassistant.service
+Requires=homeassistant.service
 
 [Container]
 ContainerName=restic-powerup
