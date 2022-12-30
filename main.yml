@@ -22,6 +22,8 @@
       tags: [photoprism]
     - import_tasks: tasks/restic.yml
       tags: [restic]
+    - import_tasks: tasks/gitmirror.yml
+      tags: [gitmirror]
 
   handlers:
     - name: reload_nft

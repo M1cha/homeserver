@@ -115,6 +115,25 @@
           ip daddr 192.168.178.61 tcp dport 22 accept comment "lxd-2 rpoweroff"
         }
 
+        chain accept_internet {
+          # Source: https://phoenixnap.com/kb/public-vs-private-ip-address
+          ip daddr {
+            1.0.0.0-9.255.255.255,
+            11.0.0.0-100.63.255.255,
+            100.128.0.0-126.255.255.255,
+            128.0.0.0-169.253.255.255,
+            169.255.0.0-172.15.255.255,
+            172.32.0.0-191.255.255.255,
+            192.0.1.0/24,
+            192.0.3.0-192.88.98.255,
+            192.88.100.0-192.167.255.255,
+            192.169.0.0-198.17.255.255,
+            198.20.0.0-198.51.99.255,
+            198.51.101.0-203.0.112.255,
+            203.0.114.0-223.255.255.255
+          } accept
+        }
+
         chain forward {
           type filter hook forward priority 0; policy drop;
 
@@ -125,6 +144,7 @@
           iifname $if_podman oifname eth0.100 ether saddr $mac_tls-proxy jump tlsproxy_to_mgmt
           iifname $if_podman oifname $if_lan ether saddr $mac_homeassistant jump homeassistant_to_lan
           iifname $if_podman ether saddr $mac_restic-autobackup ip daddr 192.168.178.77 tcp dport 8000 accept comment "restic-backup-2"
+          iifname $if_podman oifname $if_lan ether saddr $mac_gitmirror jump accept_internet
 
           log flags all prefix "dropped forward: "
         }
