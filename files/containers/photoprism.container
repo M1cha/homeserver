@@ -13,6 +13,7 @@ PodmanArgs=--mount type=bind,src=/var/containerbind/photoprism,dst=/photoprism/s
 
 # originals
 PodmanArgs=--mount type=bind,src=/var/containerbind/googlephotos_backup,dst=/photoprism/originals/googlephotos_backup,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/var/containerbind/photos_dad,dst=/photoprism/originals/photos_dad,ro,idmap,relabel=shared
 PodmanArgs=--mount type=bind,src=/var/containerbind/synced_photos,dst=/photoprism/originals/synced_photos,ro,idmap,relabel=shared
 
 PodmanArgs=--env-file=/opt/container-secrets/photoprism/env
