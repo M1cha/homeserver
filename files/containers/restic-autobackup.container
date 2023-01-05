@@ -23,7 +23,6 @@ PodmanArgs=--mount type=bind,src=/opt/container-secrets/restic-autobackup,dst=/m
 
 # backup sources
 PodmanArgs=--mount type=bind,src=/var/containerbind/gitmirror,dst=/media/data/gitmirror,ro,idmap,relabel=shared
-PodmanArgs=--mount type=bind,src=/var/containerbind/googlephotos_backup,dst=/media/data/googlephotos_backup,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/var/containerbind/photo_backups,dst=/media/data/photo_backups,ro,idmap,relabel=shared
 #PodmanArgs=--mount type=bind,src=/var/containerbind/homeassistant_config,dst=/media/data/homeassistant_config,ro,idmap,relabel=shared
-PodmanArgs=--mount type=bind,src=/var/containerbind/photos_dad,dst=/media/data/photos_dad,ro,idmap,relabel=shared
 PodmanArgs=--mount type=bind,src=/var/containerbind/synced_photos,dst=/media/data/synced_photos,ro,idmap,relabel=shared

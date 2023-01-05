@@ -12,8 +12,7 @@ Network=podman:mac=00:16:3e:42:42:0f
 PodmanArgs=--mount type=bind,src=/var/containerbind/photoprism,dst=/photoprism/storage,rw,idmap,relabel=shared
 
 # originals
-PodmanArgs=--mount type=bind,src=/var/containerbind/googlephotos_backup,dst=/photoprism/originals/googlephotos_backup,ro,idmap,relabel=shared
-PodmanArgs=--mount type=bind,src=/var/containerbind/photos_dad,dst=/photoprism/originals/photos_dad,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/var/containerbind/photo_backups,dst=/photoprism/originals/backups,ro,idmap,relabel=shared
 PodmanArgs=--mount type=bind,src=/var/containerbind/synced_photos,dst=/photoprism/originals/synced_photos,ro,idmap,relabel=shared
 
 PodmanArgs=--env-file=/opt/container-secrets/photoprism/env
