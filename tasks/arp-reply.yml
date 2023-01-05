@@ -34,7 +34,7 @@
       After=network.target
 
       [Service]
-      Type=Simple
+      Type=simple
       ProtectSystem=full
       ProtectHome=true
       ExecStart=/usr/local/bin/arp-reply -i eth0
