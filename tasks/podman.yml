@@ -88,6 +88,15 @@
     content: |
       containers:100000:1000000000
 
+# This is needed by containers like nginx which use `/dev/std*`
+- name: Install std2pipe binary
+  ansible.builtin.copy:
+    src: tools/std2pipe/target/linux/arm64/std2pipe
+    dest: /usr/local/bin/std2pipe
+    owner: root
+    group: root
+    mode: '0755'
+
 # This is needed for forwarding devices to containers
 # I'm not using `ansible.posix.seboolean` because I don't want to install the
 # `selinux` python module
