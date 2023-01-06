@@ -104,7 +104,23 @@ create /etc/pki/ca-trust/source/anchors/m1cha-main.pem
 run update-ca-trust
 ```
 
-### ansible
+## ansible
+
+### Build dependencies
+arp-reply:
+
+```bash
+git clone tools/arp-reply
+sh -c 'cd tools/arp-reply && cross build --release --target aarch64-unknown-linux-gnu'
+```
+
+std2pipe:
+
+```bash
+./tools/std2pipe/build_release.sh linux/arm64
+```
+
+### Run/Update
 
 ```bash
 ansible-playbook main.yml
