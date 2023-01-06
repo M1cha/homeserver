@@ -16,7 +16,7 @@
 
 - name: Install arp-reply binary
   ansible.builtin.copy:
-    src: arp-reply/target/aarch64-unknown-linux-gnu/release/arp-reply
+    src: tools/arp-reply/target/aarch64-unknown-linux-gnu/release/arp-reply
     dest: /usr/local/bin/arp-reply
     owner: root
     group: root
