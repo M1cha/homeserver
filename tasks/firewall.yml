@@ -98,7 +98,10 @@
 
         chain lan_to_podman {
           # It was an input packet but is now going to podman.
-          # This means it was forwarded and we want to accept it.
+          # This means it was forwarded by netavarks rules and we want to accept it.
+          meta mark & 0x2 == 0x2 accept
+
+          # we dnat'ed this packet thus want to accept it
           meta mark & 0x1 == 0x1 accept
         }
 
@@ -157,7 +160,7 @@
           type filter hook prerouting priority -200; policy accept;
 
           # mark everything that is intended for one of our IPs
-          iifname $if_lan fib daddr . iif type == { local, broadcast, multicast } meta mark set mark or 0x1
+          iifname $if_lan fib daddr . iif type == { local, broadcast, multicast } meta mark set mark or 0x2
         }
       }
 
