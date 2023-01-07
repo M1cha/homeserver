@@ -125,7 +125,7 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    // tracks how many fds are in the wpoll set so we can quit when it's empty
+    // tracks how many fds are in the epoll set so we can quit when it's empty
     int num_epoll_fds = 0;
 
     event = (struct epoll_event) {
