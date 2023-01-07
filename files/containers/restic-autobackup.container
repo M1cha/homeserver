@@ -5,7 +5,7 @@ Requires=restic-powerup.service
 
 [Container]
 ContainerName=restic-autobackup
-Image=ghcr.io/m1cha/restic-autobackup:latest
+Image=ghcr.io/m1cha/homeserver/restic-autobackup:latest
 Label=io.containers.autoupdate=registry
 Network=podman:mac=00:16:3e:42:42:0d
 Exec=/opt/restic-autobackup/run
