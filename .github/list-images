@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -euo pipefail
+
+readarray -d '' images < <(find container-images/ -type f -name 'Containerfile\.*' -printf '%f\0')
+
+for i in "${!images[@]}"; do
+    IFS='.' read -ra parts <<< "${images[$i]}"
+
+    images[$i]="${parts[1]}"
+done
+
+jq --compact-output --null-input '$ARGS.positional' --args -- "${images[@]}"
