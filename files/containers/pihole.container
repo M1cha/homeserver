@@ -7,7 +7,7 @@ ContainerName=pihole
 Image=docker.io/pihole/pihole:latest
 Label=io.containers.autoupdate=registry
 PodmanArgs=--entrypoint /user-init
-PodmanArgs=--mount type=bind,src=/opt/container-files/pihole/lighttpd.conf,dst=/etc/lighttpd/external.conf,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/opt/container-files/pihole/lighttpd.conf,dst=/etc/lighttpd/conf-enabled/external.conf,ro,idmap,relabel=shared
 PodmanArgs=--mount type=bind,src=/opt/container-files/pihole/user-init,dst=/user-init,ro,idmap,relabel=shared
 PodmanArgs=--mount type=bind,src=/opt/container-secrets/pihole,dst=/media/config,ro,idmap,relabel=shared
 PodmanArgs=--mount type=bind,src=/var/containerbind/pihole_nvs,dst=/etc/pihole,rw,idmap,relabel=shared
