@@ -1,0 +1,5 @@
+FROM docker.io/golang:1.18-alpine
+
+RUN go install github.com/mailhog/mailhog@master
+
+ENTRYPOINT ["/go/bin/mailhog"]
