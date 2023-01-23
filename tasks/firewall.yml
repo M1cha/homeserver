@@ -168,6 +168,7 @@
         chain prerouting {
           type nat hook prerouting priority -100;
 
+          iifname $if_lan ip daddr $ip4pub_bitwarden tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_bitwarden:8443
           iifname $if_lan ip daddr $ip4pub_grafana tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_grafana:3000
           iifname $if_lan ip daddr $ip4pub_gotify tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_gotify
           iifname $if_lan ip daddr $ip4pub_homeassistant tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_homeassistant:8123
@@ -200,6 +201,8 @@
           ether type arp accept
 
           # communication rules for all containers
+          ether saddr $mac_bitwarden ether daddr $mac_bitwarden-mariadb accept
+          ether saddr $mac_bitwarden ether daddr $mac_mailhog accept
           ether saddr $mac_homeassistant ether daddr $mac_restic-backup-1 icmp type echo-request accept
           ether saddr $mac_homeassistant ether daddr { $mac_influxdb, $mac_gotify } accept
           ether saddr $mac_grafana ether daddr { $mac_influxdb, $mac_gotify, $mac_loki } accept

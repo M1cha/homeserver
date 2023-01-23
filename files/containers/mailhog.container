@@ -1,0 +1,19 @@
+[Unit]
+Description=mailhog
+After=network.target
+
+[Container]
+ContainerName=mailhog
+Image=ghcr.io/m1cha/homeserver/mailhog:latest
+Network=podman:mac=00:16:3e:42:42:16
+PodmanArgs=--mount type=bind,src=/var/containerbind/mailhog,dst=/maildir,rw,idmap,relabel=shared
+Environment=MH_STORAGE=maildir
+Environment=MH_MAILDIR_PATH=/maildir
+Environment=MH_AUTH_FILE=/maildir/auth
+
+[Service]
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target
