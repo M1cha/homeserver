@@ -24,6 +24,10 @@ xrestic() {
 xrestic_backup() {
     local host="$1"
     xrestic "$host" backup /media/data \
+        --exclude /var/containerbind/bitwarden/licenses \
+        --exclude /var/containerbind/bitwarden/logs \
+        --exclude /var/containerbind/bitwarden/ssl.crt \
+        --exclude /var/containerbind/bitwarden/ssl.key \
         --exclude /var/containerbind/syncthing/config
 }
 
