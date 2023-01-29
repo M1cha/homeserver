@@ -23,7 +23,8 @@ xrestic() {
 
 xrestic_backup() {
     local host="$1"
-    xrestic "$host" backup /media/data
+    xrestic "$host" backup /media/data \
+        --exclude /var/containerbind/syncthing/config
 }
 
 xrestic_backup restic-backup-2.home.arpa
