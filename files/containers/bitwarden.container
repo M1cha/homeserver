@@ -5,8 +5,9 @@ Requires=bitwarden-mariadb.service
 
 [Container]
 ContainerName=bitwarden
-Image=docker.io/bitwarden/self-host:beta
-Label=io.containers.autoupdate=registry
+#Image=docker.io/bitwarden/self-host:beta
+Image=localhost/m1cha/bitwarden:arm64
+#Label=io.containers.autoupdate=registry
 Network=podman:mac=00:16:3e:42:42:15,ip=10.88.42.61
 
 # storage
@@ -42,7 +43,11 @@ Environment=globalSettings__mail__smtp__username=test
 Environment=globalSettings__mail__smtp__password=test
 
 # Other
+Environment=globalSettings__disableUserRegistration=true
 Environment=adminSettings__admins=admin@bitwarden.home.arpa
+
+# Offline installation
+Environment=globalSettings__pushRelayBaseUri=
 
 [Service]
 Restart=always
