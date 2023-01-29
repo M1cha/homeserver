@@ -22,7 +22,7 @@
       Options=defaults,data=journal
   notify: reload_systemd
 
-- name: Replace syncthing-rsync.timer
+- name: Replace restic-autobackup.timer
   ansible.builtin.copy:
     dest: /etc/systemd/system/restic-autobackup.timer
     owner: root
