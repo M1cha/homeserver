@@ -1,0 +1,28 @@
+[Unit]
+Description=rclone backup
+After=network.target
+
+[Container]
+ContainerName=rclone-backup
+Image=ghcr.io/m1cha/homeserver/restic-autobackup:latest
+Label=io.containers.autoupdate=registry
+Network=podman:mac=00:16:3e:42:42:17
+Environment=RCLONE_CONFIG=/media/config/rclone.conf
+PodmanArgs=--hostname homeserver
+Exec=restic \
+    -r rclone:main:backup \
+    --password-file /media/config/credentials \
+    --verbose \
+    backup /media/data \
+    --exclude /var/containerbind/bitwarden/licenses \
+    --exclude /var/containerbind/bitwarden/logs \
+    --exclude /var/containerbind/bitwarden/ssl.crt \
+    --exclude /var/containerbind/bitwarden/ssl.key
+
+# secrets
+PodmanArgs=--mount type=bind,src=/opt/container-secrets/rclone-backup,dst=/media/config,ro,idmap,relabel=shared
+
+# backup sources
+PodmanArgs=--mount type=bind,src=/var/containerbind/bitwarden,dst=/media/data/bitwarden,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/var/containerbind/bitwarden-mariadb,dst=/media/data/bitwarden-mariadb,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/var/containerbind/syncthing/synced,dst=/media/data/syncthing/synced,ro,idmap,relabel=shared

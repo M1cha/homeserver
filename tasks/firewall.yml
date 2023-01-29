@@ -147,7 +147,7 @@
           iifname $if_podman oifname eth0.100 ether saddr $mac_tls-proxy jump tlsproxy_to_mgmt
           iifname $if_podman oifname $if_lan ether saddr $mac_homeassistant jump homeassistant_to_lan
           iifname $if_podman ether saddr $mac_restic-autobackup ip daddr 192.168.178.77 tcp dport 8000 accept comment "restic-backup-2"
-          iifname $if_podman oifname $if_lan ether saddr $mac_gitmirror jump accept_internet
+          iifname $if_podman oifname $if_lan ether saddr { $mac_gitmirror, $mac_rclone-backup } jump accept_internet
 
           log flags all prefix "dropped forward: "
         }

@@ -20,6 +20,8 @@
       tags: [syncthing-rsync]
     - import_tasks: tasks/photoprism.yml
       tags: [photoprism]
+    - import_tasks: tasks/rclone.yml
+      tags: [rclone]
     - import_tasks: tasks/restic.yml
       tags: [restic]
     - import_tasks: tasks/gitmirror.yml
