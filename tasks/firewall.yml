@@ -147,7 +147,7 @@
           iifname $if_podman oifname eth0.100 ether saddr $mac_tls-proxy jump tlsproxy_to_mgmt
           iifname $if_podman oifname $if_lan ether saddr $mac_homeassistant jump homeassistant_to_lan
           iifname $if_podman ether saddr $mac_restic-autobackup ip daddr 192.168.178.77 tcp dport 8000 accept comment "restic-backup-2"
-          iifname $if_podman oifname $if_lan ether saddr { $mac_gitmirror, $mac_rclone-backup } jump accept_internet
+          iifname $if_podman oifname $if_lan ether saddr { $mac_gitmirror, $mac_jellyfin, $mac_rclone-backup } jump accept_internet
 
           log flags all prefix "dropped forward: "
         }
@@ -172,6 +172,7 @@
           iifname $if_lan ip daddr $ip4pub_grafana tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_grafana:3000
           iifname $if_lan ip daddr $ip4pub_gotify tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_gotify
           iifname $if_lan ip daddr $ip4pub_homeassistant tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_homeassistant:8123
+          iifname $if_lan ip daddr $ip4pub_jellyfin-traefik tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_jellyfin-traefik
           iifname $if_lan ip daddr $ip4pub_mediashare-samba tcp dport {139, 445} meta mark set mark or 0x1 dnat to $ip4_mediashare-samba
           iifname $if_lan ip daddr $ip4pub_photoprism-traefik tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_photoprism-traefik
           iifname $if_lan ip daddr $ip4pub_restic-backup-1 tcp dport 8000 meta mark set mark or 0x1 dnat to $ip4_restic-backup-1
@@ -206,6 +207,7 @@
           ether saddr $mac_homeassistant ether daddr $mac_restic-backup-1 icmp type echo-request accept
           ether saddr $mac_homeassistant ether daddr { $mac_influxdb, $mac_gotify } accept
           ether saddr $mac_grafana ether daddr { $mac_influxdb, $mac_gotify, $mac_loki } accept
+          ether saddr $mac_jellyfin-traefik ether daddr $mac_jellyfin accept
           ether saddr $mac_loki ether daddr { $mac_loki-minio } accept
           ether saddr $mac_photoprism ether daddr $mac_photoprism-mariadb accept
           ether saddr $mac_photoprism-traefik ether daddr $mac_photoprism accept

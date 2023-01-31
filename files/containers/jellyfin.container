@@ -1,0 +1,24 @@
+[Unit]
+Description=Jellyfin
+After=network.target
+
+[Container]
+ContainerName=jellyfin
+Image=docker.io/jellyfin/jellyfin:latest
+Label=io.containers.autoupdate=registry
+Network=podman:mac=00:16:3e:42:42:19
+PodmanArgs=--cgroup-conf=memory.high=209715200
+
+# storage
+PodmanArgs=--mount type=bind,src=/var/containerbind/jellyfin/config,dst=/config,rw,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/var/containerbind/jellyfin/cache,dst=/cache,rw,idmap,relabel=shared
+
+# media
+PodmanArgs=--mount type=bind,src=/var/containerbind/music,dst=/media/music,ro,idmap,relabel=shared
+
+[Service]
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

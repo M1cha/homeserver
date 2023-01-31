@@ -1,0 +1,23 @@
+[Unit]
+Description=Jellyfin traefik
+After=network.target jellyfin.service
+Requires=jellyfin.service
+
+[Container]
+ContainerName=jellyfin-traefik
+Image=docker.io/traefik:latest
+Label=io.containers.autoupdate=registry
+Network=podman:mac=00:16:3e:42:42:18,ip=10.88.42.62
+
+# config
+PodmanArgs=--mount type=bind,src=/opt/container-files/jellyfin-traefik,dst=/etc/traefik,ro,idmap,relabel=shared
+
+# secrets
+PodmanArgs=--mount type=bind,src=/opt/container-secrets/jellyfin-traefik,dst=/media/config,ro,idmap,relabel=shared
+
+[Service]
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target
