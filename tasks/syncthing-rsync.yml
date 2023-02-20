@@ -45,6 +45,7 @@
 
       doit /var/containerbind/syncthing/Camera /var/containerbind/synced_photos/Camera
       doit /var/containerbind/syncthing/Screenshots /var/containerbind/synced_photos/Screenshots
+      doit /var/containerbind/syncthing/whatsapp-media /var/containerbind/synced_photos/whatsapp-media
 
       if [ "$did_checksum" == "1" ]; then
         touch "$checksum_time_file"
@@ -75,6 +76,7 @@
         --exclude '.*\.tmp' \
         /var/containerbind/syncthing/Camera \
         /var/containerbind/syncthing/Screenshots \
+        /var/containerbind/syncthing/whatsapp-media \
         | while read path
       do
           echo "$path changed"
