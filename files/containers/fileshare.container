@@ -1,0 +1,22 @@
+[Unit]
+Description=fileshare
+After=network.target
+
+[Container]
+ContainerName=fileshare
+Image=docker.io/library/nginx:latest
+Label=io.containers.autoupdate=registry
+Network=podman:mac=00:16:3e:42:42:20,ip=10.88.42.63
+PodmanArgs=--mount type=bind,src=/opt/container-secrets/fileshare,dst=/media/config,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/opt/container-secrets/fileshare/default.conf,dst=/etc/nginx/conf.d/default.conf,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/var/containerbind/fileshare,dst=/srv,ro,idmap,relabel=shared
+
+Exec=std2pipe nginx -g 'daemon off;'
+PodmanArgs=--mount type=bind,src=/usr/local/bin/std2pipe,dst=/bin/std2pipe
+
+[Service]
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

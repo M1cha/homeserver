@@ -169,6 +169,7 @@
           type nat hook prerouting priority -100;
 
           iifname $if_lan ip daddr $ip4pub_bitwarden tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_bitwarden:8443
+          iifname $if_lan ip daddr $ip4pub_fileshare tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_fileshare
           iifname $if_lan ip daddr $ip4pub_grafana tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_grafana:3000
           iifname $if_lan ip daddr $ip4pub_gotify tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_gotify
           iifname $if_lan ip daddr $ip4pub_homeassistant tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_homeassistant:8123
