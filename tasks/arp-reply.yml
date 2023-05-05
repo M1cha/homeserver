@@ -37,7 +37,7 @@
       Type=simple
       ProtectSystem=full
       ProtectHome=true
-      ExecStart=/usr/local/bin/arp-reply -i eth0
+      ExecStart=/usr/local/bin/arp-reply -i end0
       Restart=always
       RestartSec=10
 

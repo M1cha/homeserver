@@ -20,15 +20,15 @@
       interface="${1}"
       action="${2}"
 
-      if [[ "$action" == "up" ]] && [[ "$interface" == "eth0" ]]; then
+      if [[ "$action" == "up" ]] && [[ "$interface" == "end0" ]]; then
         ip link set dev "$interface" promisc on
       fi
 
 - name: Add VLAN 100
   community.general.nmcli:
-    conn_name: eth0.100
-    ifname: eth0.100
-    vlandev: eth0
+    conn_name: end0.100
+    ifname: end0.100
+    vlandev: end0
     vlanid: 100
     type: vlan
     state: present
