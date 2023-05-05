@@ -6,6 +6,7 @@ Requires=photoprism.service
 [Container]
 ContainerName=photoprism-traefik
 Image=docker.io/traefik:latest
+Label=io.containers.autoupdate=registry
 Network=podman:mac=00:16:3e:42:42:10,ip=10.88.42.58
 
 # config

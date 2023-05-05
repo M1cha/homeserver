@@ -5,6 +5,7 @@ After=network.target
 [Container]
 ContainerName=mailhog
 Image=ghcr.io/m1cha/homeserver/mailhog:latest
+Label=io.containers.autoupdate=registry
 Network=podman:mac=00:16:3e:42:42:16
 PodmanArgs=--mount type=bind,src=/var/containerbind/mailhog,dst=/maildir,rw,idmap,relabel=shared
 Environment=MH_STORAGE=maildir
