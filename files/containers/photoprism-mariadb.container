@@ -4,9 +4,9 @@ After=network.target
 
 [Container]
 ContainerName=photoprism-mariadb
-Image=docker.io/mariadb:10.10
+Image=docker.io/mariadb:10.11
 Label=io.containers.autoupdate=registry
-Exec=mysqld --innodb-buffer-pool-size=512M --transaction-isolation=READ-COMMITTED --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-connections=512 --innodb-rollback-on-timeout=OFF --innodb-lock-wait-timeout=120
+Exec=mysqld --innodb-buffer-pool-size=512M --lower-case-table-names=1 --transaction-isolation=READ-COMMITTED --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-connections=512 --innodb-rollback-on-timeout=OFF --innodb-lock-wait-timeout=180
 Network=podman:mac=00:16:3e:42:42:0e
 PodmanArgs=--mount type=bind,src=/var/containerbind/photoprism-mariadb,dst=/var/lib/mysql,rw,idmap,relabel=shared
 
