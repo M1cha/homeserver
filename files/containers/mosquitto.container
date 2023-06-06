@@ -1,0 +1,17 @@
+[Unit]
+Description=MQTT broker
+After=network.target
+
+[Container]
+ContainerName=mosquitto
+Image=docker.io/eclipse-mosquitto:2.0
+Label=io.containers.autoupdate=registry
+Network=podman:mac=00:16:3e:42:42:21
+PodmanArgs=--mount type=bind,src=/opt/container-files/mosquitto/mosquitto.conf,dst=/mosquitto/config/mosquitto.conf,ro,idmap,relabel=shared
+
+[Service]
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target
