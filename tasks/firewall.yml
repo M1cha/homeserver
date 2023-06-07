@@ -71,8 +71,7 @@
         chain inbound_lan {
           tcp dport 22 accept comment "SSH"
 
-          # for debug purposes
-          icmp type echo-request limit rate 5/second accept
+          ip6 saddr fe80::/10 udp sport 547 udp dport 546 accept comment "DHCPv6 replies"
         }
 
         chain inbound_podman {
@@ -86,8 +85,8 @@
           ct state invalid drop
           ct state { established, related } accept
 
-          # SLAAC
-          icmpv6 type { nd-router-solicit, nd-router-advert, nd-neighbor-solicit, nd-neighbor-advert } accept
+          ip protocol icmp counter accept comment "accept all ICMP types"
+          ip6 nexthdr icmpv6 counter accept comment "accept all ICMP types"
 
           iifname lo accept
           iifname $if_lan jump inbound_lan
