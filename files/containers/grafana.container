@@ -17,7 +17,6 @@ PodmanArgs=--env-file=/opt/container-secrets/grafana/env
 PodmanArgs=--mount type=bind,src=/opt/container-files/grafana/provisioning,dst=/etc/grafana/provisioning,ro,idmap,relabel=shared
 PodmanArgs=--mount type=bind,src=/opt/container-files/grafana/dashboards,dst=/usr/share/grafana/conf/dashboards,ro,idmap,relabel=shared
 PodmanArgs=--mount type=bind,src=/opt/container-files/grafana/third_party,dst=/usr/share/grafana/conf/third_party,ro,idmap,relabel=shared
-PodmanArgs=--mount type=bind,src=/opt/container-files-extracted/grafana/plugins,dst=/var/lib/grafana/plugins,ro,idmap,relabel=shared
 
 # pre-init script
 PodmanArgs=--mount type=bind,src=/opt/container-secrets/grafana/ca.crt,dst=/usr/local/share/ca-certificates/homeserver-ca.crt,ro,idmap,relabel=shared
