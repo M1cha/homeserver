@@ -5,7 +5,7 @@ Requires=bitwarden-mariadb.service
 
 [Container]
 ContainerName=bitwarden
-Image=localhost/m1cha/bitwarden:arm64
+Image=docker.io/bitwarden/self-host:beta
 Network=podman:mac=00:16:3e:42:42:15,ip=10.88.42.61
 
 # storage
