@@ -11,6 +11,7 @@ PodmanArgs=--mount type=bind,src=/opt/container-files/pihole/lighttpd.conf,dst=/
 PodmanArgs=--mount type=bind,src=/opt/container-files/pihole/user-init,dst=/user-init,ro,idmap,relabel=shared
 PodmanArgs=--mount type=bind,src=/opt/container-secrets/pihole,dst=/media/config,ro,idmap,relabel=shared
 PodmanArgs=--mount type=bind,src=/var/containerbind/pihole_nvs,dst=/etc/pihole,rw,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/opt/container-files/pihole/dnsmasq.conf,dst=/etc/dnsmasq.d/10-homeserver.conf,ro,idmap,relabel=shared
 
 Network=macvlan:mac=00:16:3e:42:42:01
 PodmanArgs=--ip 192.168.43.3
