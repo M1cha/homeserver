@@ -26,6 +26,8 @@
       tags: [restic]
     - import_tasks: tasks/gitmirror.yml
       tags: [gitmirror]
+    - import_tasks: tasks/grafana.yml
+      tags: [grafana]
 
   handlers:
     - name: reload_nft
