@@ -8,6 +8,8 @@ ContainerName=bitwarden
 Image=docker.io/bitwarden/self-host:beta
 Network=podman:mac=00:16:3e:42:42:15,ip=10.88.42.61
 
+PodmanArgs=--stop-timeout 600
+
 # storage
 PodmanArgs=--mount type=bind,src=/var/containerbind/bitwarden,dst=/etc/bitwarden,rw,idmap,relabel=shared
 
