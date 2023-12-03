@@ -43,9 +43,12 @@
       echo "pre-run cooldown"
       sleep 10
 
-      doit /var/containerbind/syncthing/Camera /var/containerbind/synced_photos/Camera
-      doit /var/containerbind/syncthing/Screenshots /var/containerbind/synced_photos/Screenshots
-      doit /var/containerbind/syncthing/whatsapp-media /var/containerbind/synced_photos/whatsapp-media
+      doit /var/containerbind/syncthing/pixel4a/Camera /var/containerbind/synced_photos/pixel4a/Camera
+      doit /var/containerbind/syncthing/pixel4a/Screenshots /var/containerbind/synced_photos/pixel4a/Screenshots
+      doit /var/containerbind/syncthing/pixel4a/whatsapp-media /var/containerbind/synced_photos/pixel4a/whatsapp-media
+      doit /var/containerbind/syncthing/pixel8/Camera /var/containerbind/synced_photos/pixel8/Camera
+      doit /var/containerbind/syncthing/pixel8/Screenshots /var/containerbind/synced_photos/pixel8/Screenshots
+      doit /var/containerbind/syncthing/pixel8/whatsapp-media /var/containerbind/synced_photos/pixel8/whatsapp-media
 
       if [ "$did_checksum" == "1" ]; then
         touch "$checksum_time_file"
@@ -74,9 +77,12 @@
 
       inotifywait -m -r -e create -e close_write -e move --format '%w%f' \
         --exclude '.*\.tmp' \
-        /var/containerbind/syncthing/Camera \
-        /var/containerbind/syncthing/Screenshots \
-        /var/containerbind/syncthing/whatsapp-media \
+        /var/containerbind/syncthing/pixel4a/Camera \
+        /var/containerbind/syncthing/pixel4a/Screenshots \
+        /var/containerbind/syncthing/pixel4a/whatsapp-media \
+        /var/containerbind/syncthing/pixel8/Camera \
+        /var/containerbind/syncthing/pixel8/Screenshots \
+        /var/containerbind/syncthing/pixel8/whatsapp-media \
         | while read path
       do
           echo "$path changed"

@@ -25,4 +25,4 @@ PodmanArgs=--mount type=bind,src=/opt/container-secrets/rclone-backup,dst=/media
 # backup sources
 PodmanArgs=--mount type=bind,src=/var/containerbind/bitwarden,dst=/media/data/bitwarden,ro,idmap,relabel=shared
 PodmanArgs=--mount type=bind,src=/var/containerbind/bitwarden-mariadb,dst=/media/data/bitwarden-mariadb,ro,idmap,relabel=shared
-PodmanArgs=--mount type=bind,src=/var/containerbind/syncthing/synced,dst=/media/data/syncthing/synced,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/var/containerbind/syncthing/pixel8/synced,dst=/media/data/syncthing/pixel8/synced,ro,idmap,relabel=shared

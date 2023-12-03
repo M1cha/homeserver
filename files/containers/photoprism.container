@@ -13,8 +13,10 @@ PodmanArgs=--mount type=bind,src=/var/containerbind/photoprism,dst=/photoprism/s
 
 # originals
 PodmanArgs=--mount type=bind,src=/var/containerbind/photo_backups,dst=/photoprism/originals/backups,ro,idmap,relabel=shared
-PodmanArgs=--mount type=bind,src=/var/containerbind/synced_photos/Camera,dst=/photoprism/originals/synced_photos/Camera,ro,idmap,relabel=shared
-PodmanArgs=--mount type=bind,src=/var/containerbind/synced_photos/Screenshots,dst=/photoprism/originals/synced_photos/Screenshots,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/var/containerbind/synced_photos/pixel4a/Camera,dst=/photoprism/originals/synced_photos/pixel4a/Camera,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/var/containerbind/synced_photos/pixel4a/Screenshots,dst=/photoprism/originals/synced_photos/pixel4a/Screenshots,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/var/containerbind/synced_photos/pixel8/Camera,dst=/photoprism/originals/synced_photos/pixel8/Camera,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/var/containerbind/synced_photos/pixel8/Screenshots,dst=/photoprism/originals/synced_photos/pixel8/Screenshots,ro,idmap,relabel=shared
 
 PodmanArgs=--env-file=/opt/container-secrets/photoprism/env
 Environment=PHOTOPRISM_ADMIN_USER=admin
