@@ -1,38 +1,41 @@
 ---
-- hosts: homeserver
+- name: Main
+  hosts: homeserver
   gather_facts: false
   vars:
     container_macs: "{{ lookup('container_query', 'containers', pattern='^Network=.*mac=(([a-zA-Z0-9]{2}:){5}[a-zA-Z0-9]{2}).*$') }}"
     container_ips: "{{ lookup('container_query', 'containers', pattern='^Network=.*ip=(\\d+\\.\\d+\\.\\d+\\.\\d+).*$') }}"
 
   tasks:
-    - import_tasks: tasks/systemd-failure-notification.yml
+    - ansible.builtin.import_tasks: tasks/systemd-failure-notification.yml
       tags: [sfn]
-    - import_tasks: tasks/podman.yml
+    - ansible.builtin.import_tasks: tasks/podman.yml
       tags: [podman]
-    - import_tasks: tasks/firewall.yml
+    - ansible.builtin.import_tasks: tasks/firewall.yml
       tags: [firewall]
-    - import_tasks: tasks/arp-reply.yml
+    - ansible.builtin.import_tasks: tasks/arp-reply.yml
       tags: [arp-reply]
-    - import_tasks: tasks/containers.yml
+    - ansible.builtin.import_tasks: tasks/containers.yml
       tags: [containers]
-    - import_tasks: tasks/syncthing-rsync.yml
+    - ansible.builtin.import_tasks: tasks/syncthing-rsync.yml
       tags: [syncthing-rsync]
-    - import_tasks: tasks/photoprism.yml
+    - ansible.builtin.import_tasks: tasks/photoprism.yml
       tags: [photoprism]
-    - import_tasks: tasks/rclone.yml
+    - ansible.builtin.import_tasks: tasks/rclone.yml
       tags: [rclone]
-    - import_tasks: tasks/restic.yml
+    - ansible.builtin.import_tasks: tasks/restic.yml
       tags: [restic]
-    - import_tasks: tasks/gitmirror.yml
+    - ansible.builtin.import_tasks: tasks/gitmirror.yml
       tags: [gitmirror]
 
   handlers:
-    - name: reload_nft
+    - name: "Reload nftables"
+      listen: reload_nft
       ansible.builtin.systemd:
         name: nftables.service
         state: restarted
 
-    - name: reload_systemd
+    - name: "Reload system daemon"
+      listen: reload_systemd
       ansible.builtin.systemd:
         daemon_reload: true

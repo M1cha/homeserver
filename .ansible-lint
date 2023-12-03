@@ -2,3 +2,6 @@
 exclude_paths:
  - files/opt/grafana/third_party
  - .github
+ - tools
+skip_list:
+ - "name[missing]"
