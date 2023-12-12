@@ -1,0 +1,21 @@
+[Unit]
+Description=immich-typesense
+After=network.target
+
+[Container]
+ContainerName=immich-typesense
+Image=docker.io/typesense/typesense:0.24.1@sha256:9bcff2b829f12074426ca044b56160ca9d777a0c488303469143dd9f8259d4dd
+Network=podman:mac=00:16:3e:42:42:24
+Volume=immich-tsdata:/data:idmap
+EnvironmentFile=/opt/container-files/immich/env
+Environment=TYPESENSE_API_KEY=some-random-text
+Environment=TYPESENSE_DATA_DIR=/data
+# remove this to get debug messages
+Environment=GLOG_minloglevel=1
+
+[Service]
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

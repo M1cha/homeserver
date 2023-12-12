@@ -1,0 +1,22 @@
+tls:
+  certificates:
+    - certFile: /media/config/immich.crt
+      keyFile: /media/config/immich.key
+  options:
+    default:
+      sniStrict: true
+
+http:
+  routers:
+    router0:
+      entryPoints:
+        - websecure
+      service: service-immich
+      rule: Host(`immich.home.arpa`)
+      tls: {}
+
+  services:
+    service-immich:
+      loadBalancer:
+        servers:
+          - url: http://immich-server:3001/

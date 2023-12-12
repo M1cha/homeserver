@@ -1,0 +1,15 @@
+[Unit]
+Description=immich-redis
+After=network.target
+
+[Container]
+ContainerName=immich-redis
+Image=docker.io/redis:6.2-alpine@sha256:60e49e22fa5706cd8df7d5e0bc50ee9bab7c608039fa653c4d961014237cca46
+Network=podman:mac=00:16:3e:42:42:27
+
+[Service]
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

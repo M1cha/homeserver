@@ -173,6 +173,7 @@
           iifname $if_lan ip daddr $ip4pub_grafana tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_grafana:3000
           iifname $if_lan ip daddr $ip4pub_gotify tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_gotify
           iifname $if_lan ip daddr $ip4pub_homeassistant tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_homeassistant:8123
+          iifname $if_lan ip daddr $ip4pub_immich-traefik tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_immich-traefik
           iifname $if_lan ip daddr $ip4pub_jellyfin-traefik tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_jellyfin-traefik
           iifname $if_lan ip daddr $ip4pub_mediashare-samba tcp dport {139, 445} meta mark set mark or 0x1 dnat to $ip4_mediashare-samba
           iifname $if_lan ip daddr $ip4pub_photoprism-traefik tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_photoprism-traefik
@@ -209,6 +210,9 @@
           ether saddr $mac_homeassistant ether daddr $mac_restic-backup-1 icmp type echo-request accept
           ether saddr $mac_homeassistant ether daddr { $mac_influxdb, $mac_gotify, $mac_mosquitto } accept
           ether saddr $mac_grafana ether daddr { $mac_influxdb, $mac_gotify, $mac_loki } accept
+          ether saddr $mac_immich-server ether daddr { $mac_immich-redis, $mac_immich-database, $mac_immich-typesense, $mac_immich-machine-learning } accept
+          ether saddr $mac_immich-microservices ether daddr { $mac_immich-redis, $mac_immich-database, $mac_immich-typesense, $mac_immich-machine-learning } accept
+          ether saddr $mac_immich-traefik ether daddr $mac_immich-server accept
           ether saddr $mac_jellyfin-traefik ether daddr $mac_jellyfin accept
           ether saddr $mac_loki ether daddr { $mac_loki-minio } accept
           ether saddr $mac_photoprism ether daddr $mac_photoprism-mariadb accept

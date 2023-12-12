@@ -1,0 +1,19 @@
+[Unit]
+Description=immich-database
+After=network.target
+
+[Container]
+ContainerName=immich-database
+Image=docker.io/postgres:14-alpine@sha256:6a0e35296341e676fe6bd8d236c72afffe2dfe3d7eb9c2405c0f3fc04500cd07
+Network=podman:mac=00:16:3e:42:42:23
+Volume=immich-pgdata:/var/lib/postgresql/data:idmap
+Environment=POSTGRES_PASSWORD=postgres
+Environment=POSTGRES_USER=postgres
+Environment=POSTGRES_DB=immich
+
+[Service]
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

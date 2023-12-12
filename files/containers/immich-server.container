@@ -1,0 +1,26 @@
+[Unit]
+Description=immich-server
+After=network.target immich-redis.service immich-database.service immich-typesense.service
+Requires=immich-redis.service immich-database.service immich-typesense.service
+
+[Container]
+ContainerName=immich-server
+Image=ghcr.io/immich-app/immich-server:release
+Network=podman:mac=00:16:3e:42:42:28
+EnvironmentFile=/opt/container-files/immich/env
+Exec=start.sh immich
+Volume=immich-upload:/usr/src/app/upload:idmap
+
+# originals
+PodmanArgs=--mount type=bind,src=/var/containerbind/photo_backups,dst=/mnt/media/backups,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/var/containerbind/synced_photos/pixel4a/Camera,dst=/mnt/media/synced_photos/pixel4a/Camera,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/var/containerbind/synced_photos/pixel4a/Screenshots,dst=/mnt/media/synced_photos/pixel4a/Screenshots,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/var/containerbind/synced_photos/pixel8/Camera,dst=/mnt/media/synced_photos/pixel8/Camera,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/var/containerbind/synced_photos/pixel8/Screenshots,dst=/mnt/media/synced_photos/pixel8/Screenshots,ro,idmap,relabel=shared
+
+[Service]
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target
