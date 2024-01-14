@@ -16,7 +16,7 @@ PodmanArgs=--mount type=bind,src=/opt/container-files/homeassistant/user-init,ds
 Environment=REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 
 # zigbee dongle
-AddDevice=/dev/serial/by-id/usb-Nabu_Casa_SkyConnect_v1.0_0ecf9c7e96e5ed11b2926c6262c613ac-if00-port0:/dev/serial/by-id/usb-Nabu_Casa_SkyConnect_v1.0_0ecf9c7e96e5ed11b2926c6262c613ac-if00-port0:rw
+AddDevice=/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0:/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0:rw
 
 [Service]
 Restart=always
