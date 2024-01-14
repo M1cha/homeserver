@@ -7,12 +7,13 @@ ContainerName=immich-traefik
 Image=docker.io/traefik:latest
 Label=io.containers.autoupdate=registry
 Network=podman:mac=00:16:3e:42:42:29,ip=10.88.42.65
+EnvironmentFile=/opt/container-secrets/immich-traefik/env
 
 # config
 PodmanArgs=--mount type=bind,src=/opt/container-files/immich-traefik,dst=/etc/traefik,ro,idmap,relabel=shared
 
 # secrets
-PodmanArgs=--mount type=bind,src=/opt/container-secrets/immich-traefik,dst=/media/config,ro,idmap,relabel=shared
+Volume=immich-traefik:/media/config:idmap
 
 [Service]
 Restart=always

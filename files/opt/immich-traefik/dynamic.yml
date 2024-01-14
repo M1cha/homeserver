@@ -1,19 +1,12 @@
-tls:
-  certificates:
-    - certFile: /media/config/immich.crt
-      keyFile: /media/config/immich.key
-  options:
-    default:
-      sniStrict: true
-
 http:
   routers:
     router0:
       entryPoints:
         - websecure
       service: service-immich
-      rule: Host(`immich.home.arpa`)
-      tls: {}
+      rule: Host(`immich.mzimmermann.info`)
+      tls:
+        certResolver: myresolver
 
   services:
     service-immich:

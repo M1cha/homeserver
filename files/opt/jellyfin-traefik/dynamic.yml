@@ -1,19 +1,12 @@
-tls:
-  certificates:
-    - certFile: /media/config/jellyfin.crt
-      keyFile: /media/config/jellyfin.key
-  options:
-    default:
-      sniStrict: true
-
 http:
   routers:
     router0:
       entryPoints:
         - websecure
       service: service-jellyfin
-      rule: Host(`jellyfin.home.arpa`)
-      tls: {}
+      rule: Host(`jellyfin.mzimmermann.info`)
+      tls:
+        certResolver: myresolver
 
   services:
     service-jellyfin:

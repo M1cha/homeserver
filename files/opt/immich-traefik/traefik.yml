@@ -2,6 +2,14 @@ entryPoints:
   websecure:
     address: ":443"
 
+certificatesResolvers:
+  myresolver:
+    acme:
+      email: sigmaepsilon92@gmail.com
+      storage: /media/config/acme.json
+      dnsChallenge:
+        provider: cloudflare
+
 providers:
   file:
     filename: "/etc/traefik/dynamic.yml"
