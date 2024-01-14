@@ -116,6 +116,7 @@
           ip daddr 192.168.178.1 accept comment "fritzbox smart home"
           ip daddr { 192.168.178.61, 192.168.178.77 } icmp type echo-request accept comment "lxd-2 and restic-backup-2 online status"
           ip daddr 192.168.178.61 tcp dport 22 accept comment "lxd-2 rpoweroff"
+          ip daddr 192.168.46.160 accept comment "samsung tv"
         }
 
         chain accept_internet {
