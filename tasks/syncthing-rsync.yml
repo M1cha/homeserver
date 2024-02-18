@@ -121,6 +121,7 @@
       Type=Simple
       ExecStart=/usr/local/bin/syncthing-rsync-watch
       Restart=always
+      RestartMode=direct
       RestartSec=10
 
       [Install]

@@ -39,6 +39,7 @@ Environment=REV_SERVER_DOMAIN=home.arpa
 
 [Service]
 Restart=always
+RestartMode=direct
 RestartSec=10
 
 [Install]

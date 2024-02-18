@@ -51,6 +51,7 @@ Environment=globalSettings__pushRelayBaseUri=
 
 [Service]
 Restart=always
+RestartMode=direct
 RestartSec=10
 
 [Install]

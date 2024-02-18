@@ -9,6 +9,7 @@ Network=podman:mac=00:16:3e:42:42:27
 
 [Service]
 Restart=always
+RestartMode=direct
 RestartSec=10
 
 [Install]

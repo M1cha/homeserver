@@ -16,6 +16,7 @@ Environment=MARIADB_RANDOM_ROOT_PASSWORD=true
 
 [Service]
 Restart=always
+RestartMode=direct
 RestartSec=10
 
 [Install]

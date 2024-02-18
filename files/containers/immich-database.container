@@ -13,6 +13,7 @@ Environment=POSTGRES_DB=immich
 
 [Service]
 Restart=always
+RestartMode=direct
 RestartSec=10
 
 [Install]

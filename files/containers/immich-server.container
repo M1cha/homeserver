@@ -20,6 +20,7 @@ PodmanArgs=--mount type=bind,src=/var/containerbind/synced_photos/pixel8/Screens
 
 [Service]
 Restart=always
+RestartMode=direct
 RestartSec=10
 
 [Install]

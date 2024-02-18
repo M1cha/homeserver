@@ -11,6 +11,7 @@ PodmanArgs=--mount type=bind,src=/opt/container-files/mosquitto/mosquitto.conf,d
 
 [Service]
 Restart=always
+RestartMode=direct
 RestartSec=10
 
 [Install]

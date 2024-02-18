@@ -13,6 +13,7 @@ PodmanArgs=--mount type=bind,src=/opt/container-files/loki,dst=/etc/loki,ro,idma
 
 [Service]
 Restart=always
+RestartMode=direct
 RestartSec=10
 
 [Install]

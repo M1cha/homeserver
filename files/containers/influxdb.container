@@ -20,6 +20,7 @@ Environment=INFLUXD_TLS_KEY=/media/config/server.key
 
 [Service]
 Restart=always
+RestartMode=direct
 RestartSec=10
 
 [Install]

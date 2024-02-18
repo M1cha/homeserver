@@ -18,6 +18,7 @@ PodmanArgs=--mount type=bind,src=/opt/container-secrets/restic-powerup,dst=/medi
 
 [Service]
 Restart=always
+RestartMode=direct
 RestartSec=10
 
 [Install]

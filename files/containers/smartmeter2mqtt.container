@@ -15,6 +15,7 @@ Environment=RUST_LOG=info
 
 [Service]
 Restart=always
+RestartMode=direct
 RestartSec=10
 
 [Install]

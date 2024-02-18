@@ -18,6 +18,7 @@ Environment=MINIO_UPDATE=off
 
 [Service]
 Restart=always
+RestartMode=direct
 RestartSec=10
 
 [Install]

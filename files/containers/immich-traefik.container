@@ -17,6 +17,7 @@ Volume=immich-traefik:/media/config:idmap
 
 [Service]
 Restart=always
+RestartMode=direct
 RestartSec=10
 
 [Install]

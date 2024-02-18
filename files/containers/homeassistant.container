@@ -20,6 +20,7 @@ AddDevice=/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0:/dev/serial/by-id/usb
 
 [Service]
 Restart=always
+RestartMode=direct
 RestartSec=10
 
 [Install]

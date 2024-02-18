@@ -11,6 +11,7 @@ PodmanArgs=--mount type=bind,src=/var/containerbind/syncthing,dst=/var/syncthing
 
 [Service]
 Restart=always
+RestartMode=direct
 RestartSec=10
 
 [Install]

@@ -15,6 +15,7 @@ Exec=/usr/local/bin/mailhog
 
 [Service]
 Restart=always
+RestartMode=direct
 RestartSec=10
 
 [Install]

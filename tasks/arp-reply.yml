@@ -39,6 +39,7 @@
       ProtectHome=true
       ExecStart=/usr/local/bin/arp-reply -i end0
       Restart=always
+      RestartMode=direct
       RestartSec=10
 
       [Install]

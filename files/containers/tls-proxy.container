@@ -15,6 +15,7 @@ PodmanArgs=--mount type=bind,src=/usr/local/bin/std2pipe,dst=/bin/std2pipe
 
 [Service]
 Restart=always
+RestartMode=direct
 RestartSec=10
 
 [Install]

@@ -30,6 +30,7 @@ Environment=GF_SERVER_CERT_KEY=/media/config/server.key
 
 [Service]
 Restart=always
+RestartMode=direct
 RestartSec=10
 
 [Install]

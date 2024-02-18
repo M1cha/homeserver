@@ -16,6 +16,7 @@ Environment=GOTIFY_SERVER_SSL_CERTKEY=/media/config/server.key
 
 [Service]
 Restart=always
+RestartMode=direct
 RestartSec=10
 
 [Install]
