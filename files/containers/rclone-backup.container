@@ -4,8 +4,8 @@ After=network.target
 
 [Container]
 ContainerName=rclone-backup
-Image=ghcr.io/m1cha/homeserver/restic-autobackup:latest
-Label=io.containers.autoupdate=registry
+Image=localhost/homeserver-universal:latest
+Label=io.containers.autoupdate=local
 Network=podman:mac=00:16:3e:42:42:17
 Environment=RCLONE_CONFIG=/media/config/rclone.conf
 PodmanArgs=--hostname homeserver

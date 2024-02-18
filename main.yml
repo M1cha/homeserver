@@ -27,6 +27,8 @@
       tags: [restic]
     - ansible.builtin.import_tasks: tasks/gitmirror.yml
       tags: [gitmirror]
+    - ansible.builtin.import_tasks: tasks/container-image-builder.yml
+      tags: [container-image-builder]
 
   handlers:
     - name: "Reload nftables"

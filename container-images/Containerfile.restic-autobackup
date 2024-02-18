@@ -1,3 +1,0 @@
-FROM docker.io/alpine:latest
-
-RUN apk add --no-cache ca-certificates fuse openssh-client tzdata restic netcat-openbsd rclone

@@ -4,13 +4,14 @@ After=network.target
 
 [Container]
 ContainerName=mailhog
-Image=ghcr.io/m1cha/homeserver/mailhog:latest
-Label=io.containers.autoupdate=registry
+Image=localhost/homeserver-universal:latest
+Label=io.containers.autoupdate=local
 Network=podman:mac=00:16:3e:42:42:16
 PodmanArgs=--mount type=bind,src=/var/containerbind/mailhog,dst=/maildir,rw,idmap,relabel=shared
 Environment=MH_STORAGE=maildir
 Environment=MH_MAILDIR_PATH=/maildir
 Environment=MH_AUTH_FILE=/maildir/auth
+Exec=/usr/local/bin/mailhog
 
 [Service]
 Restart=always

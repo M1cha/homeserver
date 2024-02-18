@@ -5,8 +5,8 @@ Requires=homeassistant.service
 
 [Container]
 ContainerName=restic-powerup
-Image=ghcr.io/m1cha/homeserver/restic-powerup:latest
-Label=io.containers.autoupdate=registry
+Image=localhost/homeserver-universal:latest
+Label=io.containers.autoupdate=local
 Network=podman:mac=00:16:3e:42:42:0c,ip=10.88.42.56
 Exec=sh -euc 'update-ca-certificates && socat -u tcp-listen:8001,fork system:/opt/restic-powerup/run'
 
