@@ -110,6 +110,7 @@
           ip daddr 192.168.42.2 tcp dport 80 accept comment "switch0"
           ip daddr 192.168.42.3 tcp dport 80 accept comment "switch1"
           ip daddr 192.168.42.4 tcp dport 80 accept comment "switch2"
+          ip daddr 192.168.42.5 tcp dport 80 accept comment "switch3"
         }
 
         chain homeassistant_to_lan {
