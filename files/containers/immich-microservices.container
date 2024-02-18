@@ -1,7 +1,7 @@
 [Unit]
 Description=immich-microservices
-After=network.target immich-redis.service immich-database.service immich-typesense.service
-Requires=immich-redis.service immich-database.service immich-typesense.service
+After=network.target immich-redis.service immich-database.service
+Requires=immich-redis.service immich-database.service
 
 [Container]
 ContainerName=immich-microservices

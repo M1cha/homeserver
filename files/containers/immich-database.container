@@ -4,7 +4,7 @@ After=network.target
 
 [Container]
 ContainerName=immich-database
-Image=docker.io/postgres:14-alpine@sha256:6a0e35296341e676fe6bd8d236c72afffe2dfe3d7eb9c2405c0f3fc04500cd07
+Image=docker.io/tensorchord/pgvecto-rs:pg14-v0.1.11@sha256:0335a1a22f8c5dd1b697f14f079934f5152eaaa216c09b61e293be285491f8ee
 Network=podman:mac=00:16:3e:42:42:23
 Volume=immich-pgdata:/var/lib/postgresql/data:idmap
 Environment=POSTGRES_PASSWORD=postgres
