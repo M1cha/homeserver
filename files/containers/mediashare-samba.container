@@ -1,6 +1,7 @@
 [Unit]
 Description=SMB media share
-After=network.target
+After=network.target run-media-archive.mount
+Requires=run-media-archive.mount
 
 [Container]
 ContainerName=mediashare-samba
@@ -16,7 +17,7 @@ PodmanArgs=--mount type=bind,src=/opt/container-files/mediashare-samba,dst=/etc/
 PodmanArgs=--mount type=bind,src=/var/containerbind/mediashare-samba,dst=/var/lib/samba/private,rw,idmap,relabel=shared
 
 # media
-PodmanArgs=--mount type=bind,src=/var/containerbind/music,dst=/media/storage/music,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/run/media/archive,dst=/media/storage,rw,idmap,relabel=shared
 
 [Service]
 Restart=always
