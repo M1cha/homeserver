@@ -19,8 +19,6 @@
       tags: [containers]
     - ansible.builtin.import_tasks: tasks/syncthing-rsync.yml
       tags: [syncthing-rsync]
-    - ansible.builtin.import_tasks: tasks/photoprism.yml
-      tags: [photoprism]
     - ansible.builtin.import_tasks: tasks/rclone.yml
       tags: [rclone]
     - ansible.builtin.import_tasks: tasks/restic.yml
