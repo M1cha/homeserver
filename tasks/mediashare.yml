@@ -1,0 +1,31 @@
+---
+- name: Create mount service
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/run-media-archive.mount
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      [Unit]
+      Description=Archive mount
+      After=systemd-fsck@dev-disk-by\x2dpartlabel-archive.service
+      Requires=systemd-fsck@dev-disk-by\x2dpartlabel-archive.service
+      # the documentation says this is implicit but `systemctl show` disagreed
+      BindsTo=dev-disk-by\x2dpartlabel-archive.device
+
+      [Mount]
+      What=/dev/disk/by-partlabel/archive
+      Where=/run/media/archive
+      Type=btrfs
+      Options=defaults
+  notify: reload_systemd
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Start run-media-archive.mount
+  ansible.builtin.systemd:
+    name: run-media-archive.mount
+    enabled: true
+    state: started
+

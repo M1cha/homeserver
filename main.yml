@@ -27,6 +27,8 @@
       tags: [gitmirror]
     - ansible.builtin.import_tasks: tasks/container-image-builder.yml
       tags: [container-image-builder]
+    - ansible.builtin.import_tasks: tasks/mediashare.yml
+      tags: [mediashare]
 
   handlers:
     - name: "Reload nftables"
