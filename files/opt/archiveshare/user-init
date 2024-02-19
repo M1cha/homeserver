@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -euo pipefail
+
+if ! [ -f "/var/lib/ssh-hostkeys/ssh_host_rsa_key" ]; then
+	ssh-keygen -A
+	mv /etc/ssh/ssh_host* /var/lib/ssh-hostkeys/
+fi
+
+exec /usr/sbin/sshd -D -e

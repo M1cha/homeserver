@@ -23,6 +23,7 @@
         jq \
         netcat-openbsd \
         openssh-client \
+        openssh-server \
         rclone \
         restic \
         samba \

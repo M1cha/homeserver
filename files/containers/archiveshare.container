@@ -1,0 +1,32 @@
+[Unit]
+Description=archive share
+After=network.target run-media-archive.mount
+Requires=run-media-archive.mount
+
+[Container]
+ContainerName=archiveshare
+Image=localhost/homeserver-universal:latest
+Label=io.containers.autoupdate=local
+Network=podman:mac=00:16:3e:42:42:2a,ip=10.88.42.66
+PodmanArgs=--entrypoint /user-init
+
+# Otherwise, relabeling the share would take a long time
+PodmanArgs=--security-opt label=disable
+
+# persistent state
+Volume=archiveshare-ssh-hostkeys:/var/lib/ssh-hostkeys:idmap
+
+# config
+PodmanArgs=--mount type=bind,src=/opt/container-files/archiveshare/user-init,dst=/user-init,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/opt/container-files/archiveshare/sshd.conf,dst=/etc/ssh/sshd_config.d/container.conf,ro,idmap,relabel=shared
+PodmanArgs=--mount type=bind,src=/opt/container-files/archiveshare/authorized_keys,dst=/root/.ssh/authorized_keys,ro,idmap,relabel=shared
+
+# share
+PodmanArgs=--mount type=bind,src=/run/media/archive,dst=/mnt,rw,idmap
+
+[Service]
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target
