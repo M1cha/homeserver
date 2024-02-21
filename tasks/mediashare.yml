@@ -22,10 +22,3 @@
 
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers
-
-- name: Start run-media-archive.mount
-  ansible.builtin.systemd:
-    name: run-media-archive.mount
-    enabled: true
-    state: started
-
