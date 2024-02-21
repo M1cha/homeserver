@@ -1,7 +1,7 @@
 [Unit]
 Description=Restic autobackup
-After=network.target restic-powerup.service run-media-archive.mount
-Requires=restic-powerup.service run-media-archive.mount
+After=network.target restic-powerup.service run-media-archive.mount run-media-roms.mount
+Requires=restic-powerup.service run-media-archive.mount run-media-roms.mount
 
 [Container]
 ContainerName=restic-autobackup
@@ -32,3 +32,4 @@ PodmanArgs=--mount type=bind,src=/var/containerbind/syncthing,dst=/media/data/sy
 #PodmanArgs=--mount type=bind,src=/var/containerbind/homeassistant_config,dst=/media/data/homeassistant_config,ro,idmap,relabel=shared
 PodmanArgs=--mount type=bind,src=/var/containerbind/synced_photos,dst=/media/data/synced_photos,ro,idmap,relabel=shared
 PodmanArgs=--mount type=bind,src=/run/media/archive,dst=/media/data/archive,ro,idmap
+PodmanArgs=--mount type=bind,src=/run/media/roms,dst=/media/data/roms,ro,idmap
