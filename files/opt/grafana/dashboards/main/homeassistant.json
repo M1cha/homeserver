@@ -39,6 +39,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -52,6 +53,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "smooth",
             "lineStyle": {
               "fill": "solid"
@@ -117,7 +119,7 @@
             "type": "influxdb",
             "uid": "rjl7EP47k"
           },
-          "query": "from(bucket: \"home-assistant\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> group(columns: [\"entity_id\", \"friendly_name_str\"])\n  |> filter(fn: (r) => r.device_class_str == \"power\")\n  |> filter(fn: (r) => r.entity_id == \"smartmeter_power\")\n  |> map(fn: (r) => ({\n      _time: r._time,\n      entity_id: r.entity_id,\n      friendly_name_str: r.friendly_name_str,\n      _value: r.value,\n    }))",
+          "query": "from(bucket: \"home-assistant\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> group(columns: [\"entity_id\", \"friendly_name_str\"])\n  |> filter(fn: (r) => r.device_class_str == \"power\")\n  |> filter(fn: (r) => r.entity_id == \"smartmeter_power\")\n  |> map(fn: (r) => ({\n      _time: r._time,\n      entity_id: r.entity_id,\n      friendly_name_str: r.friendly_name_str,\n      _value: r.value,\n    }))\n    |> aggregateWindow(every: v.windowPeriod, fn: mean)",
           "queryType": "randomWalk",
           "refId": "A"
         }
@@ -153,6 +155,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -166,7 +169,8 @@
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "linear",
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
             "lineStyle": {
               "fill": "solid"
             },
@@ -199,7 +203,7 @@
               }
             ]
           },
-          "unit": "percent"
+          "unit": "conμgm3"
         },
         "overrides": []
       },
@@ -209,18 +213,18 @@
         "x": 12,
         "y": 0
       },
-      "id": 4,
+      "id": 9,
       "options": {
         "legend": {
           "calcs": [
             "lastNotNull"
           ],
-          "displayMode": "table",
+          "displayMode": "list",
           "placement": "right",
-          "showLegend": true
+          "showLegend": false
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -231,12 +235,12 @@
             "type": "influxdb",
             "uid": "rjl7EP47k"
           },
-          "query": "from(bucket: \"home-assistant\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> group(columns: [\"entity_id\", \"friendly_name_str\"])\n  |> filter(fn: (r) => r.device_class_str == \"humidity\")\n  |> map(fn: (r) => ({\n      _time: r._time,\n      entity_id: r.entity_id,\n      friendly_name_str: r.friendly_name_str,\n      _value: r.value,\n    }))",
+          "query": "from(bucket: \"home-assistant\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> group(columns: [\"entity_id\", \"friendly_name_str\"])\n  |> filter(fn: (r) => r.device_class_str == \"pm1\" or r.device_class_str == \"pm25\" or r.device_class_str == \"pm10\")\n  |> map(fn: (r) => ({\n      _time: r._time,\n      entity_id: r.entity_id,\n      friendly_name_str: r.friendly_name_str,\n      _value: r.value,\n    }))\n    |> aggregateWindow(every: v.windowPeriod, fn: mean)",
           "queryType": "randomWalk",
           "refId": "A"
         }
       ],
-      "title": "Humidities",
+      "title": "Air quality",
       "transformations": [
         {
           "disabled": true,
@@ -267,6 +271,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -280,6 +285,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineStyle": {
               "fill": "solid"
@@ -381,6 +387,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -394,6 +401,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineStyle": {
               "fill": "solid"
@@ -427,35 +435,9 @@
               }
             ]
           },
-          "unit": "volt"
+          "unit": "percent"
         },
-        "overrides": [
-          {
-            "__systemRef": "hideSeriesFrom",
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "desktop Electricalmeasurementrmsvoltage",
-                  "work Electricalmeasurementrmsvoltage"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": true
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 8,
@@ -463,7 +445,7 @@
         "x": 12,
         "y": 8
       },
-      "id": 8,
+      "id": 4,
       "options": {
         "legend": {
           "calcs": [
@@ -485,12 +467,12 @@
             "type": "influxdb",
             "uid": "rjl7EP47k"
           },
-          "query": "from(bucket: \"home-assistant\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> group(columns: [\"entity_id\", \"friendly_name_str\"])\n  |> filter(fn: (r) => r.device_class_str == \"voltage\")\n  |> map(fn: (r) => ({\n      _time: r._time,\n      entity_id: r.entity_id,\n      friendly_name_str: r.friendly_name_str,\n      _value: r.value,\n    }))",
+          "query": "from(bucket: \"home-assistant\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> group(columns: [\"entity_id\", \"friendly_name_str\"])\n  |> filter(fn: (r) => r.device_class_str == \"humidity\")\n  |> map(fn: (r) => ({\n      _time: r._time,\n      entity_id: r.entity_id,\n      friendly_name_str: r.friendly_name_str,\n      _value: r.value,\n    }))",
           "queryType": "randomWalk",
           "refId": "A"
         }
       ],
-      "title": "Voltages",
+      "title": "Humidities",
       "transformations": [
         {
           "disabled": true,
@@ -521,6 +503,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -534,6 +517,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineStyle": {
               "fill": "solid"
@@ -635,6 +619,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -648,6 +633,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineStyle": {
               "fill": "solid"
@@ -681,9 +667,35 @@
               }
             ]
           },
-          "unit": "pressurehpa"
+          "unit": "volt"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "desktop Electricalmeasurementrmsvoltage",
+                  "work Electricalmeasurementrmsvoltage"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -691,7 +703,7 @@
         "x": 12,
         "y": 16
       },
-      "id": 5,
+      "id": 8,
       "options": {
         "legend": {
           "calcs": [
@@ -713,12 +725,12 @@
             "type": "influxdb",
             "uid": "rjl7EP47k"
           },
-          "query": "from(bucket: \"home-assistant\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> group(columns: [\"entity_id\", \"friendly_name_str\"])\n  |> filter(fn: (r) => r.device_class_str == \"pressure\")\n  |> map(fn: (r) => ({\n      _time: r._time,\n      entity_id: r.entity_id,\n      friendly_name_str: r.friendly_name_str,\n      _value: r.value,\n    }))",
+          "query": "from(bucket: \"home-assistant\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> group(columns: [\"entity_id\", \"friendly_name_str\"])\n  |> filter(fn: (r) => r.device_class_str == \"voltage\")\n  |> map(fn: (r) => ({\n      _time: r._time,\n      entity_id: r.entity_id,\n      friendly_name_str: r.friendly_name_str,\n      _value: r.value,\n    }))",
           "queryType": "randomWalk",
           "refId": "A"
         }
       ],
-      "title": "Pressures",
+      "title": "Voltages",
       "transformations": [
         {
           "disabled": true,
@@ -749,6 +761,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -762,6 +775,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineStyle": {
               "fill": "solid"
@@ -850,23 +864,138 @@
         }
       ],
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "rjl7EP47k"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "pressurehpa"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 24
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.1.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "rjl7EP47k"
+          },
+          "query": "from(bucket: \"home-assistant\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> group(columns: [\"entity_id\", \"friendly_name_str\"])\n  |> filter(fn: (r) => r.device_class_str == \"pressure\")\n  |> map(fn: (r) => ({\n      _time: r._time,\n      entity_id: r.entity_id,\n      friendly_name_str: r.friendly_name_str,\n      _value: r.value,\n    }))",
+          "queryType": "randomWalk",
+          "refId": "A"
+        }
+      ],
+      "title": "Pressures",
+      "transformations": [
+        {
+          "disabled": true,
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "_time"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*friendly_name_str=\"(.*)\".*",
+            "renamePattern": "$1"
+          }
+        }
+      ],
+      "type": "timeseries"
     }
   ],
   "refresh": "1m",
-  "schemaVersion": 38,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Home Assistant",
   "uid": "Oo0XiQ47z",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }
