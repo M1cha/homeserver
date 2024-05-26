@@ -6,6 +6,7 @@ After=network.target
 ContainerName=immich-redis
 Image=registry.hub.docker.com/library/redis:6.2-alpine@sha256:51d6c56749a4243096327e3fb964a48ed92254357108449cb6e23999c37773c5
 Network=podman:mac=00:16:3e:42:42:27
+Tmpfs=/data
 
 [Service]
 Restart=always
