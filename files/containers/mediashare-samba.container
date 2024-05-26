@@ -1,0 +1,30 @@
+[Unit]
+Description=SMB media share
+After=network.target run-media-media.mount
+Requires=run-media-media.mount
+
+[Container]
+ContainerName=mediashare-samba
+Image=localhost/homeserver-universal:latest
+Label=io.containers.autoupdate=local
+Network=podman:mac=00:16:3e:42:42:13,ip=10.88.42.60
+Exec=smbd --foreground --no-process-group --debug-stdout
+UserNS=auto:size=65535
+PodmanArgs=--security-opt label=disable
+
+# config
+PodmanArgs=--mount type=bind,src=/opt/container-files/mediashare-samba,dst=/etc/samba,ro,idmap,relabel=shared
+
+# persistent state (mostly for the passwords)
+PodmanArgs=--mount type=bind,src=/var/containerbind/mediashare-samba,dst=/var/lib/samba/private,rw,idmap,relabel=shared
+
+# media
+PodmanArgs=--mount type=bind,src=/run/media/media,dst=/mnt,ro,idmap
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

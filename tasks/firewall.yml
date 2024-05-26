@@ -178,6 +178,7 @@
           iifname $if_lan ip daddr $ip4pub_homeassistant tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_homeassistant:8123
           iifname $if_lan ip daddr $ip4pub_immich-traefik tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_immich-traefik
           iifname $if_lan ip daddr $ip4pub_jellyfin-traefik tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_jellyfin-traefik
+          iifname $if_lan ip daddr $ip4pub_mediashare-samba tcp dport {139, 445} meta mark set mark or 0x1 dnat to $ip4_mediashare-samba
           iifname $if_lan ip daddr $ip4pub_restic-backup-1 tcp dport 8000 meta mark set mark or 0x1 dnat to $ip4_restic-backup-1
           iifname $if_lan ip daddr $ip4pub_restic-backup-1 icmp type echo-request meta mark set mark or 0x1 dnat to $ip4_restic-backup-1
           iifname $if_lan ip daddr $ip4pub_roms-nginx tcp dport 80 meta mark set mark or 0x1 dnat to $ip4_roms-nginx
