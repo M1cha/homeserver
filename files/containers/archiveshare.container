@@ -1,7 +1,7 @@
 [Unit]
 Description=archive share
 After=network.target run-media-archive.mount run-media-roms.mount
-Requires=run-media-archive.mount run-media-roms.mount
+Requires=run-media-archive.mount run-media-roms.mount run-media-media.mount
 
 [Container]
 ContainerName=archiveshare
@@ -24,6 +24,7 @@ PodmanArgs=--mount type=bind,src=/opt/container-files/archiveshare/authorized_ke
 # share
 PodmanArgs=--mount type=bind,src=/run/media/archive,dst=/mnt/archive,rw,idmap
 PodmanArgs=--mount type=bind,src=/run/media/roms,dst=/mnt/roms,rw,idmap
+PodmanArgs=--mount type=bind,src=/run/media/media,dst=/mnt/media,rw,idmap
 
 [Service]
 Restart=always
