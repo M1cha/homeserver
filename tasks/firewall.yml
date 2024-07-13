@@ -149,7 +149,15 @@
           iifname $if_podman oifname end0.100 ether saddr $mac_tls-proxy jump tlsproxy_to_mgmt
           iifname $if_podman oifname $if_lan ether saddr $mac_homeassistant jump homeassistant_to_lan
           iifname $if_podman ether saddr $mac_restic-autobackup ip daddr 192.168.178.77 tcp dport 8000 accept comment "restic-backup-2"
-          iifname $if_podman oifname $if_lan ether saddr { $mac_gitmirror, $mac_jellyfin, $mac_rclone-backup, $mac_immich-traefik, $mac_jellyfin-traefik } jump accept_internet
+          iifname $if_podman ether saddr $mac_gatus ip daddr 100.64.0.0/16 accept comment "work VPN"
+          iifname $if_podman oifname $if_lan ether saddr {
+              $mac_gatus,
+              $mac_gitmirror,
+              $mac_jellyfin,
+              $mac_rclone-backup,
+              $mac_immich-traefik,
+              $mac_jellyfin-traefik
+          } jump accept_internet
 
           log flags all prefix "dropped forward: "
         }
@@ -173,6 +181,7 @@
           iifname $if_lan ip daddr $ip4pub_archiveshare tcp dport 22 meta mark set mark or 0x1 dnat to $ip4_archiveshare
           iifname $if_lan ip daddr $ip4pub_bitwarden tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_bitwarden:8443
           iifname $if_lan ip daddr $ip4pub_fileshare tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_fileshare
+          iifname $if_lan ip daddr $ip4pub_gatus tcp dport 80 meta mark set mark or 0x1 dnat to $ip4_gatus:8080
           iifname $if_lan ip daddr $ip4pub_grafana tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_grafana:3000
           iifname $if_lan ip daddr $ip4pub_gotify tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_gotify
           iifname $if_lan ip daddr $ip4pub_homeassistant tcp dport 443 meta mark set mark or 0x1 dnat to $ip4_homeassistant:8123
@@ -210,9 +219,10 @@
           # communication rules for all containers
           ether saddr $mac_bitwarden ether daddr $mac_bitwarden-mariadb accept
           ether saddr $mac_bitwarden ether daddr $mac_mailhog accept
+          ether saddr $mac_gatus ether daddr $mac_gatus-postgres accept
           ether saddr $mac_homeassistant ether daddr $mac_restic-backup-1 icmp type echo-request accept
           ether saddr $mac_homeassistant ether daddr { $mac_influxdb, $mac_gotify, $mac_mosquitto } accept
-          ether saddr $mac_grafana ether daddr { $mac_influxdb, $mac_gotify, $mac_loki } accept
+          ether saddr $mac_grafana ether daddr { $mac_influxdb, $mac_gotify, $mac_loki, $mac_gatus-postgres } accept
           ether saddr $mac_immich-server ether daddr { $mac_immich-redis, $mac_immich-database, $mac_immich-machine-learning } accept
           ether saddr $mac_immich-microservices ether daddr { $mac_immich-redis, $mac_immich-database, $mac_immich-machine-learning } accept
           ether saddr $mac_immich-traefik ether daddr $mac_immich-server accept

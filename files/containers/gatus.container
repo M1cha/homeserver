@@ -1,0 +1,22 @@
+[Unit]
+Description=gatus
+After=network.target gatus-postgres.service
+Requires=gatus-postgres.service
+
+[Container]
+ContainerName=gatus
+Image=ghcr.io/twin/gatus
+Label=io.containers.autoupdate=registry
+Network=podman:mac=00:16:3e:42:42:2c,ip=10.88.42.68
+PodmanArgs=--mount type=bind,src=/var/containerbind/gatus/config.yaml,dst=/config/config.yaml,ro,idmap,relabel=shared
+Environment=POSTGRES_PASSWORD=postgres
+Environment=POSTGRES_USER=postgres
+Environment=POSTGRES_DB=gatus
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target
