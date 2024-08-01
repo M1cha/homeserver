@@ -1,0 +1,10 @@
+[Unit]
+Description=Starts restic autobackup
+
+[Timer]
+OnCalendar=weekly
+RandomizedDelaySec=900
+Persistent=true
+
+[Install]
+WantedBy=timers.target

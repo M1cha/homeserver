@@ -1,0 +1,31 @@
+[Unit]
+Description=TLS proxy
+After=network.target
+
+[Container]
+ContainerName=tlsproxy
+Image=docker.io/library/nginx:latest
+AutoUpdate=registry
+Network=podman:mac=00:16:3e:42:42:05
+Network=ipvlan:ip=192.168.43.51,interface_name=pub0
+Annotation=local.nftables=tlsproxy
+Volume=/usr/local/share/ca-main.pem:/etc/nginx/ssl/ca.pem:ro
+Volume=/usr/local/share/tlsproxy/default.conf:/etc/nginx/conf.d/default.conf:ro,idmap,z
+Secret=tlsproxy_modem_cert
+Secret=tlsproxy_modem_key
+Secret=tlsproxy_switch0_cert
+Secret=tlsproxy_switch0_key
+Secret=tlsproxy_switch1_cert
+Secret=tlsproxy_switch1_key
+Secret=tlsproxy_switch2_cert
+Secret=tlsproxy_switch2_key
+Secret=tlsproxy_switch3_cert
+Secret=tlsproxy_switch3_key
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

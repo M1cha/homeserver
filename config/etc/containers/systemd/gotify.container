@@ -1,0 +1,26 @@
+[Unit]
+Description=Gotify
+After=network.target
+
+[Container]
+ContainerName=gotify
+Image=docker.io/gotify/server:latest
+AutoUpdate=registry
+Network=podman:mac=00:16:3e:42:42:07
+Network=ipvlan:ip=192.168.43.54,interface_name=pub0
+Annotation=local.nftables=gotify
+Secret=gotify_https_cert
+Secret=gotify_https_key
+Volume=gotify_data:/app/data:idmap,z,nocopy
+
+Environment=GOTIFY_SERVER_SSL_ENABLED=true
+Environment=GOTIFY_SERVER_SSL_CERTFILE=/run/secrets/gotify_https_cert
+Environment=GOTIFY_SERVER_SSL_CERTKEY=/run/secrets/gotify_https_key
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

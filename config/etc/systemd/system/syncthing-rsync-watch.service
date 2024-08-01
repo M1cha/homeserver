@@ -1,0 +1,12 @@
+[Unit]
+Description=Watches syncthing data for changes and notifies systemd
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/syncthing-rsync-watch
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

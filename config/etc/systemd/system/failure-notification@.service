@@ -1,0 +1,8 @@
+[Unit]
+Description=Send a notification about a failed systemd unit
+After=network.target gotify.service
+Requires=gotify.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/failure-notification "%i"

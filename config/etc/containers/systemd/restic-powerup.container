@@ -1,0 +1,24 @@
+[Unit]
+Description=Restic powerup
+After=network.target homeassistant.service
+Requires=homeassistant.service
+
+[Container]
+ContainerName=restic-powerup
+Image=localhost/homeserver-universal:latest
+AutoUpdate=local
+Network=podman:mac=00:16:3e:42:42:0c
+Network=ipvlan:ip=192.168.43.56,interface_name=pub0
+Annotation=local.nftables=restic-powerup
+Exec=sh -euc 'update-ca-certificates && socat -u tcp-listen:80,fork system:/opt/restic-powerup/run'
+Volume=/usr/local/share/ca-main.pem:/usr/local/share/ca-certificates/homeassistant-ca.crt:ro,idmap,z
+Volume=/usr/local/share/restic-powerup:/opt/restic-powerup:ro,idmap,z
+Secret=restic_powerup_homeassistant_token
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

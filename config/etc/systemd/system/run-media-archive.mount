@@ -1,0 +1,12 @@
+[Unit]
+Description=Archive mount
+After=systemd-fsck@dev-disk-by\x2dpartlabel-archive.service
+Requires=systemd-fsck@dev-disk-by\x2dpartlabel-archive.service
+# the documentation says this is implicit but `systemctl show` disagreed
+BindsTo=dev-disk-by\x2dpartlabel-archive.device
+
+[Mount]
+What=/dev/disk/by-partlabel/archive
+Where=/run/media/archive
+Type=btrfs
+Options=defaults

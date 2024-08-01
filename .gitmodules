@@ -1,4 +1,0 @@
-[submodule "files/opt/grafana/third_party/rfrail3-grafana-dashboards"]
-	path = files/opt/grafana/third_party/rfrail3-grafana-dashboards
-	url = https://github.com/rfrail3/grafana-dashboards.git
-	branch = master

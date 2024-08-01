@@ -1,0 +1,18 @@
+[Unit]
+Description=gitmirror
+After=network.target
+
+[Container]
+ContainerName=gitmirror
+Image=ghcr.io/m1cha/gitmirror:latest
+AutoUpdate=registry
+Network=podman:mac=00:16:3e:42:42:11
+Exec= \
+    -d /media/data \
+    -u M1cha \
+    -o efidroid \
+    -o grub4android \
+    -o ridephysics \
+    --exclude M1cha/proprietary_vendor_xiaomi
+Volume=gitmirror:/media/data:idmap,z,nocopy
+Environment=RUST_LOG=info

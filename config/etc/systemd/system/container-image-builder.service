@@ -1,0 +1,10 @@
+[Unit]
+Description=container image builder
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/container-image-builder
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,28 @@
+[Unit]
+Description=rclone backup
+After=network.target
+
+[Container]
+ContainerName=rclone-backup
+Image=localhost/homeserver-universal:latest
+AutoUpdate=local
+Network=podman:mac=00:16:3e:42:42:17
+Environment=RCLONE_CONFIG=/run/config/rclone.conf
+HostName=homeserver
+Exec=restic \
+    -r rclone:main:backup \
+    --password-file /run/secrets/rclone_backup_credentials \
+    --verbose \
+    backup \
+    /run/media/data \
+    /run/media/syncthing/pixel8/synced \
+    --exclude /run/media/data/bitwarden_config/logs
+
+# secrets
+Secret=rclone_backup_credentials
+Volume=rclone_backup:/run/config:idmap,z
+
+# backup sources
+Volume=bitwarden_config:/run/media/data/bitwarden_config:ro,idmap,z
+Volume=bitwarden_db:/run/media/data/bitwarden_db:ro,idmap,z
+Volume=syncthing:/run/media/syncthing:ro,idmap,z

@@ -1,0 +1,24 @@
+[Unit]
+Description=smartmeter2mqtt
+After=network.target
+
+[Container]
+ContainerName=smartmeter2mqtt
+Image=ghcr.io/m1cha/smartmeter/smartmeter2mqtt/linux/amd64:latest
+AutoUpdate=registry
+Network=podman:mac=00:16:3e:42:42:22
+Network=ipvlan:ip=192.168.43.64,interface_name=pub0
+Annotation=local.nftables=smartmeter2mqtt
+Volume=smartmeter2mqtt:/media/config:idmap,z,nocopy
+WorkingDir=/media/config
+Exec=/media/config/config.toml
+
+Environment=RUST_LOG=info
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

@@ -1,0 +1,8 @@
+[Unit]
+Description=Triggers rsync on syncthing data changes
+
+[Path]
+PathChanged=/tmp/syncthing-files-changed
+
+[Install]
+WantedBy=multi-user.target

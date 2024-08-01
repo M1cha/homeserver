@@ -1,0 +1,9 @@
+[Unit]
+Description=Creates a hardlinked copy of the syncthing data (ignoring deletes)
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/syncthing-rsync
+
+[Install]
+WantedBy=multi-user.target

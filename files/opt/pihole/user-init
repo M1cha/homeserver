@@ -1,7 +1,0 @@
-#!/bin/sh
-
-mkdir -p /run/lighttpd
-cp /media/config/*.pem /run/lighttpd/
-chown www-data:www-data /run/lighttpd/*.pem
-
-exec /s6-init

@@ -1,0 +1,23 @@
+[Unit]
+Description=bitwarden database
+After=network.target
+
+[Container]
+ContainerName=bitwarden-db
+Image=docker.io/mariadb:10
+AutoUpdate=registry
+Network=podman:mac=00:16:3e:42:42:14
+Volume=bitwarden_db:/var/lib/mysql:idmap,z,nocopy
+
+Environment=MARIADB_USER=bitwarden
+Environment=MARIADB_PASSWORD=super_strong_password
+Environment=MARIADB_DATABASE=bitwarden_vault
+Environment=MARIADB_RANDOM_ROOT_PASSWORD=true
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

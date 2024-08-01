@@ -1,0 +1,40 @@
+[Unit]
+Description=Grafana
+After=network.target influxdb.service loki.service
+
+[Container]
+ContainerName=grafana
+Image=docker.io/grafana/grafana-oss:latest
+User=0
+AutoUpdate=registry
+Network=podman:mac=00:16:3e:42:42:04
+Network=ipvlan:ip=192.168.43.52,interface_name=pub0
+Annotation=local.nftables=grafana
+
+# secrets
+Secret=grafana_https_cert
+Secret=grafana_https_key
+Secret=grafana_influxdb_token,type=env,target=INFLUXDB_TOKEN
+Secret=grafana_security_admin_password,type=env,target=GF_SECURITY_ADMIN_PASSWORD
+
+# configs
+Volume=/usr/local/share/grafana/provisioning:/etc/grafana/provisioning:ro
+Volume=/usr/local/share/grafana/dashboards:/usr/share/grafana/conf/dashboards:ro
+
+# pre-init script
+Volume=/usr/local/share/ca-main.pem:/usr/local/share/ca-certificates/homeserver-ca.crt:ro
+Entrypoint=/user-init
+Volume=/usr/local/share/grafana/user-init:/user-init:ro
+
+Environment=GF_SERVER_DOMAIN=grafana.home.arpa
+Environment=GF_SERVER_PROTOCOL=https
+Environment=GF_SERVER_CERT_FILE=/run/secrets/grafana_https_cert
+Environment=GF_SERVER_CERT_KEY=/run/secrets/grafana_https_key
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

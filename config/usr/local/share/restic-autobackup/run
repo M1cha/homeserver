@@ -1,0 +1,31 @@
+#!/bin/sh
+
+set -xeuo pipefail
+
+xrestic() {
+    local host="$1"
+    shift
+
+    # wakeup
+    echo "$host" | nc -v restic-powerup 80
+
+    # wait for server to bind to port
+    timeout 120 sh -c "while ! nc -z '$host' 8000; do sleep 0.5; done"
+
+    restic \
+        -r "rest:https://$host:8000/restic" \
+        --cacert "/run/config/ca.pem" \
+        --tls-client-cert "/run/secrets/restic_autobackup_client_cert" \
+        --verbose \
+        --password-file "/run/secrets/restic_autobackup_credentials" \
+        "$@"
+}
+
+xrestic_backup() {
+    local host="$1"
+    xrestic "$host" backup /run/media/data \
+        --exclude /run/media/data/syncthing/config
+}
+
+xrestic_backup restic-backup-2.home.arpa
+xrestic_backup restic-backup-1

@@ -1,0 +1,23 @@
+[Unit]
+Description=Jellyfin traefik
+After=network.target jellyfin.service
+
+[Container]
+ContainerName=jellyfin-traefik
+Image=docker.io/traefik:latest
+AutoUpdate=registry
+Network=podman:mac=00:16:3e:42:42:18
+Network=ipvlan:ip=192.168.43.62,interface_name=pub0
+Annotation=local.nftables=jellyfin-traefik
+Volume=/usr/local/share/jellyfin-traefik:/etc/traefik:ro,idmap,z
+Volume=jellyfin_traefik:/run/storage:idmap,z,nocopy
+Secret=jellyfin_traefik_cf_dns_api_token,type=env,target=CF_DNS_API_TOKEN
+Secret=jellyfin_traefik_cf_zone_api_token,type=env,target=CF_ZONE_API_TOKEN
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -euo pipefail
+
+mkdir -p /run/lighttpd
+cp /run/secrets/pihole_https_pem /run/lighttpd/combined.pem
+chown www-data:www-data /run/lighttpd/*.pem
+
+exec /s6-init

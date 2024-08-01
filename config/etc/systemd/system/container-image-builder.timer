@@ -1,0 +1,10 @@
+[Unit]
+Description=Nightly container image builder jobs
+
+[Timer]
+OnCalendar=daily
+RandomizedDelaySec=900
+Persistent=true
+
+[Install]
+WantedBy=timers.target

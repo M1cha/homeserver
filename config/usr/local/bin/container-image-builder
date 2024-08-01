@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -euo pipefail
+
+tag="localhost/homeserver-universal:latest"
+containerfile="/usr/local/share/container-image-builder/Containerfile"
+export BUILDAH_LAYERS=false
+
+pkgs_old=$(podman run --rm "$tag" apk list --installed --quiet || true)
+
+podman build --pull=always --no-cache --iidfile=/tmp/iid --net=host -f "$containerfile"
+iid_new=$(cat /tmp/iid)
+pkgs_new=$(podman run --rm "$iid_new" apk list --installed --quiet)
+
+if [ "$pkgs_old" != "$pkgs_new" ]; then
+      echo "update image"
+      podman tag "$iid_new" "$tag"
+else
+      echo "no update needed"
+fi

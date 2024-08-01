@@ -1,0 +1,37 @@
+[Unit]
+Description=Restic autobackup
+After=network.target restic-powerup.service run-media-archive.mount run-media-roms.mount
+Requires=restic-powerup.service run-media-archive.mount run-media-roms.mount
+
+[Container]
+ContainerName=restic-autobackup
+Image=localhost/homeserver-universal:latest
+AutoUpdate=local
+Network=podman:mac=00:16:3e:42:42:0d
+Exec=/opt/restic-autobackup/run
+HostName=homeserver
+SecurityLabelDisable=true
+
+# scripts
+Volume=/usr/local/share/restic-autobackup:/opt/restic-autobackup:ro,idmap,z
+
+# persistent cache
+Volume=restic_autobackup_cache:/run/media/cache:idmap,z
+Environment=XDG_CACHE_HOME=/run/media/cache
+
+# secrets
+Volume=/usr/local/share/ca-restic.pem:/run/config/ca.pem:ro
+Secret=restic_autobackup_client_cert
+Secret=restic_autobackup_credentials
+
+# backup sources
+Volume=bitwarden_config:/run/media/data/bitwarden_config:ro,idmap,z
+Volume=bitwarden_db:/run/media/data/bitwarden_db:ro,idmap,z
+Volume=gitmirror:/run/media/data/gitmirror:ro,idmap,z
+Volume=music:/run/media/data/music:ro,idmap,z
+Volume=photo_backups:/run/media/data/photo_backups:ro,idmap,z
+Volume=syncthing:/run/media/data/syncthing:ro,idmap,z
+Volume=homeassistant_config:/run/media/data/homeassistant_config:ro,idmap,z
+Volume=synced_photos:/run/media/data/synced_photos:ro,idmap,z
+Volume=/run/media/archive:/run/media/data/archive:ro,idmap
+Volume=/run/media/roms:/run/media/data/roms:ro,idmap

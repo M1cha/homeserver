@@ -1,0 +1,13 @@
+[Unit]
+Before=local-fs.target
+Requires=systemd-fsck@dev-disk-by\x2dpartlabel-var.service
+After=systemd-fsck@dev-disk-by\x2dpartlabel-var.service
+
+[Mount]
+Where=/var
+What=/dev/disk/by-partlabel/var
+Type=btrfs
+Options=subvol=v2
+
+[Install]
+RequiredBy=local-fs.target

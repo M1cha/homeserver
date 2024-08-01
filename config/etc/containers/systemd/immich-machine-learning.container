@@ -1,0 +1,18 @@
+[Unit]
+Description=immich-machine-learning
+After=network.target
+
+[Container]
+ContainerName=immich-machine-learning
+Image=ghcr.io/immich-app/immich-machine-learning:v1.113.0
+Network=podman:mac=00:16:3e:42:42:25
+Volume=immich_model_cache:/cache:idmap
+EnvironmentFile=/usr/local/share/immich/env
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

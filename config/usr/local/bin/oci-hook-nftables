@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -euo pipefail
+
+exec 1> >(logger -t "oci-hook-nftables")
+exec 2> >(logger -t "oci-hook-nftables" -p user.err)
+
+config=$(< /dev/stdin)
+pid=$(jq -r .pid <<< "$config")
+file=$(jq -r '.annotations["local.nftables"]' <<< "$config")
+
+nsenter -t "$pid" -n nft \
+    -I "/usr/local/share/nftables" \
+    -f "/usr/local/share/nftables/container-$file.conf"

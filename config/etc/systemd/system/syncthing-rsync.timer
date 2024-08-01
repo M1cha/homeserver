@@ -1,0 +1,10 @@
+[Unit]
+Description=Starts rsync regularly in case inotify missed changes
+
+[Timer]
+OnCalendar=daily
+RandomizedDelaySec=900
+Persistent=true
+
+[Install]
+WantedBy=timers.target

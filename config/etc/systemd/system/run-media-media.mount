@@ -1,0 +1,12 @@
+[Unit]
+Description=Media mount
+After=systemd-fsck@dev-disk-by\x2dpartlabel-media.service
+Requires=systemd-fsck@dev-disk-by\x2dpartlabel-media.service
+# the documentation says this is implicit but `systemctl show` disagreed
+BindsTo=dev-disk-by\x2dpartlabel-media.device
+
+[Mount]
+What=/dev/disk/by-partlabel/media
+Where=/run/media/media
+Type=ext4
+Options=defaults

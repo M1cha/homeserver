@@ -1,0 +1,26 @@
+[Unit]
+Description=immich-server
+After=network.target immich-redis.service immich-database.service
+Requires=immich-redis.service immich-database.service
+
+[Container]
+ContainerName=immich-server
+Image=ghcr.io/immich-app/immich-server:v1.113.0
+Network=podman:mac=00:16:3e:42:42:28
+EnvironmentFile=/usr/local/share/immich/env
+Volume=immich_upload:/usr/src/app/upload:idmap
+
+# Originals
+Volume=photo_backups:/mnt/media/backups:ro,idmap,z
+Mount=type=bind,src=/var/lib/containers/storage/volumes/synced_photos/_data/pixel4a/Camera,dst=/mnt/media/synced_photos/pixel4a/Camera,ro,idmap,relabel=shared
+Mount=type=bind,src=/var/lib/containers/storage/volumes/synced_photos/_data/pixel4a/Screenshots,dst=/mnt/media/synced_photos/pixel4a/Screenshots,ro,idmap,relabel=shared
+Mount=type=bind,src=/var/lib/containers/storage/volumes/synced_photos/_data/pixel8/Camera,dst=/mnt/media/synced_photos/pixel8/Camera,ro,idmap,relabel=shared
+Mount=type=bind,src=/var/lib/containers/storage/volumes/synced_photos/_data/pixel8/Screenshots,dst=/mnt/media/synced_photos/pixel8/Screenshots,ro,idmap,relabel=shared
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

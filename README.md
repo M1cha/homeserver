@@ -4,45 +4,44 @@ This is my full homeserver setup.
 
 ## Hardware
 
-- ROCK 4 Model A+ (4GB RAM, 32GB EMMC) - [allnet](https://shop.allnetchina.cn/collections/frontpage/products/rock-pi-4-model-b-board-only-2-4-5ghz-wlan-bluetooth-5-0?variant=39284740653158) - [radxa wiki](https://wiki.radxa.com/Rock4/hardware/rock4)
-- [M.2 extension board](https://shop.allnetchina.cn/products/rock-pi-4x-m-2-extension-board-v1-6)
-- [Samsung SSD 980 M.2 1TB](https://www.samsung.com/de/memory-storage/nvme-ssd/980-1tb-nvme-pcie-gen-3-mz-v8v1t0bw/)
-- [SDSQXA2-064G-GN6MA](https://www.westerndigital.com/en-ap/products/memory-cards/sandisk-extreme-uhs-i-microsd-160-mbps#SDSQXA2-064G-GN6MA)
-- [Heatsink](https://shop.allnetchina.cn/products/heatsink-for-rock-pi-4?variant=15798546858086)
-- [RTC battery](https://shop.allnetchina.cn/p¸roducts/rtc-battery-for-rock-pi-4?variant=15416681529446)
-
-### Backup HDD
-
-This setup allows powering down both 12V and 5V lines of the HDD using a single
-smart plug. Both The 5V and the 12V power supplies are connected to it.
-
+- [ASUS Pro H610M-C D4-CSM](https://www.asus.com/motherboards-components/motherboards/business/pro-h610m-c-d4-csm/)
+- [Intel® Core™ i3-12100](https://ark.intel.com/content/www/us/en/ark/products/134584/intel-core-i3-12100-processor-12m-cache-up-to-4-30-ghz.html)
+- [CP2K16G4DFRA32A RAM](https://www.crucial.de/memory/ddr4/CP2K16G4DFRA32A)
+- [Dynatron A53](https://www.dynatron.co/product-page/a53)
+- [LEICKE 120 W power supply](https://www.leicke.eu/de/products/NT03015)
+- [PicoPSU-150-XT](https://www.mini-box.com/picoPSU-150-XT)
+- [IPC-C236 Case](https://www.yakkaroo.de/19-zoll-2he-server-gehaeuse-ipc-c236-36cm-kurz)
+- [Delock SATA power Y-cable](https://www.delock.de/produkt/60135/merkmale.html?g=835)
+- [SDDR-B531-GN6NN card reader](https://www.westerndigital.com/de-de/products/accessories/sandisk-mobilemate-uhs-i-usb-3-0-microsd-reader-writer?sku=SDDR-B531-GN6NN)
+- [SDSQXAH-064G-GN6GN microSD](https://www.westerndigital.com/products/memory-cards/sandisk-extreme-uhs-i-for-mobile-gaming-microsd?sku=SDSQXAH-064G-GN6GN)
+- [JEYI M.2 NVME SSD to PCIe 4.0 x1 Adapter Card](https://de.aliexpress.com/item/1005005802093622.html?spm=a2g0o.order_list.order_list_main.11.130e5c5fU2vg1Y&gatewayAdapt=glo2deu)
+- 2x [8cm PCI-E Card Bracket](https://www.aliexpress.com/item/1005006014444931.html?spm=a2g0o.order_list.order_list_main.5.130e5c5fU2vg1Y)
 - WD Red WD40EFRX 4TB
-- [benon multi-socket](https://www.amazon.de/gp/product/B0888PK57K)
-- [1m deleyCON USB 3.0 extension](https://www.deleycon.de/deleycon-usb-3-0-verlaengerungskabel-usb-stecker-zu-usb-buchse/) (cut open to disconnect 5V and power it through a USB charger)
-- Samsung USB charger (as the 5V power source, soldered to the cable above)
-- [TRÅDFRI smart plug](https://www.ikea.com/de/de/p/tradfri-steckdose-funkgesteuert-smart-00377314/)
-- [EasyULT USB3 to SATA adapter](https://www.amazon.de/gp/product/B07L5DK7C5)
-- Cheap 12V DC power adapter
+- WD Blue SN580 2TB
+- 2x Samsung SSD 980 1TB
+- Samsung SSD 860 1TB
+
 
 ### Smart Home
 
-- [deleyCON 4 Port USB 3.0 HUB](https://www.deleycon.de/deleycon-3-port-usb-3-0-hub-mit-kartenleser-sdhc-micro-sd-windows-mac-3x-usb3-0-port/) (connected through a USB2 extension cable to prevent 2.4GHz interference)
 - CC2652P USB dongle
 
-## Operating system
+## Installation
 
-### Firmware
+### Disable PCI IC
 
-I'm using the internal MMC just for the firmware because:
+This IC prevents the CPU from entering lower power states. Here's the info you
+need to change the hidden BIOS setting to disable The root port it's connected to.
+IT was extracted from BIOS version `Pro-H610M-C-D4-SI-3401`.
 
-- mainline linux had IO errors with the MMC
-- The reserved partition of CoreOS is too small for rk3399
+```
+VarStore Guid: 4570B7F1-ADE8-4943-8DC3-406472842384, VarStoreId: 0x6, Size: 0x811, Name: "PchSetup"
 
-Installation:
-
-- compile u-boot with `rock-pi-4-rk3399_defconfig`
-- boot into any OS from the microSD so we can write to the MMC
-- `dd if=u-boot-rockchip.bin of=/dev/mmcblk0 seek=64`
+OneOf Prompt: "PCI Express Root Port 3", Help: "Control the PCI Express Root Port.", QuestionFlags: 0x10, QuestionId: 0xB25, VarStoreId: 0x6, VarOffset: 0x102, Flags: 0x10, Size: 8, Min: 0x0, Max: 0x1, Step: 0x0
+    OneOfOption Option: "Disabled" Value: 0
+    OneOfOption Option: "Enabled" Value: 1, Default, MfgDefault
+End
+```
 
 ### CoreOS
 
@@ -61,67 +60,34 @@ podman run --privileged --rm -v .:/data -w /data quay.io/coreos/coreos-installer
 Write to micro SD:
 
 ```bash
-sudo podman run --privileged --rm -v /dev:/dev -v /run/udev:/run/udev -v .:/data -w /data quay.io/coreos/coreos-installer:release install --offline --image-file fedora-coreos-37.20221106.3.0-metal.aarch64.raw.xz --ignition-file coreos/homeserver.ign /dev/mmcblk0
+sudo podman run --privileged --rm -v /dev:/dev -v /run/udev:/run/udev -v .:/data -w /data quay.io/coreos/coreos-installer:release install --offline --image-file fedora-coreos-37.20221106.3.0-metal.x86_64.raw.xz --ignition-file coreos/homeserver.ign /dev/mmcblk0
 ```
 
 ### Install additional packages
 
 ```bash
-sudo rpm-ostree install htop inotify-tools python3
+sudo rpm-ostree install dmidecode efivar hdparm htop inotify-tools lm_sensors pciutils powertop s-tui stress tcpdump usbutils
 ```
 
+- dmidecode, efivar, lm_sensors, powertop, s-tui, stress: Useful on x86
+- hdparm: For putting the backup HDD to sleep
 - htop: it's just very useful
 - inotify-tools: required for my syncthing rsyncd setup
-- python3: for ansible
-
-### Network setup
-
-These could be done with ansible but I found them a little too specific to my
-setup so I did them manually.
-
-Ignore router DNS to prevent adding the search-domain to containers `/etc/hosts`:
-
-```bash
-nmcli con mod 'Wired connection 1' ipv4.ignore-auto-dns yes
-nmcli con mod 'Wired connection 1' ipv6.ignore-auto-dns yes
-```
-
-Use the routers DNS server instead of pihole:
-
-`/etc/systemd/resolved.conf`
-
-```ini
-[Resolve]
-DNS=192.168.43.1
-```
+- pciutils. tcpdump, usbutils: useful for debugging
 
 ### Trust my own CA
 
 The gotify client needs this.
 
 ```bash
-create /etc/pki/ca-trust/source/anchors/m1cha-main.pem
-run update-ca-trust
+update-ca-trust
 ```
 
 ## ansible
 
-### Build dependencies
-arp-reply:
-
-```bash
-git clone tools/arp-reply
-sh -c 'cd tools/arp-reply && cross build --release --target aarch64-unknown-linux-gnu'
-```
-
-std2pipe:
-
-```bash
-./tools/std2pipe/build_release.sh linux/arm64
-```
-
 ### Run/Update
 
 ```bash
-ansible-playbook main.yml
+./update
 ```
+

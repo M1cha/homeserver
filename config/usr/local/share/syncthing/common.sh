@@ -1,0 +1,10 @@
+photo_dirs=(
+    pixel4a/Camera
+    pixel4a/Screenshots
+    pixel4a/whatsapp-media
+    pixel8/Camera
+    pixel8/Screenshots
+    pixel8/whatsapp-media
+)
+volume_dir_syncthing=/var/lib/containers/storage/volumes/syncthing/_data
+volume_dir_synced_photos=/var/lib/containers/storage/volumes/synced_photos/_data

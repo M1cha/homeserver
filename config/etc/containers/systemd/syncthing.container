@@ -1,0 +1,19 @@
+[Unit]
+Description=Syncthing
+After=network.target
+
+[Container]
+ContainerName=syncthing
+Image=docker.io/syncthing/syncthing:latest
+AutoUpdate=registry
+Network=ipvlan:ip=192.168.43.53,interface_name=pub0
+Annotation=local.nftables=syncthing
+Volume=syncthing:/var/syncthing:idmap,z,nocopy
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

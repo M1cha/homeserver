@@ -1,0 +1,62 @@
+[Unit]
+Description=Bitwarden
+After=network.target bitwarden-db.service
+Requires=bitwarden-db.service
+
+[Container]
+ContainerName=bitwarden
+Image=docker.io/bitwarden/self-host:2024.7.2-beta
+Network=podman:mac=00:16:3e:42:42:15
+Network=ipvlan:ip=192.168.43.61,interface_name=pub0
+Annotation=local.nftables=bitwarden
+
+StopTimeout=600
+
+# storage
+Volume=bitwarden_config:/etc/bitwarden:idmap,z,nocopy
+
+# Server hostname
+Environment=BW_DOMAIN=bitwarden.home.arpa
+
+# Database
+Environment=BW_DB_PROVIDER=mysql
+Environment=BW_DB_SERVER=bitwarden-db
+Environment=BW_DB_DATABASE=bitwarden_vault
+Environment=BW_DB_USERNAME=bitwarden
+Environment=BW_DB_PASSWORD=super_strong_password
+
+# Installation information
+# Get your ID and key from https://bitwarden.com/host/
+Environment=BW_INSTALLATION_ID=00000000-0000-0000-0000-000000000000
+Environment=BW_INSTALLATION_KEY=xxxxxxxxxxxx
+
+# SSL
+Secret=bitwarden_https_cert
+Secret=bitwarden_https_key
+Environment=BW_ENABLE_SSL=true
+Environment=BW_PORT_HTTPS=8443
+Environment=BW_SSL_CERT=../../run/secrets/bitwarden_https_cert
+Environment=BW_SSL_KEY=../../run/secrets/bitwarden_https_key
+
+# Mail
+Environment=globalSettings__mail__replyToEmail=noreply@bitwarden.home.arpa
+Environment=globalSettings__mail__smtp__host=mailhog
+Environment=globalSettings__mail__smtp__port=1025
+Environment=globalSettings__mail__smtp__ssl=false
+Environment=globalSettings__mail__smtp__username=test
+Environment=globalSettings__mail__smtp__password=test
+
+# Other
+Environment=globalSettings__disableUserRegistration=true
+Environment=adminSettings__admins=admin@bitwarden.home.arpa
+
+# Offline installation
+Environment=globalSettings__pushRelayBaseUri=
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

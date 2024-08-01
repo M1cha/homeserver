@@ -1,0 +1,29 @@
+[Unit]
+Description=archive share
+After=network.target run-media-archive.mount run-media-roms.mount run-media-media.mount
+Requires=run-media-archive.mount run-media-roms.mount run-media-media.mount
+
+[Container]
+ContainerName=share-archive
+Image=localhost/homeserver-universal:latest
+AutoUpdate=local
+Network=ipvlan:ip=192.168.43.66,interface_name=pub0
+Annotation=local.nftables=share-archive
+Entrypoint=/user-init
+SecurityLabelDisable=true
+Volume=share_archive_ssh_hostkeys:/var/lib/ssh-hostkeys:idmap
+Volume=/usr/local/share/share-archive/user-init:/user-init:ro,idmap,z
+Volume=/usr/local/share/share-archive/sshd.conf:/etc/ssh/sshd_config.d/container.conf:ro,idmap,z
+Volume=/usr/local/share/share-archive/authorized_keys:/root/.ssh/authorized_keys:ro,idmap,z
+
+# share
+Volume=/run/media/archive:/mnt/archive:rw,idmap
+Volume=/run/media/roms:/mnt/roms:rw,idmap
+Volume=/run/media/media:/mnt/media:rw,idmap
+
+[Service]
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

@@ -1,0 +1,12 @@
+[Unit]
+Description=hdparm sleep
+After=run-media-resticbackup.mount
+Requires=dev-disk-by\x2dpartlabel-restic\x2dbackup.device
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=hdparm -S 120 /dev/disk/by-partlabel/restic-backup
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,20 @@
+#!/bin/bash
+# This service is a workaround for systemd path units not supporting recursive
+# directory watching. We simply do that ourselves using inotifywait and let
+# systemd watch a single file instead. Simply starting the service directly is
+# not sufficient because we would miss changes that happen while rsync is
+# running.
+
+set -euo pipefail
+
+source /usr/local/share/syncthing/common.sh
+
+inotifywait -m -r -e create -e close_write -e move --format '%w%f' \
+  --exclude '.*\.tmp' \
+  "${photo_dirs[@]/#/$volume_dir_syncthing/}" \
+  | while read path
+do
+    echo "$path changed"
+    date +%s > /tmp/syncthing-files-changed
+done
+

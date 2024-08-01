@@ -1,0 +1,51 @@
+#!/bin/bash
+
+set -euo pipefail
+
+source /usr/local/share/syncthing/common.sh
+
+checksum_time_file="/tmp/syncthing-rsync-last-checksumming"
+
+extra_args=()
+
+twelve_hours_ago=$(date -d 'now - 12 hours' '+%s')
+last_checksumming=$(date -r "$checksum_time_file" '+%s' || echo '0')
+
+# checksumming takes much longer and consumes a lot of CPU, so lets do it
+# max every 12 hours only.
+did_checksum=0
+if (( last_checksumming <= twelve_hours_ago )); then
+  echo "enable checksumming"
+  extra_args+=(--checksum)
+  did_checksum=1
+fi
+
+doit() {
+  local src="$1"
+  local dst="$2"
+
+  rsync -av \
+    "${extra_args[@]}" \
+    --exclude '*.tmp' \
+    --link-dest="$src" \
+    "$src"/ \
+    "$dst"
+}
+
+# pre-run cooldown so we get to sync more data on the first run of a very
+# active sync
+echo "pre-run cooldown"
+sleep 10
+
+for dir in "${photo_dirs[@]}"; do
+    doit "$volume_dir_syncthing/$dir" "$volume_dir_synced_photos/$dir"
+done
+
+if [ "$did_checksum" == "1" ]; then
+  touch "$checksum_time_file"
+fi
+
+# post-run cooldown so we don't run this service too often on a
+# long-running and active sync
+echo "post-run cooldown"
+sleep 5m

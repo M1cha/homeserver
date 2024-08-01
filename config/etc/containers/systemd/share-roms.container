@@ -1,0 +1,22 @@
+[Unit]
+Description=roms share
+After=network.target run-media-roms.mount
+Requires=run-media-roms.mount
+
+[Container]
+ContainerName=share-roms
+Image=docker.io/library/nginx:latest
+AutoUpdate=registry
+Network=ipvlan:ip=192.168.43.67,interface_name=pub0
+Annotation=local.nftables=share-roms
+SecurityLabelDisable=true
+Volume=/usr/local/share/share-roms/default.conf:/etc/nginx/conf.d/default.conf:ro,idmap,z
+Volume=/run/media/roms:/mnt:ro,idmap
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

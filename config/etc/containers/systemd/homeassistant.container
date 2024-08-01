@@ -1,0 +1,28 @@
+[Unit]
+Description=home assistant
+After=network.target # gotify.service influxdb.service
+
+[Container]
+ContainerName=homeassistant
+Image=ghcr.io/home-assistant/home-assistant:stable
+Network=podman:mac=00:16:3e:42:42:03
+Network=ipvlan:ip=192.168.43.50,interface_name=pub0
+Annotation=local.nftables=homeassistant
+Secret=homeassistant_https_cert
+Secret=homeassistant_https_key
+Volume=homeassistant_config:/config:idmap,z,nocopy
+Volume=/usr/local/share/ca-main.pem:/usr/local/share/ca-certificates/ca.pem:ro
+Volume=/usr/local/share/homeassistant/user-init:/user-init:ro
+Environment=REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+Entrypoint=/user-init
+
+# zigbee dongle
+AddDevice=/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0:/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0:rw
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

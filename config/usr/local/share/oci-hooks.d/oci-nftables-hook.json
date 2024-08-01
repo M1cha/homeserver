@@ -1,0 +1,12 @@
+{
+    "version": "1.0.0",
+    "hook": {
+        "path": "/usr/local/bin/oci-hook-nftables"
+    },
+    "when": {
+        "annotations": {
+            "^local\\.nftables$": ".*"
+        }
+    },
+    "stages": ["prestart"]
+}

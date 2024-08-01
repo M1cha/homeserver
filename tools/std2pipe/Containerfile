@@ -1,3 +1,0 @@
-FROM docker.io/alpine:3.17
-
-RUN apk add --no-cache cmake gcc ninja musl-dev

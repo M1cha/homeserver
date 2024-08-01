@@ -1,0 +1,20 @@
+[Unit]
+Description=Jellyfin
+After=network.target
+
+[Container]
+ContainerName=jellyfin
+Image=docker.io/jellyfin/jellyfin:latest
+AutoUpdate=registry
+Network=podman:mac=00:16:3e:42:42:19
+Volume=jellyfin_config:/config:idmap,z
+Volume=jellyfin_cache:/cache:idmap,z
+Volume=music:/media/music:ro,idmap,z
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

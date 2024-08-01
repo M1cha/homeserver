@@ -1,0 +1,25 @@
+[Unit]
+Description=influxdb server
+After=network.target
+
+[Container]
+ContainerName=influxdb
+Image=docker.io/influxdb:2.3-alpine
+AutoUpdate=registry
+Network=podman:mac=00:16:3e:42:42:02
+Volume=influxdb_data:/var/lib/influxdb2:idmap,z,nocopy
+Tmpfs=/etc/influxdb2
+
+Environment=DOCKER_INFLUXDB_INIT_MODE=setup
+Environment=DOCKER_INFLUXDB_INIT_USERNAME=admin
+Environment=DOCKER_INFLUXDB_INIT_PASSWORD=adminadmin
+Environment=DOCKER_INFLUXDB_INIT_ORG=local
+Environment=DOCKER_INFLUXDB_INIT_BUCKET=default-bucket
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target

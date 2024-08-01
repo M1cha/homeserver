@@ -1,0 +1,27 @@
+[Unit]
+Description=media share
+After=network.target run-media-media.mount
+Requires=run-media-media.mount
+
+[Container]
+ContainerName=share-media
+Image=localhost/homeserver-universal:latest
+AutoUpdate=local
+Network=ipvlan:ip=192.168.43.60,interface_name=pub0
+Annotation=local.nftables=share-media
+Exec=smbd --foreground --no-process-group --debug-stdout
+UserNS=auto:size=65535
+SecurityLabelDisable=true
+Volume=/usr/local/share/share-media:/etc/samba:ro,idmap,z
+Volume=share_media:/var/lib/samba/private:idmap,z
+
+# share
+Volume=/run/media/media:/mnt:ro,idmap
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target default.target
