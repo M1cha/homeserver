@@ -1,0 +1,8 @@
+#!/bin/bash
+
+exec podman run --rm -it \
+	--net host \
+	-v "immich_model_cache:/cache:idmap" \
+	--mount type=bind,src=$PWD,dst=/mnt,ro,idmap,relabel=shared \
+	ghcr.io/immich-app/immich-machine-learning:v1.113.0 \
+	/mnt/download_inside
