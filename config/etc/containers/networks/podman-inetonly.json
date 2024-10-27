@@ -1,0 +1,22 @@
+{
+    "name": "podman-inetonly",
+    "id": "6e2c58a9e8f912d84521a73e10f3a4cb7407ba05f05761be3f330df537725636",
+    "driver": "bridge",
+    "network_interface": "podman1",
+    "created": "2022-12-04T06:31:25.169911599Z",
+    "subnets": [
+        {
+            "subnet": "10.89.0.0/16",
+            "gateway": "10.89.0.1"
+        }
+    ],
+    "ipv6_enabled": false,
+    "internal": false,
+    "dns_enabled": false,
+    "options": {
+        "isolate": "true"
+    },
+    "ipam_options": {
+        "driver": "host-local"
+    }
+}

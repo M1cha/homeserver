@@ -1,0 +1,38 @@
+#!/bin/bash
+
+set -euo pipefail
+
+exec 1> >(logger -t "update-bridge-rules")
+exec 2> >(logger -t "update-bridge-rules" -p user.err)
+
+# Source: https://stackoverflow.com/a/17841619
+join_by() {
+    local IFS="$1"
+    shift
+    echo "$*"
+}
+
+add_veth_rule() {
+    local bridge="$1"
+    local chain="$2"
+
+    mapfile -d '' veths < <(ip -j link show | jq --raw-output0 ".[] | select(.master == \"$bridge\") | .ifname")
+    if [ ${#veths[@]} -eq 0 ]; then
+        return
+    fi
+
+    str=$(join_by , "${veths[@]}")
+    echo "iifname { $str } goto $chain"
+}
+
+export PATH="$PATH:/usr/sbin:/usr/bin"
+
+nft -f - <<EOF
+flush chain bridge homeserver_brfilter bridge_detection
+table bridge homeserver_brfilter {
+    chain bridge_detection {
+        $(add_veth_rule podman0 podman)
+        $(add_veth_rule podman1 podman_inetonly)
+    }
+}
+EOF
