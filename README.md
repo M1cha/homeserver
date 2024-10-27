@@ -74,7 +74,7 @@ rpm-ostree install dmidecode efivar hdparm htop inotify-tools libvirt lm_sensors
 - hdparm: For putting the backup HDD to sleep
 - htop: it's just very useful
 - inotify-tools: required for my syncthing rsyncd setup
-- pciutils. tcpdump, usbutils: useful for debugging
+- pciutils, tcpdump, usbutils: useful for debugging
 - libvirt, nfs-utils, qemu: virtual machines
 
 ### Trust my own CA
