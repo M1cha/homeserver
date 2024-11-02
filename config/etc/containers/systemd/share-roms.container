@@ -1,7 +1,7 @@
 [Unit]
 Description=roms share
-After=network.target run-media-roms.mount
-Requires=run-media-roms.mount
+After=network.target run-media-archive.mount
+Requires=run-media-archive.mount
 
 [Container]
 ContainerName=share-roms
@@ -11,7 +11,7 @@ Network=ipvlan:ip=192.168.43.67,interface_name=pub0
 Annotation=local.nftables=share-roms
 SecurityLabelDisable=true
 Volume=/usr/local/share/share-roms/default.conf:/etc/nginx/conf.d/default.conf:ro,idmap,z
-Volume=/run/media/roms:/mnt:ro,idmap
+Volume=/run/media/archive/maindata/roms:/mnt:ro,idmap
 
 [Service]
 Restart=always

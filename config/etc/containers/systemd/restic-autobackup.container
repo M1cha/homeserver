@@ -1,7 +1,7 @@
 [Unit]
 Description=Restic autobackup
-After=network.target restic-powerup.service run-media-archive.mount run-media-roms.mount
-Requires=restic-powerup.service run-media-archive.mount run-media-roms.mount
+After=network.target restic-powerup.service run-media-archive.mount
+Requires=restic-powerup.service run-media-archive.mount
 
 [Container]
 ContainerName=restic-autobackup
@@ -34,4 +34,3 @@ Volume=syncthing:/run/media/data/syncthing:ro,idmap,z
 Volume=homeassistant_config:/run/media/data/homeassistant_config:ro,idmap,z
 Volume=synced_photos:/run/media/data/synced_photos:ro,idmap,z
 Volume=/run/media/archive:/run/media/data/archive:ro,idmap
-Volume=/run/media/roms:/run/media/data/roms:ro,idmap

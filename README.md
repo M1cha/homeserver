@@ -15,10 +15,10 @@ This is my full homeserver setup.
 - [SDDR-B531-GN6NN card reader](https://www.westerndigital.com/de-de/products/accessories/sandisk-mobilemate-uhs-i-usb-3-0-microsd-reader-writer?sku=SDDR-B531-GN6NN)
 - [SDSQXAH-064G-GN6GN microSD](https://www.westerndigital.com/products/memory-cards/sandisk-extreme-uhs-i-for-mobile-gaming-microsd?sku=SDSQXAH-064G-GN6GN)
 - [JEYI M.2 NVME SSD to PCIe 4.0 x1 Adapter Card](https://de.aliexpress.com/item/1005005802093622.html?spm=a2g0o.order_list.order_list_main.11.130e5c5fU2vg1Y&gatewayAdapt=glo2deu)
-- 2x [8cm PCI-E Card Bracket](https://www.aliexpress.com/item/1005006014444931.html?spm=a2g0o.order_list.order_list_main.5.130e5c5fU2vg1Y)
+- [8cm PCI-E Card Bracket](https://www.aliexpress.com/item/1005006014444931.html?spm=a2g0o.order_list.order_list_main.5.130e5c5fU2vg1Y)
 - WD Red WD40EFRX 4TB
 - WD Blue SN580 2TB
-- 2x Samsung SSD 980 1TB
+- Samsung SSD 980 1TB
 - Samsung SSD 860 1TB
 
 
