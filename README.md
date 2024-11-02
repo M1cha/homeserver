@@ -85,9 +85,7 @@ The gotify client needs this.
 update-ca-trust
 ```
 
-## ansible
-
-### Run/Update
+### Update
 
 ```bash
 ./update
