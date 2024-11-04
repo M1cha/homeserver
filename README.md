@@ -7,7 +7,6 @@ This is my full homeserver setup.
 - [ASUS Pro H610M-C D4-CSM](https://www.asus.com/motherboards-components/motherboards/business/pro-h610m-c-d4-csm/)
 - [Intel® Core™ i3-12100](https://ark.intel.com/content/www/us/en/ark/products/134584/intel-core-i3-12100-processor-12m-cache-up-to-4-30-ghz.html)
 - [CP2K16G4DFRA32A RAM](https://www.crucial.de/memory/ddr4/CP2K16G4DFRA32A)
-- [Dynatron A53](https://www.dynatron.co/product-page/a53)
 - [LEICKE 120 W power supply](https://www.leicke.eu/de/products/NT03015)
 - [PicoPSU-150-XT](https://www.mini-box.com/picoPSU-150-XT)
 - [IPC-C236 Case](https://www.yakkaroo.de/19-zoll-2he-server-gehaeuse-ipc-c236-36cm-kurz)
