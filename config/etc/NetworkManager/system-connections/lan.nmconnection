@@ -8,7 +8,9 @@ timestamp=1719619226
 
 [ipv4]
 ignore-auto-dns=true
-method=auto
+method=manual
+address1=192.168.43.108/24
+gateway=192.168.43.1
 
 [ipv6]
 addr-gen-mode=default
