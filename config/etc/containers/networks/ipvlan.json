@@ -2,6 +2,7 @@
      "name": "ipvlan",
      "id": "73636dfc05f2dcd2b8f74f245af4d26bc5201adf6f3531e568798793c483235e",
      "driver": "ipvlan",
+     "network_interface": "eno1",
      "created": "2024-07-30T15:56:46.860117804Z",
      "subnets": [
           {
