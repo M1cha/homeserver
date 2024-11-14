@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/container-image-builder
+ExecStart=/usr/local/bin/container-image-builder %i
 
 [Install]
 WantedBy=multi-user.target

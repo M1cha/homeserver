@@ -16,3 +16,5 @@ RUN apk add --no-cache \
     socat \
     tzdata
 COPY --from=golang /go/bin/mailhog /usr/local/bin/
+
+RUN apk list --installed > /etc/software-versions
