@@ -13,7 +13,7 @@ apicall() {
         -f --silent \
         -H "Authorization: Bearer $token" \
         -H "Content-Type: application/json" \
-        "https://homeassistant.home.arpa:8123/api/$path" \
+        "https://homeassistant.home.arpa/api/$path" \
         "$@"
 }
 

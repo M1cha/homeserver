@@ -7,14 +7,12 @@ interface-name=eno1
 timestamp=1719619226
 
 [ipv4]
-ignore-auto-dns=true
 method=manual
-address1=192.168.43.108/24
+address1=192.168.43.10/24
 gateway=192.168.43.1
 
 [ipv6]
-addr-gen-mode=default
-ignore-auto-dns=true
 method=auto
+route1=fd33:1491:4cfa:f001::/64
 
 [proxy]

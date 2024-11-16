@@ -1,0 +1,24 @@
+[Unit]
+Description=jool
+After=network.target jool-modules.service nftables.service
+Wants=jool-modules.service
+
+[Service]
+PrivateNetwork=yes
+ExecStartPre=/usr/local/share/jool/pre
+Restart=always
+RestartSec=10
+
+[Container]
+ContainerName=jool
+Image=localhost/jool:latest
+AutoUpdate=local
+Volume=/usr/local/share/jool/entrypoint:/entrypoint:ro,idmap,z
+Exec=/entrypoint
+Network=host
+RunInit=true
+AddCapability=NET_ADMIN
+UserNS=host
+
+[Install]
+WantedBy=multi-user.target

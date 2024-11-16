@@ -47,11 +47,14 @@ install() {
 	tmp2sys etc/systemd/system
 	tmp2sys etc/pki/ca-trust/source/anchors --delete
 	tmp2sys usr/local/bin --delete
-	tmp2sys usr/local/lib --delete
 	tmp2sys usr/local/share --delete
 
 	# This is needed for forwarding devices to containers.
 	setsebool -P container_use_devices=true
+
+	# We can't be online without the router VM.
+	systemctl disable NetworkManager-wait-online.service
+	systemctl mask NetworkManager-wait-online.service
 
 	systemctl daemon-reload
 	nmcli connection reload
@@ -69,7 +72,6 @@ install() {
 		syncthing-rsync.timer
 
 	systemctl reload nftables.service
-	/usr/bin/flock -x -w 1 /tmp/update-bridge-rules.lock /usr/local/bin/update-bridge-rules
 }
 
 cleanup_systemd

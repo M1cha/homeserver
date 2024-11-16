@@ -4,11 +4,9 @@ After=network.target
 
 [Container]
 ContainerName=gotify
-Image=docker.io/gotify/server:latest
+Image=docker.io/gotify/server:2.5
 AutoUpdate=registry
-Network=podman:mac=00:16:3e:42:42:07
-Network=ipvlan:ip=192.168.43.54,interface_name=pub0
-Annotation=local.nftables=gotify
+Network=brvirt:host_interface_name=veth_gotify,mac=8e:cc:7e:8a:4e:10
 Secret=gotify_https_cert
 Secret=gotify_https_key
 Volume=gotify_data:/app/data:idmap,z,nocopy
@@ -23,4 +21,4 @@ RestartMode=direct
 RestartSec=10
 
 [Install]
-WantedBy=multi-user.target default.target
+WantedBy=multi-user.target

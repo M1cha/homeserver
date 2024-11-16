@@ -6,7 +6,7 @@ After=network.target
 ContainerName=influxdb
 Image=docker.io/influxdb:2.3-alpine
 AutoUpdate=registry
-Network=podman:mac=00:16:3e:42:42:02
+Network=brvirt:host_interface_name=veth_influxdb
 Volume=influxdb_data:/var/lib/influxdb2:idmap,z,nocopy
 Tmpfs=/etc/influxdb2
 
@@ -22,4 +22,4 @@ RestartMode=direct
 RestartSec=10
 
 [Install]
-WantedBy=multi-user.target default.target
+WantedBy=multi-user.target

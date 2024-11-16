@@ -7,8 +7,7 @@ Requires=run-media-archive.mount run-media-media.mount
 ContainerName=share-archive
 Image=localhost/homeserver-universal:latest
 AutoUpdate=local
-Network=ipvlan:ip=192.168.43.66,interface_name=pub0
-Annotation=local.nftables=share-archive
+Network=brvirt:host_interface_name=veth_archshare
 Entrypoint=/user-init
 SecurityLabelDisable=true
 Volume=share_archive_ssh_hostkeys:/var/lib/ssh-hostkeys:idmap
@@ -25,4 +24,4 @@ Restart=always
 RestartSec=10
 
 [Install]
-WantedBy=multi-user.target default.target
+WantedBy=multi-user.target

@@ -1,0 +1,65 @@
+{
+     "name": "brvirt",
+     "id": "700c0db5339cedd2c7c5dc62a3fd8a6a01836d6e8a106a2dde195be766ac134d",
+     "driver": "bridge",
+     "network_interface": "brvirt",
+     "created": "2024-11-16T07:35:22.312838102Z",
+     "subnets": [
+          {
+               "subnet": "fd33:1491:4cfa:f000::/64",
+               "gateway": "fd33:1491:4cfa:f000::1",
+               "lease_range": {
+                   "start_ip": "fd33:1491:4cfa:f000::2",
+                   "end_ip": "fd33:1491:4cfa:f000::8000"
+               }
+          },
+          {
+               "subnet": "10.91.0.0/16",
+               "gateway": "10.91.0.1",
+               "lease_range": {
+                   "start_ip": "10.91.0.2",
+                   "end_ip": "10.91.127.255"
+               }
+          },
+          {
+               "subnet": "10.92.0.0/16",
+               "gateway": "10.92.0.1",
+               "lease_range": {
+                   "start_ip": "10.92.0.2",
+                   "end_ip": "10.92.127.255"
+               }
+          }
+     ],
+     "routes": [
+          {
+               "destination": "fd33:1491:4cfa::/48",
+               "gateway": "fd33:1491:4cfa:f000::1"
+          },
+          {
+              "destination": "fd0f:585:edff:1::/64",
+               "gateway": "fd33:1491:4cfa:f000::1"
+          },
+          {
+               "destination": "64:ff9b:1::/96",
+               "gateway": "fd33:1491:4cfa:f000::1"
+          },
+          {
+               "destination": "192.168.0.0/16",
+               "gateway": "10.91.0.1"
+          },
+          {
+               "destination": "0.0.0.0/0",
+               "gateway": "10.91.128.1"
+          }
+     ],
+     "ipv6_enabled": true,
+     "internal": true,
+     "dns_enabled": true,
+     "options": {
+          "mode": "unmanaged",
+          "no_default_route": "true"
+     },
+     "ipam_options": {
+          "driver": "host-local"
+     }
+}

@@ -6,9 +6,9 @@ After=network.target immich-server.service
 ContainerName=immich-traefik
 Image=docker.io/traefik:latest
 AutoUpdate=registry
-Network=podman:mac=00:16:3e:42:42:29
-Network=ipvlan:ip=192.168.43.65,interface_name=pub0
-Annotation=local.nftables=immich-traefik
+Network=brvirt:host_interface_name=veth_imm_prox,ip6=fd33:1491:4cfa:f000::8002
+DNS=none
+Volume=/usr/local/share/resolv-inet.conf:/etc/resolv.conf:ro,idmap,z
 Volume=/usr/local/share/immich-traefik:/etc/traefik:ro,idmap,z
 Volume=immich_traefik:/run/storage:idmap,z,nocopy
 Secret=immich_traefik_cf_dns_api_token,type=env,target=CF_DNS_API_TOKEN
@@ -20,4 +20,4 @@ RestartMode=direct
 RestartSec=10
 
 [Install]
-WantedBy=multi-user.target default.target
+WantedBy=multi-user.target

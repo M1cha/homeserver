@@ -7,9 +7,7 @@ BindsTo=run-media-resticbackup.mount
 ContainerName=restic-backup-1
 Image=ghcr.io/m1cha/restic-rest-server:latest
 AutoUpdate=registry
-Network=podman:mac=00:16:3e:42:42:0b
-Network=ipvlan:ip=192.168.43.55,interface_name=pub0
-Annotation=local.nftables=restic-backup-1
+Network=brvirt:host_interface_name=veth_restic_b1
 Volume=/run/media/resticbackup:/media/data:idmap,z
 Volume=/usr/local/share/ca-restic.pem:/run/config/ca.pem:ro
 Secret=restic_backup_1_ssl_cert

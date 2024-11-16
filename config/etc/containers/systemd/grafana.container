@@ -7,9 +7,8 @@ ContainerName=grafana
 Image=docker.io/grafana/grafana-oss:latest
 User=0
 AutoUpdate=registry
-Network=podman:mac=00:16:3e:42:42:04
-Network=ipvlan:ip=192.168.43.52,interface_name=pub0
-Annotation=local.nftables=grafana
+Network=brvirt:host_interface_name=veth_grafana,mac=8e:cc:7e:8a:4e:13
+Sysctl=net.ipv4.ip_unprivileged_port_start=0
 
 # secrets
 Secret=grafana_https_cert
@@ -28,6 +27,7 @@ Volume=/usr/local/share/grafana/user-init:/user-init:ro
 
 Environment=GF_SERVER_DOMAIN=grafana.home.arpa
 Environment=GF_SERVER_PROTOCOL=https
+Environment=GF_SERVER_HTTP_PORT=443
 Environment=GF_SERVER_CERT_FILE=/run/secrets/grafana_https_cert
 Environment=GF_SERVER_CERT_KEY=/run/secrets/grafana_https_key
 
@@ -37,4 +37,4 @@ RestartMode=direct
 RestartSec=10
 
 [Install]
-WantedBy=multi-user.target default.target
+WantedBy=multi-user.target

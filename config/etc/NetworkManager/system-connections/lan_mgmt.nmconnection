@@ -12,11 +12,10 @@ parent=eno1
 
 [ipv4]
 ignore-auto-dns=true
-method=auto
+method=manual
+address1=192.168.42.2/24
 
 [ipv6]
-addr-gen-mode=default
-ignore-auto-dns=true
-method=auto
+method=disabled
 
 [proxy]

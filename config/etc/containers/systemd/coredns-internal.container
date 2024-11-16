@@ -1,0 +1,19 @@
+[Unit]
+Description=internal coredns DNS server
+After=network.target
+
+[Container]
+ContainerName=coredns-internal
+Image=docker.io/coredns/coredns:latest
+AutoUpdate=registry
+Network=brvirt:host_interface_name=veth_corednsint,mac=5e:e3:5d:54:ed:29,ip6=fd33:1491:4cfa:f000::8003
+Volume=/usr/local/share/coredns-internal/Corefile:/run/media/config/Corefile:ro,idmap,z
+UserNS=auto
+Exec=-conf /run/media/config/Corefile
+
+[Service]
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

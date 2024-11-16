@@ -6,7 +6,7 @@ After=network.target
 ContainerName=bitwarden-db
 Image=docker.io/mariadb:10
 AutoUpdate=registry
-Network=podman:mac=00:16:3e:42:42:14
+Network=brvirt:host_interface_name=veth_bwdb
 Volume=bitwarden_db:/var/lib/mysql:idmap,z,nocopy
 
 Environment=MARIADB_USER=bitwarden
@@ -20,4 +20,4 @@ RestartMode=direct
 RestartSec=10
 
 [Install]
-WantedBy=multi-user.target default.target
+WantedBy=multi-user.target

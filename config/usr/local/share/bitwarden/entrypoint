@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -euo pipefail
+
+sed -i 's/#\(listen \[::\]:\)/\1/g' /etc/hbs/nginx-config.hbs
+
+exec /entrypoint.sh

@@ -1,0 +1,17 @@
+[connection]
+id=lan_inet
+uuid=89ddbfe2-67d1-4cc5-8975-1d49021dcf4d
+type=vlan
+controller=brvirt
+master=brvirt
+port-type=bridge
+slave-type=bridge
+
+[ethernet]
+
+[bridge-port]
+
+[vlan]
+flags=1
+id=300
+parent=eno1

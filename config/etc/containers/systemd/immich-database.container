@@ -6,7 +6,7 @@ After=network.target
 ContainerName=immich-database
 Image=registry.hub.docker.com/tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0
 Exec=postgres -c shared_preload_libraries=vectors.so -c 'search_path="$$user", public, vectors' -c logging_collector=on -c max_wal_size=2GB -c shared_buffers=512MB -c wal_compression=on
-Network=podman:mac=00:16:3e:42:42:23
+Network=brvirt:host_interface_name=veth_imm_db
 Volume=immich_database:/var/lib/postgresql/data:idmap
 Environment=POSTGRES_PASSWORD=postgres
 Environment=POSTGRES_USER=postgres
@@ -19,4 +19,4 @@ RestartMode=direct
 RestartSec=10
 
 [Install]
-WantedBy=multi-user.target default.target
+WantedBy=multi-user.target

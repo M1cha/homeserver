@@ -6,9 +6,10 @@ After=network.target
 ContainerName=syncthing
 Image=docker.io/syncthing/syncthing:latest
 AutoUpdate=registry
-Network=ipvlan:ip=192.168.43.53,interface_name=pub0
-Annotation=local.nftables=syncthing
+Network=brvirt:host_interface_name=veth_syncthing,mac=0e:08:09:85:5d:6e
 Volume=syncthing:/var/syncthing:idmap,z,nocopy
+Environment=STGUIADDRESS=0.0.0.0:443
+Sysctl=net.ipv4.ip_unprivileged_port_start=0
 
 [Service]
 Restart=always
@@ -16,4 +17,4 @@ RestartMode=direct
 RestartSec=10
 
 [Install]
-WantedBy=multi-user.target default.target
+WantedBy=multi-user.target

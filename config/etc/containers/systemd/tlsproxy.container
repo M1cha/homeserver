@@ -6,9 +6,7 @@ After=network.target
 ContainerName=tlsproxy
 Image=docker.io/library/nginx:latest
 AutoUpdate=registry
-Network=podman:mac=00:16:3e:42:42:05
-Network=ipvlan:ip=192.168.43.51,interface_name=pub0
-Annotation=local.nftables=tlsproxy
+Network=brvirt:host_interface_name=veth_tlsproxy,mac=8e:cc:7e:8a:4e:0f
 Volume=/usr/local/share/ca-main.pem:/etc/nginx/ssl/ca.pem:ro
 Volume=/usr/local/share/tlsproxy/default.conf:/etc/nginx/conf.d/default.conf:ro,idmap,z
 Secret=tlsproxy_modem_cert
@@ -28,4 +26,4 @@ RestartMode=direct
 RestartSec=10
 
 [Install]
-WantedBy=multi-user.target default.target
+WantedBy=multi-user.target

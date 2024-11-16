@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -xeuo pipefail
+
+kernel_revision=$(uname -r)
+arch=$(uname -m)
+
+dnf install -y \
+	git \
+	koji \
+
+koji download-build --rpm --arch="$arch" "kernel-devel-$kernel_revision"
+dnf install -y "kernel-devel-$kernel_revision.rpm"
+
+git clone https://github.com/NICMx/Jool.git -b v4.1.13 /opt/jool
+
+make -C "/usr/src/kernels/$kernel_revision" M=/opt/jool/src/mod/common modules
+make -C "/usr/src/kernels/$kernel_revision" M=/opt/jool/src/mod/nat64 modules
+
+mkdir -p "/run/media/jool-modules/$kernel_revision"
+cp /opt/jool/src/mod/common/jool_common.ko "/run/media/jool-modules/$kernel_revision/"
+cp /opt/jool/src/mod/nat64/jool.ko "/run/media/jool-modules/$kernel_revision/"

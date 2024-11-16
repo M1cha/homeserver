@@ -6,11 +6,13 @@ Requires=bitwarden-db.service
 [Container]
 ContainerName=bitwarden
 Image=docker.io/bitwarden/self-host:2024.7.2-beta
-Network=podman:mac=00:16:3e:42:42:15
-Network=ipvlan:ip=192.168.43.61,interface_name=pub0
-Annotation=local.nftables=bitwarden
+Network=brvirt:host_interface_name=veth_bitwarden
+Sysctl=net.ipv4.ip_unprivileged_port_start=0
 
 StopTimeout=600
+
+Volume=/usr/local/share/bitwarden:/run/media/config:ro,idmap,z
+Entrypoint=/run/media/config/entrypoint
 
 # storage
 Volume=bitwarden_config:/etc/bitwarden:idmap,z,nocopy
@@ -34,7 +36,7 @@ Environment=BW_INSTALLATION_KEY=xxxxxxxxxxxx
 Secret=bitwarden_https_cert
 Secret=bitwarden_https_key
 Environment=BW_ENABLE_SSL=true
-Environment=BW_PORT_HTTPS=8443
+Environment=BW_PORT_HTTPS=443
 Environment=BW_SSL_CERT=../../run/secrets/bitwarden_https_cert
 Environment=BW_SSL_KEY=../../run/secrets/bitwarden_https_key
 
@@ -59,4 +61,4 @@ RestartMode=direct
 RestartSec=10
 
 [Install]
-WantedBy=multi-user.target default.target
+WantedBy=multi-user.target

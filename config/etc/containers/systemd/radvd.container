@@ -1,0 +1,20 @@
+[Unit]
+Description=IPv6 Router Advertisement Daemon
+After=network.target
+
+[Container]
+ContainerName=radvd
+Image=localhost/radvd:latest
+AutoUpdate=local
+Volume=/usr/local/share/radvd/radvd.conf:/etc/radvd.conf:ro,idmap,z
+Exec=radvd --nodaemon
+Network=host
+AddCapability=NET_ADMIN,NET_RAW,SYS_ADMIN
+UserNS=host
+
+[Service]
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

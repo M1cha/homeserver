@@ -1,0 +1,24 @@
+[Unit]
+Description=OpenThread Border Router
+After=network.target
+
+[Container]
+ContainerName=otbr
+Image=docker.io/homeassistant/amd64-addon-otbr:latest
+AutoUpdate=registry
+Network=brthread:host_interface_name=veth_otbr,ip6=fd33:1491:4cfa:f002::8000
+AddCapability=NET_ADMIN,NET_RAW
+Sysctl=net.ipv6.conf.all.forwarding=1
+Sysctl=net.ipv6.conf.all.accept_ra=2
+AddDevice=/dev/net/tun:/dev/net/tun
+AddDevice=/dev/serial/by-id/usb-Nordic_Semiconductor_ASA_OpenThread_CoProcessor_3804D0A373C4BD19-if00:/dev/serial/by-id/usb-Nordic_Semiconductor_ASA_OpenThread_CoProcessor_3804D0A373C4BD19-if00:rw
+Volume=otbr_data:/var/lib/thread:idmap,z
+Volume=/usr/local/share/otbr:/run/media/config:ro,idmap,z
+Entrypoint=/run/media/config/run
+
+[Service]
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

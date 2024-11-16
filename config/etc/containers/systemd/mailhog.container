@@ -6,7 +6,7 @@ After=network.target
 ContainerName=mailhog
 Image=localhost/homeserver-universal:latest
 AutoUpdate=local
-Network=podman:mac=00:16:3e:42:42:16
+Network=brvirt:host_interface_name=veth_mailhog
 Volume=mailhog:/maildir:idmap,z,nocopy
 Environment=MH_STORAGE=maildir
 Environment=MH_MAILDIR_PATH=/maildir
@@ -19,4 +19,4 @@ RestartMode=direct
 RestartSec=10
 
 [Install]
-WantedBy=multi-user.target default.target
+WantedBy=multi-user.target

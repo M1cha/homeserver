@@ -1,0 +1,32 @@
+{
+     "name": "brthread",
+     "id": "698e1e2ef32e2da00c425a255d6c18984d7265021b522d16037b29798accd60c",
+     "driver": "bridge",
+     "network_interface": "brthread",
+     "created": "2024-11-16T07:35:22.312838102Z",
+     "subnets": [
+          {
+               "subnet": "fd33:1491:4cfa:f002::/64",
+               "gateway": "fd33:1491:4cfa:f002::1",
+               "lease_range": {
+                   "start_ip": "fd33:1491:4cfa:f002::2",
+                   "end_ip": "fd33:1491:4cfa:f002::8000"
+               }
+          }
+     ],
+     "routes": [
+          {
+               "destination": "fd33:1491:4cfa::/48",
+               "gateway": "fd33:1491:4cfa:f002::1"
+          }
+     ],
+     "ipv6_enabled": true,
+     "internal": true,
+     "dns_enabled": false,
+     "options": {
+          "mode": "unmanaged"
+     },
+     "ipam_options": {
+          "driver": "host-local"
+     }
+}

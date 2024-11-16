@@ -7,8 +7,7 @@ Requires=run-media-media.mount
 ContainerName=share-media
 Image=localhost/homeserver-universal:latest
 AutoUpdate=local
-Network=ipvlan:ip=192.168.43.60,interface_name=pub0
-Annotation=local.nftables=share-media
+Network=brvirt:host_interface_name=veth_mediashare
 Exec=smbd --foreground --no-process-group --debug-stdout
 UserNS=auto:size=65535
 SecurityLabelDisable=true
@@ -24,4 +23,4 @@ RestartMode=direct
 RestartSec=10
 
 [Install]
-WantedBy=multi-user.target default.target
+WantedBy=multi-user.target

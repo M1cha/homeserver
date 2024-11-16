@@ -1,0 +1,19 @@
+[Unit]
+Description=Compile jool kernel modules
+ConditionFileNotEmpty=|!/var/cache/jool-modules/%v/jool_common.ko
+ConditionFileNotEmpty=|!/var/cache/jool-modules/%v/jool.ko
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStartPre=mkdir -p /var/cache/jool-modules
+
+[Container]
+UserNS=auto
+ContainerName=jool-modules
+Image=docker.io/fedora:%w
+AutoUpdate=registry
+Volume=/var/cache/jool-modules:/run/media/jool-modules:idmap,z
+Volume=/usr/local/share/jool-modules/entrypoint:/entrypoint:idmap,z,ro
+Exec=/entrypoint
+Network=host

@@ -7,34 +7,10 @@ import ipaddress
 import io
 
 
-def get_container_macs(directory):
-    results = {}
-
-    pattern = re.compile(r"^Network=.*mac=(([a-zA-Z0-9]{2}:){5}[a-zA-Z0-9]{2}).*$")
-    for file in directory.glob("*.container"):
-        name = file.stem
-        with file.open() as f:
-            for line in f.readlines():
-                m = pattern.match(line)
-                if m is None:
-                    continue
-
-                item = m.group(1)
-
-                if name in results:
-                    raise Exception(f"{name} has multiple items of the same value")
-                    continue
-
-                if item in results.values():
-                    raise Exception(f"{item} does already exist in another unit")
-
-                results[name] = item
-    return results
-
-
 class Target:
-    def __init__(self, userhost):
-        self.userhost = userhost
+    def __init__(self, user, host):
+        self.user = user
+        self.host = host
         self.tmpdir = PurePath("~/tmp_config")
 
     def rsync(self, source, target, delete=False):
@@ -53,7 +29,7 @@ class Target:
                 "--specials",
                 "--executability",
                 f"{source}",
-                f"{self.userhost}:{target}",
+                f"{self.user}@[{self.host}]:{target}",
             ],
         )
         subprocess.run(args, check=True)
@@ -61,10 +37,10 @@ class Target:
     def write_file(self, source, target):
         target = self.tmpdir / target
 
-        subprocess.run(["ssh", self.userhost, "mkdir", "-p", target.parent], check=True)
+        subprocess.run(["ssh", f"{self.user}@{self.host}", "mkdir", "-p", target.parent], check=True)
 
         p = subprocess.Popen(
-            ["ssh", self.userhost, f"cat > {target}"], stdin=subprocess.PIPE
+            ["ssh", f"{self.user}@{self.host}", f"cat > {target}"], stdin=subprocess.PIPE
         )
         p.communicate(input=source.encode())
         if p.returncode != 0:
@@ -74,22 +50,16 @@ class Target:
         with open("script.sh", "rb") as f:
             script = f.read()
 
-        p = subprocess.run(["ssh", self.userhost, script], check=True)
+        p = subprocess.run(["ssh", f"{self.user}@{self.host}", script], check=True)
 
 
 def main():
-    target = Target("root@192.168.43.108")
+    target = Target("root", "fe80::ce28:aaff:fe09:1bbd%eth0")
     source_dir = Path("./config").resolve()
     source_dir_private = Path("./config-private").resolve()
-    container_macs = get_container_macs(source_dir / "etc/containers/systemd")
 
     target.rsync(f"{source_dir}/", f"{target.tmpdir}/", delete=True)
     target.rsync(f"{source_dir_private}/", f"{target.tmpdir}/")
-
-    nft_vars = io.StringIO()
-    for name, mac in container_macs.items():
-        nft_vars.write(f"define mac_{name} = {mac}\n")
-    target.write_file(nft_vars.getvalue(), "usr/local/share/nftables/vars.conf")
 
     target.run_script("script.sh")
 
