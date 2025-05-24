@@ -31,7 +31,7 @@ This is my full homeserver setup.
 
 This IC prevents the CPU from entering lower power states. Here's the info you
 need to change the hidden BIOS setting to disable The root port it's connected to.
-IT was extracted from BIOS version `Pro-H610M-C-D4-SI-3401`.
+It was extracted from BIOS version `Pro-H610M-C-D4-SI-3401`.
 
 ```
 VarStore Guid: 4570B7F1-ADE8-4943-8DC3-406472842384, VarStoreId: 0x6, Size: 0x811, Name: "PchSetup"
