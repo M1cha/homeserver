@@ -1,0 +1,11 @@
+FROM docker.io/fedora:42
+
+RUN dnf install -y \
+	libvirt \
+	nfs-utils \
+	qemu \
+	virt-install
+
+RUN rpm -qa > /etc/software-versions
+
+CMD [ "/sbin/init" ]

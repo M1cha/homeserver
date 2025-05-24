@@ -65,8 +65,7 @@ sudo podman run --privileged --rm -v /dev:/dev -v /run/udev:/run/udev -v .:/data
 ### Install additional packages
 
 ```bash
-rpm-ostree override remove nfs-utils-coreos
-rpm-ostree install dmidecode efivar hdparm htop inotify-tools libvirt lm_sensors nfs-utils pciutils powertop qemu s-tui stress tcpdump usbutils
+rpm-ostree install dmidecode efivar hdparm htop inotify-tools lm_sensors pciutils powertop s-tui stress tcpdump usbutils
 ```
 
 - dmidecode, efivar, lm_sensors, powertop, s-tui, stress: Useful on x86
@@ -74,7 +73,6 @@ rpm-ostree install dmidecode efivar hdparm htop inotify-tools libvirt lm_sensors
 - htop: it's just very useful
 - inotify-tools: required for my syncthing rsyncd setup
 - pciutils, tcpdump, usbutils: useful for debugging
-- libvirt, nfs-utils, qemu: virtual machines
 
 ### Trust my own CA
 
