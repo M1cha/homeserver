@@ -26,10 +26,14 @@ ip6tables -N $otbr_forward_egress_chain
 ip6tables -I FORWARD 2 -i $thread_if -j $otbr_forward_egress_chain
 ip6tables -A $otbr_forward_egress_chain -j ACCEPT
 
+/usr/sbin/mdnsd -debug &
+sleep 2
+
 exec otbr-agent \
 	-v \
 	-d 7 \
 	-s \
 	-I "$thread_if" \
 	-B "$backbone_if" \
-	spinel+hdlc+uart:///dev/serial/by-id/usb-Nordic_Semiconductor_ASA_OpenThread_CoProcessor_3804D0A373C4BD19-if00
+	spinel+hdlc+uart:///dev/serial/by-id/usb-Nordic_Semiconductor_ASA_OpenThread_CoProcessor_3804D0A373C4BD19-if00 \
+	"trel://$backbone_if"
