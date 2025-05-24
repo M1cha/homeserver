@@ -1,0 +1,33 @@
+FROM docker.io/debian:bookworm
+
+RUN apt update
+RUN apt install -y \
+	apt-transport-https \
+	ca-certificates \
+	curl \
+	gnupg \
+	procps \
+	wget
+
+RUN \
+	echo 'deb [ arch=amd64,arm64 ] https://www.ui.com/downloads/unifi/debian stable ubiquiti' \
+	>> /etc/apt/sources.list.d/100-ubnt-unifi.list
+RUN wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ui.com/unifi/unifi-repo.gpg
+
+RUN curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | \
+	gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg \
+	--dearmor
+RUN \
+	echo "deb [ signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] http://repo.mongodb.org/apt/debian bookworm/mongodb-org/8.0 main" \
+	>> /etc/apt/sources.list.d/mongodb-org-8.0.list
+
+RUN apt update
+RUN apt install unifi -y
+
+# from /usr/lib/systemd/system/unifi.service
+ENV UNIFI_CORE_ENABLED=false
+ENV UNIFI_MONGODB_SERVICE_ENABLED=false
+ENV UNIFI_JVM_OPTS="-Xmx1024M -XX:+UseParallelGC"
+WORKDIR /usr/lib/unifi
+
+RUN apt list --installed > /etc/software-versions

@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -euo pipefail
+
+alias=unifi
+password=aircontrolenterprise
+
+openssl pkcs12 -export \
+    -inkey "/run/secrets/unifi_ssl_key" \
+    -in "/run/secrets/unifi_ssl_cert" \
+    -out "/tmp/keystore.p12" \
+    -passout "pass:$password" \
+    -name "$alias"
+
+mv /tmp/keystore.p12 /var/lib/unifi/keystore
+
+/usr/sbin/unifi-network-service-helper init
+/usr/sbin/unifi-network-service-helper init-uos
+
+exec /usr/bin/java \
+    -Dfile.encoding=UTF-8 \
+    -Djava.awt.headless=true \
+    -Dapple.awt.UIElement=true \
+    -Dunifi.core.enabled=${UNIFI_CORE_ENABLED} \
+    -Dunifi.mongodb.service.enabled=${UNIFI_MONGODB_SERVICE_ENABLED} \
+    $UNIFI_JVM_OPTS \
+    -XX:+ExitOnOutOfMemoryError \
+    -XX:+CrashOnOutOfMemoryError \
+    -XX:ErrorFile=/usr/lib/unifi/logs/unifi_crash.log \
+    -Xlog:gc:logs/gc.log:time:filecount=2,filesize=5M \
+    --add-opens java.base/java.lang=ALL-UNNAMED \
+    --add-opens java.base/java.time=ALL-UNNAMED \
+    --add-opens java.base/sun.security.util=ALL-UNNAMED \
+    --add-opens java.base/java.io=ALL-UNNAMED \
+    --add-opens java.rmi/sun.rmi.transport=ALL-UNNAMED \
+    -jar /usr/lib/unifi/lib/ace.jar start
