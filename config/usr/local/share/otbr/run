@@ -2,6 +2,7 @@
 
 set -euo pipefail
 
+backbone_if="eth0"
 thread_if="wpan0"
 otbr_forward_ingress_chain="OTBR_FORWARD_INGRESS"
 otbr_forward_egress_chain="OTBR_FORWARD_EGRESS"
@@ -14,10 +15,10 @@ ipset create -exist otbr-ingress-allow-dst-swap hash:net family inet6
 ip6tables -N $otbr_forward_ingress_chain
 ip6tables -I FORWARD 1 -o $thread_if -j $otbr_forward_ingress_chain
 
-ip6tables -A $otbr_forward_ingress_chain -m pkttype --pkt-type unicast -i ${thread_if} -j DROP
+ip6tables -A $otbr_forward_ingress_chain -m pkttype --pkt-type unicast -i "$thread_if" -j DROP
 ip6tables -A $otbr_forward_ingress_chain -m set --match-set otbr-ingress-deny-src src -j DROP
 ip6tables -A $otbr_forward_ingress_chain -m set --match-set otbr-ingress-allow-dst dst -j ACCEPT
-ip6tables -A $otbr_forward_ingress_chain -m pkttype --pkt-type unicast -i eth0 -j ACCEPT
+ip6tables -A $otbr_forward_ingress_chain -m pkttype --pkt-type unicast -i "$backbone_if" -j ACCEPT
 ip6tables -A $otbr_forward_ingress_chain -m pkttype --pkt-type unicast -j DROP
 ip6tables -A $otbr_forward_ingress_chain -j ACCEPT
 
@@ -29,6 +30,6 @@ exec otbr-agent \
 	-v \
 	-d 7 \
 	-s \
-	-I wpan0 \
-	-B eth0 \
+	-I "$thread_if" \
+	-B "$backbone_if" \
 	spinel+hdlc+uart:///dev/serial/by-id/usb-Nordic_Semiconductor_ASA_OpenThread_CoProcessor_3804D0A373C4BD19-if00
