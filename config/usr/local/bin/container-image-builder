@@ -16,6 +16,7 @@ fi
 
 podman build \
 	--no-cache \
+	--pull=always \
 	--iidfile="/tmp/iid.$name" \
 	--net=host \
 	-f "$containerfile" \
