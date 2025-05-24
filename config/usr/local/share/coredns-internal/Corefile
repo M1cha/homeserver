@@ -6,7 +6,7 @@
 	rewrite continue name suffix .homeserver.home.arpa .dns.podman answer auto
 
 	forward dns.podman fd33:1491:4cfa:f000::1
-	forward . fd33:1491:4cfa:1:ca31:97ff:fe66:782b
+	forward . fd33:1491:4cfa:1:b418:a5ff:fee5:966f
 
 	log
 	errors
