@@ -6,6 +6,7 @@ kernel_revision=$(uname -r)
 arch=$(uname -m)
 
 dnf install -y \
+	awk \
 	git \
 	koji \
 
