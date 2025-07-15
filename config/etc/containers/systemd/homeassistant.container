@@ -11,6 +11,7 @@ Volume=/usr/local/share/resolv-lan.conf:/etc/resolv.conf:ro,idmap,z
 Sysctl=net.ipv4.ip_unprivileged_port_start=0
 Secret=homeassistant_https_cert
 Secret=homeassistant_https_key
+Secret=gamingpc_ssh_hdr_key,mode=0600
 Volume=homeassistant_config:/config:idmap,z,nocopy
 Volume=/usr/local/share/ca-main.pem:/usr/local/share/ca-certificates/ca.pem:ro
 Volume=/usr/local/share/homeassistant/user-init:/user-init:ro
