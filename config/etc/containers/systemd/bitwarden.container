@@ -5,7 +5,7 @@ Requires=bitwarden-db.service
 
 [Container]
 ContainerName=bitwarden
-Image=docker.io/bitwarden/self-host:2024.7.2-beta
+Image=ghcr.io/bitwarden/self-host:2025.7.0-beta
 Network=brvirt:host_interface_name=veth_bitwarden
 Sysctl=net.ipv4.ip_unprivileged_port_start=0
 
@@ -29,7 +29,7 @@ Environment=BW_DB_PASSWORD=super_strong_password
 
 # Installation information
 # Get your ID and key from https://bitwarden.com/host/
-Environment=BW_INSTALLATION_ID=00000000-0000-0000-0000-000000000000
+Environment=BW_INSTALLATION_ID=00000000-0000-0000-0000-000000000001
 Environment=BW_INSTALLATION_KEY=xxxxxxxxxxxx
 
 # SSL
