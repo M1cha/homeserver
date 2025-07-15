@@ -4,7 +4,7 @@ After=network.target
 
 [Container]
 ContainerName=immich-machine-learning
-Image=ghcr.io/immich-app/immich-machine-learning:v1.113.0
+Image=ghcr.io/immich-app/immich-machine-learning:v1.135.3
 Network=brvirt:host_interface_name=veth_imm_ml
 Volume=immich_model_cache:/cache:idmap
 EnvironmentFile=/usr/local/share/immich/env

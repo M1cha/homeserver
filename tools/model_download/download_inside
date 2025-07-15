@@ -5,7 +5,7 @@ import requests
 import time
 import json
 
-server = subprocess.Popen(["./start.sh"])
+server = subprocess.Popen(["python", "-m", "immich_ml"])
 time.sleep(10)
 
 

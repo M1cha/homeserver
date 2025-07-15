@@ -4,7 +4,7 @@ After=network.target
 
 [Container]
 ContainerName=immich-redis
-Image=docker.io/redis:6.2-alpine@sha256:e3b17ba9479deec4b7d1eeec1548a253acc5374d68d3b27937fcfe4df8d18c7e
+Image=docker.io/valkey/valkey:8-bookworm@sha256:fec42f399876eb6faf9e008570597741c87ff7662a54185593e74b09ce83d177
 Network=brvirt:host_interface_name=veth_imm_red
 Tmpfs=/data
 

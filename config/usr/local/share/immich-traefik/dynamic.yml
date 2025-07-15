@@ -12,4 +12,4 @@ http:
     service-immich:
       loadBalancer:
         servers:
-          - url: http://immich-server:3001/
+          - url: http://immich-server:2283/
