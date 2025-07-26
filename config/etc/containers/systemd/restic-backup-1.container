@@ -5,7 +5,7 @@ BindsTo=run-media-resticbackup.mount
 
 [Container]
 ContainerName=restic-backup-1
-Image=ghcr.io/m1cha/restic-rest-server:latest
+Image=ghcr.io/m1cha/restic-rest-server:v0.2.1
 AutoUpdate=registry
 Network=brvirt:host_interface_name=veth_restic_b1
 Volume=/run/media/resticbackup:/media/data:idmap,z
