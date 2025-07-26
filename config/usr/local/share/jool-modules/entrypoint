@@ -13,7 +13,7 @@ dnf install -y \
 koji download-build --rpm --arch="$arch" "kernel-devel-$kernel_revision"
 dnf install -y "kernel-devel-$kernel_revision.rpm"
 
-git clone https://github.com/NICMx/Jool.git -b v4.1.13 /opt/jool
+git clone https://github.com/NICMx/Jool.git -b v4.1.14 /opt/jool
 
 make -C "/usr/src/kernels/$kernel_revision" M=/opt/jool/src/mod/common modules
 make -C "/usr/src/kernels/$kernel_revision" M=/opt/jool/src/mod/nat64 modules
