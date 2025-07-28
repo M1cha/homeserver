@@ -1,6 +1,7 @@
 [Unit]
 Description=OpenThread Border Router
-After=network.target
+BindsTo=dev-serial-by\x2did-usb\x2dNordic_Semiconductor_ASA_OpenThread_CoProcessor_3804D0A373C4BD19\x2dif00.device
+After=dev-serial-by\x2did-usb\x2dNordic_Semiconductor_ASA_OpenThread_CoProcessor_3804D0A373C4BD19\x2dif00.device network.target
 
 [Container]
 ContainerName=otbr
@@ -21,4 +22,4 @@ Restart=always
 RestartSec=10
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=dev-serial-by\x2did-usb\x2dNordic_Semiconductor_ASA_OpenThread_CoProcessor_3804D0A373C4BD19\x2dif00.device multi-user.target
