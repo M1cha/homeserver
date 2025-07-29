@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -euo pipefail
+
+exec podman run --rm -it \
+	--net none \
+	--security-opt label=disable \
+	-v /run/media/resticbackup:/media/data:idmap,z \
+	--secret=restic_autobackup_credentials \
+	localhost/homeserver-universal:latest \
+	restic \
+	--password-file "/run/secrets/restic_autobackup_credentials" \
+	--repo /media/data/1200/restic \
+	"$@"
