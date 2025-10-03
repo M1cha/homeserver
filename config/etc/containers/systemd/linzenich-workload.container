@@ -11,6 +11,9 @@ DNS=none
 Volume=/usr/local/share/resolv-inet.conf:/etc/resolv.conf:ro,idmap,z
 Entrypoint=/user-init
 Volume=/usr/local/share/linzenich-workload/user-init:/user-init:ro,idmap,z
+Volume=/usr/local/share/ca-mqtt.pem:/etc/ssl/mqtt-ca.crt:ro
+Secret=linzenich_workload_mqtt_cert
+Secret=linzenich_workload_mqtt_key
 
 [Service]
 Restart=always

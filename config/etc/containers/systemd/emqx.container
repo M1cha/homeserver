@@ -10,9 +10,12 @@ Network=brvirt:host_interface_name=veth_emqx,mac=66:ab:ac:cc:1b:8e,ip6=fd33:1491
 Sysctl=net.ipv4.ip_unprivileged_port_start=0
 Volume=/usr/local/share/emqx/emqx.conf:/opt/emqx/etc/emqx.conf:ro
 Volume=/usr/local/share/ca-main.pem:/opt/emqx/etc/certs/cacert.pem:ro
+Volume=/usr/local/share/ca-mqtt.pem:/opt/emqx/etc/certs/cacert-mqtt.pem:ro
 Secret=emqx_admin_password
 Secret=emqx_https_cert,target=/opt/emqx/etc/certs/cert.pem
 Secret=emqx_https_key,target=/opt/emqx/etc/certs/key.pem
+Secret=emqx_mqtt_cert,target=/opt/emqx/etc/certs/cert-mqtt.pem
+Secret=emqx_mqtt_key,target=/opt/emqx/etc/certs/key-mqtt.pem
 
 [Service]
 Restart=always

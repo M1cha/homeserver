@@ -2,6 +2,15 @@
 
 set -euo pipefail
 
+publish() {
+    mosquitto_pub \
+        -h emqx \
+        --cafile /etc/ssl/mqtt-ca.crt \
+        --cert /run/secrets/linzenich_workload_mqtt_cert \
+        --key /run/secrets/linzenich_workload_mqtt_key \
+        "$@"
+}
+
 sleep 10
 
 while :; do
@@ -9,7 +18,7 @@ while :; do
     value=$(curl -sfL 'https://bylinzenich.de/index.php?p=actions/sprig-core/components/render&sprig:config=25442010b7fa528c16f3bd1e16dd4f7157b0afd28d1d3eddb152f777ea033267%7B%22id%22%3A%22workload%22%2C%22siteId%22%3A1%2C%22template%22%3A%22_sprig%5C%2Fstudio-workload%22%2C%22variables%22%3A%7B%22_studioId%22%3A76890%7D%7D' -H 'HX-Request: true' | sed -n 's/.*--percentage: \([0-9]\+\)%.*/\1/p') || exit_code="$?"
 
     if [ "$exit_code" == "0" ]; then
-        mosquitto_pub -h emqx -i linzenich-workload -t linzenich-workload/koeln-merheim -m "$value"
+        publish -t linzenich-workload/koeln-merheim -m "$value"
     else
         echo "request failed: $exit_code" >&2
     fi
