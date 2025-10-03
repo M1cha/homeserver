@@ -17,6 +17,7 @@ Volume=/usr/local/share/ca-main.pem:/usr/local/share/ca-certificates/ca.pem:ro
 Volume=/usr/local/share/homeassistant/user-init:/user-init:ro
 Environment=REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 Entrypoint=/user-init
+AddDevice=/dev/serial/by-id/usb-Pulse-Eight_CEC_Adapter_v12-if00:rw
 
 [Service]
 Restart=always
