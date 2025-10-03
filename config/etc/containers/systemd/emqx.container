@@ -4,7 +4,7 @@ After=network.target
 
 [Container]
 ContainerName=emqx
-Image=docker.io/emqx:5.8
+Image=docker.io/emqx/emqx-enterprise:6.0
 AutoUpdate=registry
 Network=brvirt:host_interface_name=veth_emqx,mac=66:ab:ac:cc:1b:8e,ip6=fd33:1491:4cfa:f000::8006
 Sysctl=net.ipv4.ip_unprivileged_port_start=0
