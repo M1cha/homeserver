@@ -18,9 +18,6 @@ Volume=/usr/local/share/homeassistant/user-init:/user-init:ro
 Environment=REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 Entrypoint=/user-init
 
-# zigbee dongle
-AddDevice=/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0:/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0:rw
-
 [Service]
 Restart=always
 RestartMode=direct
