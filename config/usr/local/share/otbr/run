@@ -26,6 +26,8 @@ ip6tables -N $otbr_forward_egress_chain
 ip6tables -I FORWARD 2 -i $thread_if -j $otbr_forward_egress_chain
 ip6tables -A $otbr_forward_egress_chain -j ACCEPT
 
+ip6tables -A INPUT -i "$thread_if" -p tcp --dport 8081 -j DROP
+
 /usr/sbin/mdnsd -debug &
 sleep 2
 
