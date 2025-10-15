@@ -1,0 +1,18 @@
+[Unit]
+Description=Install Grafana plugins
+After=network.target
+
+[Service]
+Type=oneshot
+
+[Container]
+UserNS=auto
+ContainerName=grafana-plugins
+Image=localhost/homeserver-universal:latest
+AutoUpdate=local
+Exec=/run/media/config/run
+Network=brvirt:host_interface_name=veth_gfplugins
+DNS=none
+Volume=/usr/local/share/resolv-inet.conf:/etc/resolv.conf:ro,idmap,z
+Volume=/usr/local/share/grafana-plugins:/run/media/config:ro
+Volume=grafana-plugins:/var/lib/grafana/plugins:idmap,z

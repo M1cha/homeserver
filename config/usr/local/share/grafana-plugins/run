@@ -1,0 +1,43 @@
+#!/bin/bash
+
+set -xeuo pipefail
+
+plugins=(
+	victoriametrics-metrics-datasource
+)
+plugins_dir="/var/lib/grafana/plugins"
+
+# rate limit
+last_check_file="$plugins_dir/.last_check"
+twelve_hours_ago=$(date -d 'now - 12 hours' '+%s')
+last_check=$(date -r "$last_check_file" '+%s' || echo '0')
+if (( last_check >= twelve_hours_ago )); then
+	exit 0
+fi
+
+# Wait for IP addresses
+sleep 5
+
+cd "$plugins_dir"
+
+for plugin in "${plugins[@]}"; do
+	latest_version=$(curl -fSsL "https://grafana.com/api/plugins/$plugin" | jq -r .version)
+
+	current_version=""
+	if [ -f "$plugin/plugin.json" ]; then
+		current_version=$(cat "$plugin/plugin.json" | jq -r .info.version)
+	fi
+
+	if [ "$current_version" == "$latest_version" ]; then
+		echo "$plugin@$current_version is up to date" >&2
+		continue
+	fi
+
+	echo "Update $plugin from $current_version to $latest_version" >&2
+	curl -fSsL \
+		-o /tmp/plugin.zip \
+		"https://grafana.com/api/plugins/$plugin/versions/$latest_version/download"
+	unzip /tmp/plugin.zip
+done
+
+touch "$last_check_file"

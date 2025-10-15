@@ -3,7 +3,9 @@ RUN go install github.com/mailhog/mailhog@e6fa06877ef61ea82bbef234d94bdc75cca478
 
 FROM docker.io/alpine:latest
 RUN apk add --no-cache \
+    bash \
     ca-certificates \
+    coreutils \
     curl \
     fuse \
     jq \
@@ -15,7 +17,8 @@ RUN apk add --no-cache \
     restic \
     samba \
     socat \
-    tzdata
+    tzdata \
+    unzip
 COPY --from=golang /go/bin/mailhog /usr/local/bin/
 
 RUN apk list --installed > /etc/software-versions
