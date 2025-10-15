@@ -5,7 +5,7 @@ Requires=bitwarden-db.service
 
 [Container]
 ContainerName=bitwarden
-Image=ghcr.io/bitwarden/self-host:2025.7.0-beta
+Image=ghcr.io/bitwarden/self-host:2025.9.2-beta
 Network=brvirt:host_interface_name=veth_bitwarden
 Sysctl=net.ipv4.ip_unprivileged_port_start=0
 
