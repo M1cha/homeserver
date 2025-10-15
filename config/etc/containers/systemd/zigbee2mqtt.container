@@ -4,7 +4,7 @@ After=network.target
 
 [Container]
 ContainerName=zigbee2mqtt
-Image=ghcr.io/koenkk/zigbee2mqtt
+Image=ghcr.io/koenkk/zigbee2mqtt:latest
 Network=brvirt:host_interface_name=veth_z2m,mac=8e:cc:7e:8a:4e:15
 Sysctl=net.ipv4.ip_unprivileged_port_start=0
 Secret=zigbee2mqtt_https_cert
