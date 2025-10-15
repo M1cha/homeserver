@@ -61,6 +61,8 @@ install() {
 	nmcli connection reload
 	systemctl enable --now \
 		container-image-builder@homeserver-universal.timer \
+		container-image-builder@jool.timer \
+		container-image-builder@radvd.timer \
 		gitmirror.timer \
 		hdparm.service \
 		podman-auto-update.timer \
