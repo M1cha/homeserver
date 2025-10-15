@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -xeuo pipefail
+
+systemctl stop immich-server.service
+systemctl stop immich-machine-learning.service
+systemctl stop immich-redis.service
+systemctl stop immich-database.service
+
+systemctl start immich-machine-learning.service
+systemctl start immich-server.service
+
