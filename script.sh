@@ -28,6 +28,19 @@ cleanup_systemd() {
 		echo "WARNING: delete $path_etc"
 		rm -r "$path_etc"
 	done
+
+	# Remove our old `enable` symlinks
+	find /etc/systemd/system/*.wants -mindepth 1 -maxdepth 1 -print0 -type l |
+	while IFS= read -rd '' path_etc; do
+		path_usr="/usr$path_etc"
+
+		if [ -L "$path_usr" ]; then
+			continue
+		fi
+
+		echo "WARNING: delete $path_etc"
+		rm "$path_etc"
+	done
 }
 
 install() {
