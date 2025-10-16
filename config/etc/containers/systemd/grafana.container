@@ -1,7 +1,6 @@
 [Unit]
 Description=Grafana
-After=network.target influxdb.service loki.service grafana-plugins.service
-Wants=grafana-plugins.service
+After=network.target influxdb.service
 
 [Container]
 ContainerName=grafana
@@ -10,7 +9,6 @@ User=0
 AutoUpdate=registry
 Network=brvirt:host_interface_name=veth_grafana,mac=8e:cc:7e:8a:4e:13
 Sysctl=net.ipv4.ip_unprivileged_port_start=0
-Volume=grafana-plugins:/var/lib/grafana/plugins:idmap,z
 
 # secrets
 Secret=grafana_https_cert
