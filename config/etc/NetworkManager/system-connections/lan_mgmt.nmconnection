@@ -16,6 +16,6 @@ method=manual
 address1=192.168.42.2/24
 
 [ipv6]
-method=disabled
+method=auto
 
 [proxy]
