@@ -1,0 +1,3 @@
+[submodule "thirdparty/rfmoz-grafana-dashboards"]
+	path = thirdparty/rfmoz-grafana-dashboards
+	url = https://github.com/rfmoz/grafana-dashboards.git
