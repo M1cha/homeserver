@@ -1,0 +1,7 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+- job_name: node_homeserver
+  static_configs:
+  - targets: ['[fd33:1491:4cfa:f000::1]:9100']

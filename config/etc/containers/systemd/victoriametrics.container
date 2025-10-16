@@ -7,10 +7,13 @@ ContainerName=victoriametrics
 Image=docker.io/victoriametrics/victoria-metrics:v1.127.0
 AutoUpdate=registry
 Network=brvirt:host_interface_name=veth_vicmet
+Volume=/usr/local/share/victoriametrics:/run/media/config:ro,idmap,z
 Volume=victoriametrics_data:/storage:idmap,z,nocopy
 Exec=-storageDataPath=/storage \
+     -enableTCP6 \
      -httpListenAddr=:8428 \
-     -usePromCompatibleNaming
+     -usePromCompatibleNaming \
+     -promscrape.config=/run/media/config/prometheus.yml
 
 [Service]
 Restart=always

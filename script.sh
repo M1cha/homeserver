@@ -81,6 +81,7 @@ install() {
 		podman-auto-update.timer \
 		netavark-dhcp-proxy.socket \
 		nftables.service \
+		prometheus-node-exporter.service \
 		rclone-backup.timer \
 		restic-autobackup.timer \
 		syncthing-rsync.path \

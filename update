@@ -57,9 +57,14 @@ def main():
     target = Target("root", "fe80::ce28:aaff:fe09:1bbd%eth0")
     source_dir = Path("./config").resolve()
     source_dir_private = Path("./config-private").resolve()
+    thirdparty_dir = Path("./thirdparty").resolve()
 
     target.rsync(f"{source_dir}/", f"{target.tmpdir}/", delete=True)
     target.rsync(f"{source_dir_private}/", f"{target.tmpdir}/")
+    target.rsync(
+            f"{thirdparty_dir}/rfmoz-grafana-dashboards/prometheus/node-exporter-full.json",
+            f"{target.tmpdir}/usr/local/share/grafana/dashboards/main/"
+    )
 
     target.run_script("script.sh")
 

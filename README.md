@@ -65,13 +65,14 @@ sudo podman run --privileged --rm -v /dev:/dev -v /run/udev:/run/udev -v .:/data
 ### Install additional packages
 
 ```bash
-rpm-ostree install dmidecode efivar hdparm htop inotify-tools lm_sensors pciutils powertop s-tui stress tcpdump usbutils
+rpm-ostree install dmidecode efivar hdparm htop inotify-tools lm_sensors node-exporter pciutils powertop s-tui stress tcpdump usbutils
 ```
 
 - dmidecode, efivar, lm_sensors, powertop, s-tui, stress: Useful on x86
 - hdparm: For putting the backup HDD to sleep
 - htop: it's just very useful
 - inotify-tools: required for my syncthing rsyncd setup
+- node-exporter: for recording system information
 - pciutils, tcpdump, usbutils: useful for debugging
 
 ### Trust my own CA
