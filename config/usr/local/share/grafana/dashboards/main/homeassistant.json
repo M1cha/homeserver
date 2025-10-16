@@ -24,13 +24,13 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
+  "id": 2,
   "links": [],
-  "liveNow": false,
   "panels": [
     {
       "datasource": {
-        "type": "influxdb",
-        "uid": "rjl7EP47k"
+        "type": "prometheus",
+        "uid": "P4AD40D6CD93C76CA"
       },
       "description": "",
       "fieldConfig": {
@@ -45,6 +45,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -64,6 +65,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -79,7 +81,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -108,36 +110,31 @@
           "showLegend": false
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "none"
         }
       },
-      "pluginVersion": "8.1.2",
+      "pluginVersion": "12.2.0",
       "targets": [
         {
           "datasource": {
-            "type": "influxdb",
-            "uid": "rjl7EP47k"
+            "type": "prometheus",
+            "uid": "P4AD40D6CD93C76CA"
           },
-          "query": "from(bucket: \"home-assistant\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> group(columns: [\"entity_id\", \"friendly_name_str\"])\n  |> filter(fn: (r) => r.device_class_str == \"power\")\n  |> filter(fn: (r) => r.entity_id == \"smartmeter_power\")\n  |> map(fn: (r) => ({\n      _time: r._time,\n      entity_id: r.entity_id,\n      friendly_name_str: r.friendly_name_str,\n      _value: r.value,\n    }))\n    |> aggregateWindow(every: v.windowPeriod, fn: mean)",
-          "queryType": "randomWalk",
+          "editorMode": "builder",
+          "expr": "W_value{entity_id=\"smartmeter_power\"}",
+          "legendFormat": "__auto",
+          "range": true,
           "refId": "A"
         }
       ],
       "title": "Power consumption",
       "transformations": [
         {
-          "disabled": true,
-          "id": "seriesToColumns",
+          "id": "labelsToFields",
           "options": {
-            "byField": "_time"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": ".*friendly_name_str=\"(.*)\".*",
-            "renamePattern": "$1"
+            "valueLabel": "friendly_name"
           }
         }
       ],
@@ -145,8 +142,8 @@
     },
     {
       "datasource": {
-        "type": "influxdb",
-        "uid": "rjl7EP47k"
+        "type": "prometheus",
+        "uid": "P4AD40D6CD93C76CA"
       },
       "description": "",
       "fieldConfig": {
@@ -161,6 +158,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -180,6 +178,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -195,7 +194,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -224,36 +223,32 @@
           "showLegend": false
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "none"
         }
       },
-      "pluginVersion": "8.1.2",
+      "pluginVersion": "12.2.0",
       "targets": [
         {
           "datasource": {
-            "type": "influxdb",
-            "uid": "rjl7EP47k"
+            "type": "prometheus",
+            "uid": "P4AD40D6CD93C76CA"
           },
-          "query": "from(bucket: \"home-assistant\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> group(columns: [\"entity_id\", \"friendly_name_str\"])\n  |> filter(fn: (r) => r.device_class_str == \"pm1\" or r.device_class_str == \"pm25\" or r.device_class_str == \"pm10\")\n  |> map(fn: (r) => ({\n      _time: r._time,\n      entity_id: r.entity_id,\n      friendly_name_str: r.friendly_name_str,\n      _value: r.value,\n    }))\n    |> aggregateWindow(every: v.windowPeriod, fn: mean)",
-          "queryType": "randomWalk",
+          "editorMode": "builder",
+          "expr": "_g_m__value",
+          "legendFormat": "__auto",
+          "range": true,
           "refId": "A"
         }
       ],
       "title": "Air quality",
       "transformations": [
         {
-          "disabled": true,
-          "id": "seriesToColumns",
+          "id": "labelsToFields",
           "options": {
-            "byField": "_time"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": ".*friendly_name_str=\"(.*)\".*",
-            "renamePattern": "$1"
+            "mode": "columns",
+            "valueLabel": "friendly_name"
           }
         }
       ],
@@ -261,8 +256,8 @@
     },
     {
       "datasource": {
-        "type": "influxdb",
-        "uid": "rjl7EP47k"
+        "type": "prometheus",
+        "uid": "P4AD40D6CD93C76CA"
       },
       "description": "",
       "fieldConfig": {
@@ -277,6 +272,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -296,6 +292,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -311,7 +308,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -340,36 +337,32 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "none"
         }
       },
-      "pluginVersion": "8.1.2",
+      "pluginVersion": "12.2.0",
       "targets": [
         {
           "datasource": {
-            "type": "influxdb",
-            "uid": "rjl7EP47k"
+            "type": "prometheus",
+            "uid": "P4AD40D6CD93C76CA"
           },
-          "query": "temp = from(bucket: \"home-assistant\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> group(columns: [\"entity_id\", \"friendly_name_str\"])\n  |> filter(fn: (r) => r.device_class_str == \"temperature\")\n  |> map(fn: (r) => ({\n      _time: r._time,\n      entity_id: r.entity_id,\n      friendly_name_str: r.friendly_name_str,\n      _value: r.value,\n    }))\n\nclimate = from(bucket: \"home-assistant\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> group(columns: [\"entity_id\", \"friendly_name_str\"])\n  |> filter(fn: (r) => r.domain == \"climate\")\n    |> map(fn: (r) => ({\n      _time: r._time,\n      entity_id: r.entity_id,\n      friendly_name_str: r.friendly_name_str,\n      _value: r.current_temperature,\n    }))\n\nunion(tables:[temp, climate])",
-          "queryType": "randomWalk",
+          "editorMode": "builder",
+          "expr": "_C_value",
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
           "refId": "A"
         }
       ],
       "title": "Temperatures",
       "transformations": [
         {
-          "disabled": true,
-          "id": "seriesToColumns",
+          "id": "labelsToFields",
           "options": {
-            "byField": "_time"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": ".*friendly_name_str=\"(.*)\".*",
-            "renamePattern": "$1"
+            "valueLabel": "friendly_name"
           }
         }
       ],
@@ -393,6 +386,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -412,6 +406,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -427,7 +422,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -456,11 +451,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "8.1.2",
+      "pluginVersion": "12.2.0",
       "targets": [
         {
           "datasource": {
@@ -493,8 +489,8 @@
     },
     {
       "datasource": {
-        "type": "influxdb",
-        "uid": "rjl7EP47k"
+        "type": "prometheus",
+        "uid": "P4AD40D6CD93C76CA"
       },
       "description": "",
       "fieldConfig": {
@@ -509,6 +505,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -528,6 +525,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -543,7 +541,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -572,36 +570,31 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "8.1.2",
+      "pluginVersion": "12.2.0",
       "targets": [
         {
           "datasource": {
-            "type": "influxdb",
-            "uid": "rjl7EP47k"
+            "type": "prometheus",
+            "uid": "P4AD40D6CD93C76CA"
           },
-          "query": "from(bucket: \"home-assistant\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> group(columns: [\"entity_id\", \"friendly_name_str\"])\n  |> filter(fn: (r) => r.device_class_str == \"battery\")\n  |> map(fn: (r) => ({\n      _time: r._time,\n      entity_id: r.entity_id,\n      friendly_name_str: r.friendly_name_str,\n      _value: r.value,\n    }))",
-          "queryType": "randomWalk",
+          "editorMode": "builder",
+          "expr": "__value{device_class=\"battery\"}",
+          "legendFormat": "__auto",
+          "range": true,
           "refId": "A"
         }
       ],
       "title": "Batteries",
       "transformations": [
         {
-          "disabled": true,
-          "id": "seriesToColumns",
+          "id": "labelsToFields",
           "options": {
-            "byField": "_time"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": ".*friendly_name_str=\"(.*)\".*",
-            "renamePattern": "$1"
+            "valueLabel": "friendly_name"
           }
         }
       ],
@@ -609,8 +602,8 @@
     },
     {
       "datasource": {
-        "type": "influxdb",
-        "uid": "rjl7EP47k"
+        "type": "prometheus",
+        "uid": "P4AD40D6CD93C76CA"
       },
       "description": "",
       "fieldConfig": {
@@ -625,6 +618,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -644,6 +638,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -659,7 +654,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -669,33 +664,7 @@
           },
           "unit": "volt"
         },
-        "overrides": [
-          {
-            "__systemRef": "hideSeriesFrom",
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "desktop Electricalmeasurementrmsvoltage",
-                  "work Electricalmeasurementrmsvoltage"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": true
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 8,
@@ -714,36 +683,32 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "8.1.2",
+      "pluginVersion": "12.2.0",
       "targets": [
         {
           "datasource": {
-            "type": "influxdb",
-            "uid": "rjl7EP47k"
+            "type": "prometheus",
+            "uid": "P4AD40D6CD93C76CA"
           },
-          "query": "from(bucket: \"home-assistant\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> group(columns: [\"entity_id\", \"friendly_name_str\"])\n  |> filter(fn: (r) => r.device_class_str == \"voltage\")\n  |> map(fn: (r) => ({\n      _time: r._time,\n      entity_id: r.entity_id,\n      friendly_name_str: r.friendly_name_str,\n      _value: r.value,\n    }))",
-          "queryType": "randomWalk",
+          "editorMode": "builder",
+          "expr": "V_value",
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
           "refId": "A"
         }
       ],
       "title": "Voltages",
       "transformations": [
         {
-          "disabled": true,
-          "id": "seriesToColumns",
+          "id": "labelsToFields",
           "options": {
-            "byField": "_time"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": ".*friendly_name_str=\"(.*)\".*",
-            "renamePattern": "$1"
+            "valueLabel": "friendly_name"
           }
         }
       ],
@@ -751,8 +716,8 @@
     },
     {
       "datasource": {
-        "type": "influxdb",
-        "uid": "rjl7EP47k"
+        "type": "prometheus",
+        "uid": "P4AD40D6CD93C76CA"
       },
       "description": "",
       "fieldConfig": {
@@ -767,6 +732,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -786,6 +752,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -801,7 +768,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -830,36 +797,32 @@
           "showLegend": false
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "none"
         }
       },
-      "pluginVersion": "8.1.2",
+      "pluginVersion": "12.2.0",
       "targets": [
         {
           "datasource": {
-            "type": "influxdb",
-            "uid": "rjl7EP47k"
+            "type": "prometheus",
+            "uid": "P4AD40D6CD93C76CA"
           },
-          "query": "from(bucket: \"home-assistant\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> group(columns: [\"entity_id\", \"friendly_name_str\"])\n  |> filter(fn: (r) => r.device_class_str == \"carbon_dioxide\")\n  |> map(fn: (r) => ({\n      _time: r._time,\n      entity_id: r.entity_id,\n      friendly_name_str: r.friendly_name_str,\n      _value: r.value,\n    }))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean)",
-          "queryType": "randomWalk",
+          "editorMode": "builder",
+          "expr": "ppm_value",
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
           "refId": "A"
         }
       ],
       "title": "CO2",
       "transformations": [
         {
-          "disabled": true,
-          "id": "seriesToColumns",
+          "id": "labelsToFields",
           "options": {
-            "byField": "_time"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": ".*friendly_name_str=\"(.*)\".*",
-            "renamePattern": "$1"
+            "valueLabel": "friendly_name"
           }
         }
       ],
@@ -883,6 +846,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -902,6 +866,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -917,7 +882,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -946,11 +911,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "8.1.2",
+      "pluginVersion": "12.2.0",
       "targets": [
         {
           "datasource": {
@@ -982,8 +948,9 @@
       "type": "timeseries"
     }
   ],
+  "preload": false,
   "refresh": "1m",
-  "schemaVersion": 39,
+  "schemaVersion": 42,
   "tags": [],
   "templating": {
     "list": []
@@ -996,6 +963,5 @@
   "timezone": "",
   "title": "Home Assistant",
   "uid": "Oo0XiQ47z",
-  "version": 2,
-  "weekStart": ""
+  "version": 1
 }

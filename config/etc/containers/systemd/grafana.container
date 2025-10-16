@@ -1,6 +1,6 @@
 [Unit]
 Description=Grafana
-After=network.target influxdb.service
+After=network.target victoriametrics.service
 
 [Container]
 ContainerName=grafana
@@ -13,7 +13,6 @@ Sysctl=net.ipv4.ip_unprivileged_port_start=0
 # secrets
 Secret=grafana_https_cert
 Secret=grafana_https_key
-Secret=grafana_influxdb_token,type=env,target=INFLUXDB_TOKEN
 Secret=grafana_security_admin_password,type=env,target=GF_SECURITY_ADMIN_PASSWORD
 
 # configs

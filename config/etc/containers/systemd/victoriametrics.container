@@ -1,0 +1,21 @@
+[Unit]
+Description=VictoriaMetrics server
+After=network.target
+
+[Container]
+ContainerName=victoriametrics
+Image=docker.io/victoriametrics/victoria-metrics:v1.127.0
+AutoUpdate=registry
+Network=brvirt:host_interface_name=veth_vicmet
+Volume=victoriametrics_data:/storage:idmap,z,nocopy
+Exec=-storageDataPath=/storage \
+     -httpListenAddr=:8428 \
+     -usePromCompatibleNaming
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
