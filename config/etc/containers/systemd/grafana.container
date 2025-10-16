@@ -29,6 +29,7 @@ Environment=GF_SERVER_PROTOCOL=https
 Environment=GF_SERVER_HTTP_PORT=443
 Environment=GF_SERVER_CERT_FILE=/run/secrets/grafana_https_cert
 Environment=GF_SERVER_CERT_KEY=/run/secrets/grafana_https_key
+Environment=GF_USERS_HOME_PAGE=/dashboards
 
 [Service]
 Restart=always
