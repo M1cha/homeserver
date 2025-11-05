@@ -28,6 +28,9 @@ Environment=ZIGBEE2MQTT_CONFIG_FRONTEND_URL=https://zigbee2mqtt.home.arpa
 Environment=ZIGBEE2MQTT_CONFIG_FRONTEND_SSL_CERT=/run/secrets/zigbee2mqtt_https_cert
 Environment=ZIGBEE2MQTT_CONFIG_FRONTEND_SSL_KEY=/run/secrets/zigbee2mqtt_https_key
 
+Volume=/usr/local/share/zigbee2mqtt/user-init:/user-init:ro
+Entrypoint=/user-init
+
 # zigbee dongle
 AddDevice=/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0:/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0:rw
 

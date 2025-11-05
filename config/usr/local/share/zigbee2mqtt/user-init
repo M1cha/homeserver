@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -euo pipefail
+
+find /app/node_modules/zigbee-herdsman-converters/ -type f -print0 \
+	| xargs -0 sed -i 's|https://raw.githubusercontent.com/Koenkk/zigbee-OTA/master/|http://zigbee-ota-proxy/|g'
+
+exec docker-entrypoint.sh /sbin/tini -- node index.js
