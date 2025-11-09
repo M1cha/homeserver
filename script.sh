@@ -77,6 +77,7 @@ install() {
 		container-image-builder@jool.timer \
 		container-image-builder@radvd.timer \
 		gitmirror.timer \
+		googledrive-backup.timer \
 		hdparm.service \
 		podman-auto-update.timer \
 		netavark-dhcp-proxy.socket \

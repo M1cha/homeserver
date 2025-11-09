@@ -17,6 +17,7 @@ Volume=/usr/local/share/share-archive/authorized_keys:/root/.ssh/authorized_keys
 
 # share
 Volume=/run/media/archive:/mnt/archive:rw,idmap
+Volume=/run/media/archive/googledrive:/mnt/archive/googledrive:ro,idmap
 Volume=/run/media/media:/mnt/media:rw,idmap
 
 [Service]
