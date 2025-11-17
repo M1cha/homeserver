@@ -14,4 +14,4 @@ slave-type=bridge
 [vlan]
 flags=1
 id=300
-parent=eno1
+parent=enp3s0

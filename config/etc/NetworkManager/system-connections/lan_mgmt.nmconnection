@@ -8,7 +8,7 @@ type=vlan
 [vlan]
 flags=1
 id=100
-parent=eno1
+parent=enp3s0
 
 [ipv4]
 ignore-auto-dns=true

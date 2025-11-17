@@ -48,7 +48,6 @@ install() {
 
 	chmod -R go= etc/NetworkManager/system-connections/*
 
-	tmp2sys etc/fancontrol
 	tmp2sys etc/hostname
 	tmp2sys etc/sysctl.d/99-m1cha.conf
 	tmp2sys etc/subuid
