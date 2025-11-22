@@ -19,6 +19,8 @@ Secret=tlsproxy_switch2_cert
 Secret=tlsproxy_switch2_key
 Secret=tlsproxy_switch3_cert
 Secret=tlsproxy_switch3_key
+Secret=tlsproxy_switch4_cert
+Secret=tlsproxy_switch4_key
 
 [Service]
 Restart=always
