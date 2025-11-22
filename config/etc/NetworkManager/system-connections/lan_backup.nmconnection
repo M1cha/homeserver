@@ -1,0 +1,15 @@
+[connection]
+id=lan_backup
+uuid=c887ab0a-89c0-48ec-9535-77f79d1440fd
+type=ethernet
+autoconnect-priority=-999
+interface-name=enp3s0
+timestamp=1719619226
+
+[ipv4]
+method=disabled
+
+[ipv6]
+method=link-local
+
+[proxy]

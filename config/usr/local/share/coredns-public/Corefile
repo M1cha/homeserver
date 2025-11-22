@@ -1,6 +1,6 @@
 . {
 	hosts {
-		fd33:1491:4cfa:0:befc:e7ff:fe63:b194 homeserver.home.arpa
+		fd33:1491:4cfa:0:1e86:bff:fe38:711a homeserver.home.arpa
 		fallthrough
 	}
 	rewrite continue name suffix .homeserver.home.arpa .dns.podman answer auto

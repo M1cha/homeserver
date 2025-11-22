@@ -3,7 +3,7 @@ id=lan
 uuid=136ee91e-fd1c-3462-a3c3-3837dc27bafa
 type=ethernet
 autoconnect-priority=-999
-interface-name=enp3s0
+interface-name=enp1s0
 timestamp=1719619226
 
 [ipv4]
