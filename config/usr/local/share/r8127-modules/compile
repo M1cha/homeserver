@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -xeuo pipefail
+
+kernel_revision=$(uname -r)
+ko_dir="$CACHE_DIRECTORY/$kernel_revision"
+
+mkdir /tmp/build
+cd /tmp/build
+
+EXTRA_ARGS="MO=/tmp/build" make -C /usr/local/share/r8127-modules/src modules
+
+mkdir -p "$ko_dir"
+cp /tmp/build/r8127.ko "$ko_dir/"

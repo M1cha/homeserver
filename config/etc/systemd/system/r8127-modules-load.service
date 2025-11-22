@@ -1,0 +1,10 @@
+[Unit]
+Description=load r8127 kernel module
+After=r8127-modules.service
+Requires=r8127-modules.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+CacheDirectory=r8127-modules-load
+ExecStart=/usr/local/share/r8127-modules/load

@@ -1,0 +1,1 @@
+SUBSYSTEM=="pci", ATTR{vendor}=="0x10ec", ATTR{device}=="0x8127", ATTR{driver_override}="r8127"

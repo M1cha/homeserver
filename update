@@ -65,6 +65,10 @@ def main():
             f"{thirdparty_dir}/rfmoz-grafana-dashboards/prometheus/node-exporter-full.json",
             f"{target.tmpdir}/usr/local/share/grafana/dashboards/main/"
     )
+    target.rsync(
+            f"{thirdparty_dir}/r8127/src/",
+            f"{target.tmpdir}/usr/local/share/r8127-modules/src/"
+    )
 
     target.run_script("script.sh")
 

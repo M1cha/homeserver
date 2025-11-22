@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -euo pipefail
+
+pci_device="0000:01:00.0"
+current_driver=$(basename $(realpath "/sys/bus/pci/devices/$pci_device/driver"))
+
+if [ -d /sys/bus/pci/drivers/r8127 ]; then
+	echo "r8127 is loaded already" >&2
+else
+	cp "/var/cache/r8127-modules/$(uname -r)/r8127.ko" "$CACHE_DIRECTORY/"
+	chown -R root:root "$CACHE_DIRECTORY"
+	chcon -R -u system_u -r object_r -t modules_object_t "$CACHE_DIRECTORY"
+
+	insmod "$CACHE_DIRECTORY/r8127.ko" aspm=0
+	echo "r8127 loaded successfully" >&2
+fi
+
+if [ "$current_driver" == "r8127" ]; then
+	echo "r8127 is the devices driver already" >&2
+	exit 0
+fi
+
+echo "$pci_device" > /sys/bus/pci/drivers/r8169/unbind
+echo "$pci_device" > /sys/bus/pci/drivers/r8127/bind

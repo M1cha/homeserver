@@ -1,0 +1,21 @@
+[Unit]
+Description=Compile r8127 kernel modules
+ConditionFileNotEmpty=|!/var/cache/r8127-modules/%v/r8127.ko
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/share/r8127-modules/compile
+CacheDirectory=r8127-modules
+
+PrivateTmp=true
+ProtectSystem=strict
+PrivateDevices=true
+PrivateNetwork=true
+PrivateIPC=true
+ProtectHostname=true
+ProtectClock=true
+ProtectKernelTunables=true
+ProtectKernelLogs=true
+ProtectControlGroups=strict
+DynamicUser=true
