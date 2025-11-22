@@ -8,7 +8,7 @@ arch=$(uname -m)
 dnf install -y \
 	awk \
 	git \
-	koji \
+	koji
 
 koji download-build --rpm --arch="$arch" "kernel-devel-$kernel_revision"
 dnf install -y "kernel-devel-$kernel_revision.rpm"
