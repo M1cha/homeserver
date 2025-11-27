@@ -6,6 +6,55 @@ import re
 import ipaddress
 import io
 
+RE_NFT_DEFINE = re.compile("^define ([a-zA-Z_]+) = {")
+RE_NFT_PLACEHOLDER = re.compile("(.*)%([a-zA-Z_]+)%(.*)")
+
+
+def process_nftables(path):
+    output = io.StringIO()
+    contents = open(path).read()
+    defines = {}
+
+    in_define = False
+    elements = []
+    name = None
+    for line in contents.splitlines():
+        line = line.split("#")[0]
+
+        if in_define:
+            line = line.strip()
+            if line == "}":
+                defines[name] = elements
+                in_define = False
+                continue
+
+            assert line[-1] == ",", f"{line}"
+
+            elements.append(line[0:-1])
+
+        match = RE_NFT_DEFINE.match(line)
+        if match:
+            name = match.group(1)
+            elements = []
+            in_define = True
+
+    for line in contents.splitlines():
+        match = RE_NFT_PLACEHOLDER.match(line)
+        if match:
+            pre = match.group(1)
+            placeholder = match.group(2)
+            post = match.group(3)
+
+            for define in defines[placeholder]:
+                output.write(f"{pre}{define}{post}\n")
+
+            continue
+
+        output.write(f"{line}\n")
+
+    output.seek(0)
+    return output.read()
+
 
 class Target:
     def __init__(self, user, host):
@@ -69,6 +118,11 @@ def main():
             f"{thirdparty_dir}/r8127/src/",
             f"{target.tmpdir}/usr/local/share/r8127-modules/src/"
     )
+
+    patched_nftables = process_nftables(
+        source_dir / "usr/local/share/nftables/main.conf"
+    )
+    target.write_file(patched_nftables, "usr/local/share/nftables/main.conf")
 
     target.run_script("script.sh")
 
