@@ -37,10 +37,14 @@ class Target:
     def write_file(self, source, target):
         target = self.tmpdir / target
 
-        subprocess.run(["ssh", f"{self.user}@{self.host}", "mkdir", "-p", target.parent], check=True)
+        subprocess.run(
+            ["ssh", f"{self.user}@{self.host}", "mkdir", "-p", target.parent],
+            check=True,
+        )
 
         p = subprocess.Popen(
-            ["ssh", f"{self.user}@{self.host}", f"cat > {target}"], stdin=subprocess.PIPE
+            ["ssh", f"{self.user}@{self.host}", f"cat > {target}"],
+            stdin=subprocess.PIPE,
         )
         p.communicate(input=source.encode())
         if p.returncode != 0:
@@ -62,12 +66,12 @@ def main():
     target.rsync(f"{source_dir}/", f"{target.tmpdir}/", delete=True)
     target.rsync(f"{source_dir_private}/", f"{target.tmpdir}/")
     target.rsync(
-            f"{thirdparty_dir}/rfmoz-grafana-dashboards/prometheus/node-exporter-full.json",
-            f"{target.tmpdir}/usr/local/share/grafana/dashboards/main/"
+        f"{thirdparty_dir}/rfmoz-grafana-dashboards/prometheus/node-exporter-full.json",
+        f"{target.tmpdir}/usr/local/share/grafana/dashboards/main/",
     )
     target.rsync(
-            f"{thirdparty_dir}/r8127/src/",
-            f"{target.tmpdir}/usr/local/share/r8127-modules/src/"
+        f"{thirdparty_dir}/r8127/src/",
+        f"{target.tmpdir}/usr/local/share/r8127-modules/src/",
     )
 
     target.run_script("script.sh")
