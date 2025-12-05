@@ -17,6 +17,3 @@ Volume=cloudflare_data:/mnt:ro,idmap,z
 Restart=always
 RestartMode=direct
 RestartSec=10
-
-[Install]
-WantedBy=multi-user.target
