@@ -1,0 +1,22 @@
+[Unit]
+Description=cloudflare data server
+After=network.target
+
+[Container]
+ContainerName=cloudflare-data
+Image=docker.io/library/nginx:latest
+AutoUpdate=registry
+Network=brvirt:host_interface_name=veth_cfdata,mac=8e:cc:7e:8a:4e:16
+Volume=/usr/local/share/cloudflare-data/default.conf:/etc/nginx/conf.d/default.conf:ro,idmap,z
+Secret=cloudflare_data_ca
+Secret=cloudflare_data_cert
+Secret=cloudflare_data_key
+Volume=cloudflare_data:/mnt:ro,idmap,z
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
