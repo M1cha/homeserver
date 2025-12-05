@@ -17,6 +17,8 @@ Secret=restic_powerup_homeassistant_token
 Restart=always
 RestartMode=direct
 RestartSec=10
+# SIGTERM
+SuccessExitStatus=143
 
 [Install]
 WantedBy=multi-user.target
