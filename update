@@ -58,7 +58,7 @@ class Target:
 
 
 def main():
-    target = Target("root", "fe80::1e86:bff:fe38:711a%eth0")
+    target = Target("root", "fe80::1e86:bff:fe38:711a%enp8s0")
     source_dir = Path("./config").resolve()
     source_dir_private = Path("./config-private").resolve()
     thirdparty_dir = Path("./thirdparty").resolve()
