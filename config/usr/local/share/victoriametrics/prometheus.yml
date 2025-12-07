@@ -19,7 +19,7 @@ scrape_configs:
     module: [icmp]
   static_configs:
     - targets:
-      - fd33:1491:4cfa:300::1
+      - fd33:1491:4cfa:500::1
       - 2620:fe::fe
       - 8.8.8.8
   relabel_configs:

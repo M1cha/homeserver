@@ -1,5 +1,5 @@
 [connection]
-id=lan_inet
+id=lan_inet_homeserver
 uuid=89ddbfe2-67d1-4cc5-8975-1d49021dcf4d
 type=vlan
 controller=brvirt
@@ -13,5 +13,5 @@ slave-type=bridge
 
 [vlan]
 flags=1
-id=300
+id=500
 parent=enp1s0
