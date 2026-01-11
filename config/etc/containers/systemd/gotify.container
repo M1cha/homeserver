@@ -4,7 +4,7 @@ After=network.target
 
 [Container]
 ContainerName=gotify
-Image=docker.io/gotify/server:2.7
+Image=docker.io/gotify/server:2.8
 AutoUpdate=registry
 Network=brvirt:host_interface_name=veth_gotify,mac=8e:cc:7e:8a:4e:10
 Secret=gotify_https_cert
