@@ -1,0 +1,13 @@
+#!/bin/bash
+
+exec podman run --rm -it \
+	--net host \
+	-v "immich_model_cache:/cache:idmap" \
+	-e MACHINE_LEARNING_PRELOAD__CLIP__TEXTUAL=ViT-B-32__openai \
+	-e MACHINE_LEARNING_PRELOAD__CLIP__VISUAL=ViT-B-32__openai \
+	-e MACHINE_LEARNING_PRELOAD__FACIAL_RECOGNITION__RECOGNITION=buffalo_l \
+	-e MACHINE_LEARNING_PRELOAD__FACIAL_RECOGNITION__DETECTION=buffalo_l \
+	-e MACHINE_LEARNING_PRELOAD__OCR__RECOGNITION=PP-OCRv5_mobile \
+	-e MACHINE_LEARNING_PRELOAD__OCR__DETECTION=PP-OCRv5_mobile \
+	ghcr.io/immich-app/immich-machine-learning:v2.4.1 \
+	python -m immich_ml
