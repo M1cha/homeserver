@@ -4,7 +4,7 @@ After=network.target
 
 [Container]
 ContainerName=victoriametrics
-Image=docker.io/victoriametrics/victoria-metrics:v1.127.0
+Image=docker.io/victoriametrics/victoria-metrics:v1.133.0
 AutoUpdate=registry
 Network=brvirt:host_interface_name=veth_vicmet
 Volume=/usr/local/share/victoriametrics:/run/media/config:ro,idmap,z
