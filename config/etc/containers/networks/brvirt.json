@@ -40,6 +40,10 @@
                "gateway": "fd33:1491:4cfa:f000::1"
           },
           {
+              "destination": "fd65:9a0c:d6e4::/64",
+               "gateway": "fd33:1491:4cfa:f000::1"
+          },
+          {
                "destination": "64:ff9b:1::/96",
                "gateway": "fd33:1491:4cfa:f000::1"
           },
