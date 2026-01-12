@@ -1,0 +1,16 @@
+#!/bin/sh
+
+set -euo pipefail
+
+source ../common/has_updates-alpine
+
+radvd_version_latest=$(git ls-remote -q https://github.com/radvd-project/radvd.git 'refs/heads/master' | awk '{ print $1 }' | xargs)
+radvd_version_installed=$(cat /etc/radvd_version || true)
+if [ "$radvd_version_latest" != "$radvd_version_installed" ]; then
+	echo "radvd can be updated from $radvd_version_installed to $radvd_version_latest" >&2
+	echo "1"
+	exit 0
+fi
+
+echo "0"
+

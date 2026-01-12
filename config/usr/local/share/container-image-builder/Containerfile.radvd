@@ -1,8 +1,9 @@
 # Since radvd didn't create a tag for a very long time, all distros ship an
 # ancient version. We need the lastest version for pref64 support.
 
-FROM docker.io/alpine:3.22 AS builder
+FROM docker.io/alpine:3.23 AS builder
 
+RUN apk upgrade --no-cache
 RUN apk add --no-cache \
 	automake \
 	autoconf \
@@ -13,16 +14,17 @@ RUN apk add --no-cache \
 	libbsd-dev \
 	linux-headers
 
-RUN git clone https://github.com/radvd-project/radvd.git -b master /opt/radvd-src
-RUN git -C /opt/radvd-src rev-parse HEAD > /etc/software-versions
-RUN cd /opt/radvd-src && ./autogen.sh && ./configure && make -j1
+COPY . /opt/builder
+RUN /opt/builder/radvd/download-latest
 
-FROM docker.io/alpine:3.22
+RUN cd /opt/radvd-src && ./autogen.sh && ./configure && make -j1
+RUN git -C /opt/radvd-src rev-parse HEAD > /etc/radvd_version
+
+FROM docker.io/alpine:3.23
 
 COPY --from=builder /opt/radvd-src/radvd /usr/local/bin/
-COPY --from=builder /etc/software-versions /etc/
+COPY --from=builder /etc/radvd_version /etc/
 
+RUN apk upgrade --no-cache
 RUN apk add --no-cache \
 	git
-
-COPY radvd/latest-versions /usr/local/bin/

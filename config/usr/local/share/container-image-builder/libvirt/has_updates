@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -euo pipefail
+
+source ../common/has_updates-fedora
+echo "0"

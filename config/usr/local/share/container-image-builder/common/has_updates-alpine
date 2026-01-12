@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -euo pipefail
+
+apk update --quiet
+
+updates=$(apk version --limit '<' --quiet)
+if [ "$updates" != "" ]; then
+	echo "alpine updates available: $updates" >&2
+	echo "1"
+	exit 0
+fi

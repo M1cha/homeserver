@@ -1,5 +1,0 @@
-#!/bin/sh
-
-set -euo pipefail
-
-git ls-remote -q https://github.com/radvd-project/radvd.git 'refs/heads/master' | awk '{ print $1 }' | xargs

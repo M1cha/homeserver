@@ -22,6 +22,7 @@ RUN \
 	>> /etc/apt/sources.list.d/mongodb-org-8.0.list
 
 RUN apt update
+RUN apt upgrade -y
 RUN apt install unifi -y
 
 # from /usr/lib/systemd/system/unifi.service
@@ -29,5 +30,3 @@ ENV UNIFI_CORE_ENABLED=false
 ENV UNIFI_MONGODB_SERVICE_ENABLED=false
 ENV UNIFI_JVM_OPTS="-Xmx1024M -XX:+UseParallelGC"
 WORKDIR /usr/lib/unifi
-
-RUN apt list --installed > /etc/software-versions

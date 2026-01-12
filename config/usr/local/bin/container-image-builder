@@ -2,32 +2,93 @@
 
 set -euo pipefail
 
-name="$1"
-tag="localhost/$name:latest"
-containerfile="/usr/local/share/container-image-builder/Containerfile.$name"
+log() {
+	echo "====>" "$@" >&2
+}
 
-versions_old=$(podman run --rm "$tag" cat /etc/software-versions || true)
+update_image() {
+	local name="$1"
+	local tag="localhost/$name:latest"
+	local containerfile="/usr/local/share/container-image-builder/Containerfile.$name"
+	local do_update=false
+	local result
+	local containerfile_sha512=$(sha512sum "$containerfile" | awk '{print $1}')
 
-versions_latest=$(podman run --rm --net host "$tag" /usr/local/bin/latest-versions || true)
-if [ -n "$versions_latest" ] && [ "$versions_latest" = "$versions_old" ]; then
-	echo "latest-versions already reports: $versions_latest"
-	exit 0
-fi
+	local base_image_sha512
+	base_image_sha512=$(podman image inspect \
+		--format '{{ index .Labels "container_image_builder.containerfile_sha512" }}' \
+		"$tag" \
+		|| true \
+	)
 
-podman build \
-	--no-cache \
-	--pull=always \
-	--iidfile="/tmp/iid.$name" \
-	--net=host \
-	-f "$containerfile" \
-	/usr/local/share/container-image-builder
+	if [ "$base_image_sha512" != "$containerfile_sha512" ]; then
+		log "Containerfile of $name changed"
+		do_update=true
+	fi
 
-iid_new=$(cat "/tmp/iid.$name")
-versions_new=$(podman run --rm "$iid_new" cat /etc/software-versions)
+	if [ "$do_update" = false ]; then
+		result=$(podman run \
+			--rm \
+			--net host \
+			--userns auto:size=65536 \
+			-v /usr/local/share/container-image-builder:/usr/local/share/container-image-builder:ro \
+			-w "/usr/local/share/container-image-builder/$name" \
+			"$tag" \
+			"/usr/local/share/container-image-builder/$name/has_updates" \
+		)
+		if [ "$result" == "1" ]; then
+			log "$name has updates available"
+			do_update=true
+		elif [ "$result" == "0" ]; then
+			true
+		else
+			log "$name's has_updates returned unsupported result: $result"
+			return 1
+		fi
+	fi
 
-if [ "$versions_old" != "$versions_new" ]; then
-	echo "update image"
+	if [ "$do_update" = false ]; then
+		log "no update needed"
+		return 0
+	fi
+
+	log "$name needs an update"
+
+	if ! podman build \
+		--no-cache \
+		--pull=always \
+		--iidfile="/tmp/iid.$name" \
+		--net=host \
+		-f "$containerfile" \
+		--label container_image_builder.containerfile_sha512="$containerfile_sha512" \
+		/usr/local/share/container-image-builder; then
+		return 1
+	fi
+
+	local iid_new
+	iid_new=$(cat "/tmp/iid.$name")
+
+	log "update image"
 	podman tag "$iid_new" "$tag"
-else
-	echo "no update needed"
+
+	return 0
+}
+
+failed=()
+
+while IFS= read -rd '' path; do
+	filename=$(basename "$path")
+	extension="${filename##*.}"
+
+	log "Build $extension"
+
+	if ! update_image "$extension"; then
+		log "failed to build $extension"
+		failed+=("$extension")
+	fi
+done < <(find /usr/local/share/container-image-builder -name 'Containerfile.*' -mindepth 1 -maxdepth 1 -print0)
+
+if [ ${#failed[@]} -ne 0 ]; then
+	log "some containers failed to update: " "${failed[@]}"
+	exit 1
 fi

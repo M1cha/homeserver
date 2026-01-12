@@ -1,0 +1,5 @@
+#!/bin/sh
+
+set -euo pipefail
+
+git clone https://github.com/radvd-project/radvd.git -b master /opt/radvd-src

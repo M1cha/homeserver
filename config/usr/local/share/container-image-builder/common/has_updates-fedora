@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -euo pipefail
+
+if ! dnf check-update > /dev/null; then
+	echo "dnf updates available" >&2
+	echo "1"
+	exit 0
+fi

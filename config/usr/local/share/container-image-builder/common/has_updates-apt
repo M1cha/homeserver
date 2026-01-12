@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -euo pipefail
+
+export DEBIAN_FRONTEND=noninteractive
+apt update >&2
+
+updates=$(apt list --upgradable)
+if [ "$updates" != "Listing..." ]; then
+	echo "apt updates available: $updates" >&2
+	echo "1"
+	exit 0
+fi

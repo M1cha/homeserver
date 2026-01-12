@@ -73,9 +73,7 @@ install() {
 	systemctl daemon-reload
 	nmcli connection reload
 	systemctl enable --now \
-		container-image-builder@homeserver-universal.timer \
-		container-image-builder@jool.timer \
-		container-image-builder@radvd.timer \
+		container-image-builder.timer \
 		gitmirror.timer \
 		googledrive-backup.timer \
 		hdparm.service \

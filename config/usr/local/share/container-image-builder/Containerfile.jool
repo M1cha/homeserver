@@ -1,8 +1,7 @@
-FROM docker.io/alpine:3.22
+FROM docker.io/alpine:3.23
 
+RUN apk upgrade --no-cache
 RUN apk add --no-cache \
 	bash \
 	iproute2 \
 	jool-tools
-
-RUN apk list --installed > /etc/software-versions
