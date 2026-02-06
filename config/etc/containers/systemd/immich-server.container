@@ -5,7 +5,7 @@ Requires=immich-redis.service immich-database.service
 
 [Container]
 ContainerName=immich-server
-Image=ghcr.io/immich-app/immich-server:v2.4.1
+Image=ghcr.io/immich-app/immich-server:v2.5.3
 Network=brvirt:host_interface_name=veth_immich
 EnvironmentFile=/usr/local/share/immich/env
 Volume=immich_upload:/usr/src/app/upload:idmap
