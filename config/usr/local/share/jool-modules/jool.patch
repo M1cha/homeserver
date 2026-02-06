@@ -1,0 +1,44 @@
+diff --git a/src/mod/common/db/pool4/db.c b/src/mod/common/db/pool4/db.c
+index 1db470c1..7bdd98ac 100644
+--- a/src/mod/common/db/pool4/db.c
++++ b/src/mod/common/db/pool4/db.c
+@@ -534,7 +534,7 @@ static int add_to_addr_tree(struct pool4 *pool,
+ static int
+ get_min_eph(struct local_ports *ports)
+ {
+-#if LINUX_VERSION_AT_LEAST(6, 8, 0, 9999, 9)
++#if LINUX_VERSION_AT_LEAST(6, 8, 0, 10, 99)
+ 	return ports->range & 0xFFFFu;
+ #else
+ 	return ports->range[0];
+@@ -544,7 +544,7 @@ get_min_eph(struct local_ports *ports)
+ static int
+ get_max_eph(struct local_ports *ports)
+ {
+-#if LINUX_VERSION_AT_LEAST(6, 8, 0, 9999, 9)
++#if LINUX_VERSION_AT_LEAST(6, 8, 0, 10, 99)
+ 	return (ports->range >> 16u) & 0xFFFFu;
+ #else
+ 	return ports->range[1];
+diff --git a/src/mod/common/rfc7915/6to4.c b/src/mod/common/rfc7915/6to4.c
+index fb18db6a..88abe346 100644
+--- a/src/mod/common/rfc7915/6to4.c
++++ b/src/mod/common/rfc7915/6to4.c
+@@ -203,7 +203,7 @@ static verdict compute_flowix64(struct xlation *state)
+ 	hdr6 = pkt_ip6_hdr(&state->in);
+ 
+ 	flow4->flowi4_mark = state->in.skb->mark;
+-#if LINUX_VERSION_AT_LEAST(6, 18, 0, 9999, 0)
++#if LINUX_VERSION_AT_LEAST(6, 18, 0, 10, 99)
+ 	flow4->flowi4_dscp = xlat_tos(&state->jool.globals, hdr6);
+ #else
+ 	flow4->flowi4_tos = xlat_tos(&state->jool.globals, hdr6);
+@@ -649,7 +649,7 @@ static verdict ttp64_ipv4_external(struct xlation *state)
+ 
+ 	hdr4->version = 4;
+ 	hdr4->ihl = 5;
+-#if LINUX_VERSION_AT_LEAST(6, 18, 0, 9999, 0)
++#if LINUX_VERSION_AT_LEAST(6, 18, 0, 10, 99)
+ 	hdr4->tos = flow4->flowi4_dscp;
+ #else
+ 	hdr4->tos = flow4->flowi4_tos;

@@ -14,6 +14,7 @@ ContainerName=jool-modules
 Image=docker.io/fedora:%w
 AutoUpdate=registry
 Volume=/var/cache/jool-modules:/run/media/jool-modules:idmap,z
+Volume=/usr/local/share/jool-modules:/run/media/jool:idmap,z,ro
 Volume=/usr/local/share/jool-modules/entrypoint:/entrypoint:idmap,z,ro
 Exec=/entrypoint
 Network=host
