@@ -1,0 +1,22 @@
+[Unit]
+Description=webdav media share
+After=network.target run-media-archive.mount
+Requires=run-media-archive.mount
+
+[Container]
+ContainerName=share-media-webdav
+Image=docker.io/httpd:2.4-alpine
+AutoUpdate=registry
+Network=brvirt:host_interface_name=veth_webdavmed,ip6=fd33:1491:4cfa:f000::800a,ip=10.92.1.204
+SecurityLabelDisable=true
+Volume=/usr/local/share/share-media-webdav/httpd.conf:/usr/local/apache2/conf/httpd.conf:ro,idmap,z
+Volume=/usr/local/share/share-media-webdav/httpd-dav.conf:/usr/local/apache2/conf/extra/httpd-dav.conf:ro,idmap,z
+Volume=/run/media/media:/usr/local/apache2/uploads/media:ro,idmap
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
