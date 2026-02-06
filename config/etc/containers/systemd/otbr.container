@@ -5,7 +5,7 @@ After=dev-serial-by\x2did-usb\x2dNordic_Semiconductor_ASA_OpenThread_CoProcessor
 
 [Container]
 ContainerName=otbr
-Image=docker.io/homeassistant/amd64-addon-otbr:latest
+Image=docker.io/homeassistant/amd64-addon-otbr:2.15.3
 AutoUpdate=registry
 Network=brthread:host_interface_name=veth_otbr,ip6=fd33:1491:4cfa:f002::8000
 AddCapability=NET_ADMIN,NET_RAW
