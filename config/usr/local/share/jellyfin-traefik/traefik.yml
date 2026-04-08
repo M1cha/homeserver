@@ -9,6 +9,8 @@ certificatesResolvers:
       storage: /run/storage/acme.json
       dnsChallenge:
         provider: cloudflare
+        resolvers:
+        - "[2606:4700:4700::1111]:53"
 
 providers:
   file:
