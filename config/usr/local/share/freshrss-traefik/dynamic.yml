@@ -1,0 +1,19 @@
+tls:
+  certificates:
+    - certFile: /run/secrets/freshrss_https_cert
+      keyFile: /run/secrets/freshrss_https_key
+
+http:
+  routers:
+    router0:
+      entryPoints:
+        - websecure
+      service: service-freshrss
+      rule: Host(`freshrss.home.arpa`)
+      tls: {}
+
+  services:
+    service-freshrss:
+      loadBalancer:
+        servers:
+          - url: http://freshrss:80/
