@@ -5,6 +5,7 @@ After=network.target
 [Container]
 ContainerName=freshrss-database
 Image=docker.io/postgres:18
+AutoUpdate=registry
 Network=brvirt:host_interface_name=veth_frss_db
 Volume=freshrss_database:/var/lib/postgresql:idmap
 Environment=POSTGRES_DB=freshrss
