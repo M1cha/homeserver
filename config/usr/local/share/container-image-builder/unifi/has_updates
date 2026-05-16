@@ -2,5 +2,5 @@
 
 set -euo pipefail
 
-source ../common/has_updates-apt
+#source ../common/has_updates-apt
 echo "0"
