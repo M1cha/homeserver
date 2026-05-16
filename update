@@ -2,9 +2,6 @@
 
 from pathlib import Path, PurePath
 import subprocess
-import re
-import ipaddress
-import io
 
 
 class Target:
