@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+export BUILDAH_LAYERS=false
+
 log() {
 	echo "====>" "$@" >&2
 }
