@@ -13,7 +13,8 @@ Exec=-storageDataPath=/storage \
      -enableTCP6 \
      -httpListenAddr=:8428 \
      -usePromCompatibleNaming \
-     -promscrape.config=/run/media/config/prometheus.yml
+     -promscrape.config=/run/media/config/prometheus.yml \
+     -retentionPeriod=100y
 
 [Service]
 Restart=always
