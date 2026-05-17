@@ -78,3 +78,41 @@ update-ca-trust
 ./update
 ```
 
+## Manual Updates
+
+### Updates on reboot
+
+These use container images which are built and updated locally, but don't cause
+a service restart to prevent interruption. A reboot of the OS or specific
+containers will cause them to use the new image though.
+
+- libvirt
+
+### Manual image pull
+
+These use public images but aren't auto updated, to prevent breaking changes to
+interrupt the services that use them.
+
+- homeassistant
+- immich-*
+- zigbee2mqtt
+
+### Manual image version change
+
+These pin a version in the container file and auto update from the registry.
+This allows receiving security updates without causing breaking changes.
+
+- bitwarden
+- emqx
+- gotify
+- otbr
+- share-media-webdav
+- victoriametrics
+
+### Manual code and image update
+
+The are tools I maintain myself and need to be updated and built on their
+GitHub repositories.
+
+- restic-backup-1
+- gitmirror
