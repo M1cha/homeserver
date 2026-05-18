@@ -12,6 +12,9 @@ RUN apk add --no-cache \
     netcat-openbsd \
     openssh-client \
     openssh-server \
+    python3 \
+    py3-fsspec \
+    py3-requests \
     rclone \
     restic \
     samba \

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -euo pipefail
+
+image_tar="/var/lib/containers/storage/volumes/uosserver_image/_data/image.tar"
+
+podman load --input "$image_tar"
+image_name=$(tar -Oxf "$image_tar" index.json | jq -r '.manifests[0].annotations["io.containerd.image.name"]')
+
+podman tag "$image_name" localhost/uosserver:latest

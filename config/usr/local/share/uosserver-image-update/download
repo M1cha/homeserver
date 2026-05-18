@@ -1,0 +1,115 @@
+#!/usr/bin/env python3
+
+import sys
+import zipfile
+from pathlib import Path
+
+import fsspec
+import requests
+
+URL_DOWNLOADS = "https://download.svc.ui.com/v1/software-downloads"
+PATH_CACHE = Path("/run/media/cache")
+PATH_ETAG = PATH_CACHE / "last_etag"
+PATH_TAR = PATH_CACHE / "image.tar"
+PATH_DISCOVERY = PATH_CACHE / "discovery"
+
+
+def eprint(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
+
+
+def download_image_tar(url):
+    with fsspec.open(
+        url,
+        mode="rb",
+        block_size=1024 * 1024,
+    ) as f_bin:
+        with zipfile.ZipFile(f_bin, "r") as f_zip:
+            with f_zip.open("image.tar") as f_zipentry:
+                with open(PATH_TAR, "wb+") as f_out:
+                    f_out.write(f_zipentry.read())
+
+            with f_zip.open("discovery") as f_zipentry:
+                with open(PATH_DISCOVERY, "wb+") as f_out:
+                    f_out.write(f_zipentry.read())
+
+
+def get_latest_etag(url):
+    with requests.head(url) as r:
+        return r.headers.get("ETag")
+
+
+def load_etag():
+    try:
+        with PATH_ETAG.open("r") as f:
+            return f.read()
+    except FileNotFoundError:
+        return None
+
+
+def store_etag(etag):
+    with PATH_ETAG.open("w+") as f:
+        f.write(etag)
+
+
+def try_remove_file(path):
+    try:
+        path.unlink()
+    except FileNotFoundError:
+        pass
+
+
+def get_latest_download():
+    latest_download = None
+    latest_version = None
+
+    downloads = requests.get(URL_DOWNLOADS).json()["downloads"]
+    for download in downloads:
+        is_uosserver = False
+
+        if download["products"] != None:
+            for product in download["products"]:
+                if product["slug"] == "unifi-os-server":
+                    is_uosserver = True
+
+        if not is_uosserver:
+            continue
+
+        if not download["name"].endswith("Linux (x64)"):
+            continue
+
+        version = download["version"].split(".")
+        if latest_version == None or version > latest_version:
+            latest_download = download
+            latest_version = version
+
+    return latest_download
+
+
+def main():
+    download = get_latest_download()
+    eprint(f"latest download: {download["name"]}")
+    url = download["file_url"]
+
+    etag_latest = get_latest_etag(url)
+    eprint(f"latest etag: {etag_latest}")
+
+    etag_cached = load_etag()
+    eprint(f"cached etag: {etag_cached}")
+
+    tar_exists = PATH_TAR.exists()
+    eprint(f"tar exists: {tar_exists}")
+
+    if etag_latest != etag_cached or not tar_exists:
+        eprint("download image.tar")
+
+        try_remove_file(PATH_ETAG)
+        try_remove_file(PATH_TAR)
+        try_remove_file(PATH_DISCOVERY)
+
+        download_image_tar(url)
+        store_etag(etag_latest)
+
+
+if __name__ == "__main__":
+    main()
