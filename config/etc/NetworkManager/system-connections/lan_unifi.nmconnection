@@ -1,0 +1,17 @@
+[connection]
+id=lan_unifi
+uuid=594e5386-b9b2-45d6-8bd5-60744c4f36bd
+type=vlan
+controller=brunifi
+master=brunifi
+port-type=bridge
+slave-type=bridge
+
+[ethernet]
+
+[bridge-port]
+
+[vlan]
+flags=1
+id=600
+parent=enp1s0

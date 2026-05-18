@@ -1,0 +1,34 @@
+[Unit]
+Description=UniFi OS Server
+After=network.target uosserver-proxy.service
+
+[Container]
+UserNS=auto:size=65536
+PodmanArgs=--systemd=always
+ContainerName=uosserver
+Image=localhost/uosserver:latest
+AutoUpdate=local
+Network=brunifi:host_interface_name=veth_uoss,ip6=fd33:1491:4cfa:f003::8002,ip=10.93.128.2
+DNS=none
+Exec=/run/media/config/entry
+Environment=UOS_UUID=3c0bb5ed-5c07-5e28-ac16-ef7dcd4dc205
+Volume=/usr/local/share/uosserver:/run/media/config:idmap,ro,z
+Volume=uosserver_unifi:/var/lib/unifi:idmap,z
+Volume=uosserver_mongodb:/var/lib/mongodb:idmap,z
+Volume=uosserver_data:/data:idmap,z
+Volume=uosserver_persistent:/persistent:idmap,z
+Volume=uosserver_rabbitmq_ssl:/etc/rabbitmq/ssl:idmap,z
+Volume=uosserver_image:/run/media/image:idmap,ro,z
+Volume=/usr/local/share/uosserver/uosserver-discovery.service:/etc/systemd/system/uosserver-discovery.service:ro,idmap,z
+Secret=uosserver_ssl_cert
+Secret=uosserver_ssl_key
+AddCapability=NET_ADMIN
+AddCapability=NET_RAW
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

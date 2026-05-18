@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -euo pipefail
+
+export UOS_SERVER_VERSION=$(dpkg-query -W -f='${Version}' uos-agent)
+
+machine=$(uname -m)
+case $machine in
+	x86_64)
+		export FIRMWARE_PLATFORM="linux-x64"
+		;;
+	*)
+		echo "Unsupported machine: $machine" >&2
+		exit 1
+		;;
+esac
+
+cp /run/secrets/uosserver_ssl_cert /data/unifi-core/config/unifi-core.crt
+cp /run/secrets/uosserver_ssl_key /data/unifi-core/config/unifi-core.key
+
+sed -i "s/^#\?[[:space:]]*system_ip=.*/system_ip=10.93.128.3/" /var/lib/unifi/system.properties
+
+cp /run/media/image/discovery /usr/local/bin/
+chmod +x /usr/local/bin/discovery
+mkdir -p /var/lib/uosserver
+systemctl enable uosserver-discovery
+sed -i 's/host\.docker\.internal/127.0.0.1/g' /etc/default/unifi-core_advanced
+
+exec /root/uos-entrypoint.sh

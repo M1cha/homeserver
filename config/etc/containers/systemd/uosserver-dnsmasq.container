@@ -1,0 +1,24 @@
+[Unit]
+Description=uosserver DHCPv4 Server
+After=network.target
+
+[Container]
+ContainerName=uosserver-dnsmasq
+UserNS=auto
+Image=localhost/homeserver-universal:latest
+AutoUpdate=local
+Volume=/usr/local/share/uosserver-dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf:ro,idmap,z
+Exec=/usr/sbin/dnsmasq -k --pid-file --dhcp-leasefile=/var/lib/dnsmasq/dnsmasq.leases
+Volume=uosserver_dnsmasq_data:/var/lib/dnsmasq:idmap,z
+Network=brunifi:host_interface_name=veth_uoss_dnsm,ip6=fd33:1491:4cfa:f003::8003,ip=10.93.128.3
+DNS=none
+AddCapability=NET_ADMIN
+AddCapability=NET_RAW
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

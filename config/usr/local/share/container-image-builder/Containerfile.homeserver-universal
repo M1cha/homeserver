@@ -6,6 +6,7 @@ RUN apk upgrade --no-cache
 RUN apk add --no-cache \
     ca-certificates \
     curl \
+    dnsmasq \
     fuse \
     jq \
     mosquitto-clients \

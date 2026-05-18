@@ -1,0 +1,23 @@
+[connection]
+id=brunifi
+uuid=147ccd5b-5e57-4b40-820c-eb472ba55267
+type=bridge
+interface-name=brunifi
+
+[ethernet]
+
+[bridge]
+stp=false
+# Without this, ICMP6 ND doesn't work
+multicast-snooping=false
+mac-address=d6:0d:fc:8e:c1:db
+
+[ipv4]
+method=manual
+address1=10.93.0.1/16
+
+[ipv6]
+method=manual
+address1=fd33:1491:4cfa:f003::1/64
+
+[proxy]

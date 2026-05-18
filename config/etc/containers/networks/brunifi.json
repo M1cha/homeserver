@@ -1,0 +1,41 @@
+{
+     "name": "brunifi",
+     "id": "32683BD0EA90034AE96FDFC62E610079A89E4C79F91E2EFB36B13FF08EA08A17",
+     "driver": "bridge",
+     "network_interface": "brunifi",
+     "created": "2026-05-18T07:35:22.312838102Z",
+     "subnets": [
+          {
+               "subnet": "fd33:1491:4cfa:f003::/64",
+               "gateway": "fd33:1491:4cfa:f003::1",
+               "lease_range": {
+                   "start_ip": "fd33:1491:4cfa:f003::2",
+                   "end_ip": "fd33:1491:4cfa:f003::8000"
+               }
+          },
+          {
+               "subnet": "10.93.0.0/16",
+               "gateway": "10.93.0.1",
+               "lease_range": {
+                   "start_ip": "10.93.0.2",
+                   "end_ip": "10.93.127.255"
+               }
+          }
+     ],
+     "routes": [
+          {
+               "destination": "fd33:1491:4cfa::/48",
+               "gateway": "fd33:1491:4cfa:f003::1"
+          }
+     ],
+     "ipv6_enabled": true,
+     "internal": true,
+     "dns_enabled": false,
+     "options": {
+          "mode": "unmanaged",
+          "no_default_route": "true"
+     },
+     "ipam_options": {
+          "driver": "host-local"
+     }
+}

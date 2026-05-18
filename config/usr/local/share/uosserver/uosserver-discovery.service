@@ -1,0 +1,16 @@
+[Unit]
+Description=Unifi OS Discovery Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/discovery
+WorkingDirectory=/var/lib/uosserver
+Restart=on-failure
+RestartSec=10
+StartLimitInterval=60
+StartLimitBurst=3
+Environment=DISCOVERY_CLIENT_LOG_PATH=/var/lib/uosserver/logs
+
+[Install]
+WantedBy=multi-user.target
