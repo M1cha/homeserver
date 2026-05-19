@@ -1,6 +1,0 @@
-#!/bin/bash
-
-set -euo pipefail
-
-#source ../common/has_updates-apt
-echo "0"
