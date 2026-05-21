@@ -3,7 +3,6 @@
 set -euo pipefail
 
 pci_device="0000:01:00.0"
-current_driver=$(basename $(realpath "/sys/bus/pci/devices/$pci_device/driver"))
 
 if [ -d /sys/bus/pci/drivers/r8127 ]; then
 	echo "r8127 is loaded already" >&2
@@ -16,6 +15,7 @@ else
 	echo "r8127 loaded successfully" >&2
 fi
 
+current_driver=$(basename $(realpath "/sys/bus/pci/devices/$pci_device/driver"))
 if [ "$current_driver" == "r8127" ]; then
 	echo "r8127 is the devices driver already" >&2
 	exit 0
