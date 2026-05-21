@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -euo pipefail
+
+update-ca-certificates
+
+ln -s /home/mailrise/.local /root/.local
+exec mailrise -vv /etc/mailrise.conf

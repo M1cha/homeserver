@@ -42,11 +42,9 @@ Environment=BW_SSL_KEY=../../run/secrets/bitwarden_https_key
 
 # Mail
 Environment=globalSettings__mail__replyToEmail=noreply@bitwarden.home.arpa
-Environment=globalSettings__mail__smtp__host=mailhog
-Environment=globalSettings__mail__smtp__port=1025
+Environment=globalSettings__mail__smtp__host=mailrise
+Environment=globalSettings__mail__smtp__port=8025
 Environment=globalSettings__mail__smtp__ssl=false
-Environment=globalSettings__mail__smtp__username=test
-Environment=globalSettings__mail__smtp__password=test
 
 # Other
 Environment=globalSettings__disableUserRegistration=true

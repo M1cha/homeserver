@@ -1,6 +1,3 @@
-FROM docker.io/golang:1.26-alpine AS golang
-RUN go install github.com/mailhog/mailhog@e6fa06877ef61ea82bbef234d94bdc75cca478d1
-
 FROM docker.io/alpine:3.23
 RUN apk upgrade --no-cache
 RUN apk add --no-cache \
@@ -21,4 +18,3 @@ RUN apk add --no-cache \
     samba \
     socat \
     tzdata
-COPY --from=golang /go/bin/mailhog /usr/local/bin/
