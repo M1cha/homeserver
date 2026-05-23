@@ -10,7 +10,7 @@
                "gateway": "fd33:1491:4cfa:f003::1",
                "lease_range": {
                    "start_ip": "fd33:1491:4cfa:f003::2",
-                   "end_ip": "fd33:1491:4cfa:f003::8000"
+                   "end_ip": "fd33:1491:4cfa:f003::7fff"
                }
           },
           {
