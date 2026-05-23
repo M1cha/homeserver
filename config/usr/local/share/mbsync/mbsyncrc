@@ -1,0 +1,32 @@
+# Global Options
+SyncState /run/media/mbsync/state
+
+# IMAP4 Account
+IMAPAccount gmail
+Host imap.gmail.com
+UserCmd "cat /run/secrets/mbsync_gmail_user"
+PassCmd "cat /run/secrets/mbsync_gmail_password"
+AuthMechs LOGIN
+TLSType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+# Maildir Store
+MaildirStore gmail-local
+Inbox /run/media/mbsync/mail/INBOX
+SubFolders Verbatim
+Path /run/media/mbsync/mail/
+
+# IMAP Store
+IMAPStore gmail-remote
+Account gmail
+
+# Channel
+Channel gmail
+Far :gmail-remote:
+Near :gmail-local:
+Patterns *
+Sync Pull
+Create Near
+Remove Near
+Expunge None
+CopyArrivalDate yes

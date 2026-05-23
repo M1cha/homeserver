@@ -1,0 +1,17 @@
+[Unit]
+Description=mbsync
+After=network.target
+
+[Container]
+ContainerName=mbsync
+Image=localhost/homeserver-universal:latest
+AutoUpdate=local
+Network=brvirt:host_interface_name=veth_mbsync
+DNS=none
+Volume=/usr/local/share/resolv-inet.conf:/etc/resolv.conf:ro,idmap,z
+Exec=mbsync -c /run/media/config/mbsyncrc --verbose -a
+Secret=mbsync_gmail_user
+Secret=mbsync_gmail_password
+
+Volume=/usr/local/share/mbsync:/run/media/config:ro,idmap,z
+Volume=mbsync:/run/media/mbsync:idmap,z

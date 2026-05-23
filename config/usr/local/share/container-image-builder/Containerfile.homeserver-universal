@@ -5,6 +5,7 @@ RUN apk add --no-cache \
     curl \
     dnsmasq \
     fuse \
+    isync \
     jq \
     mosquitto-clients \
     netcat-openbsd \
