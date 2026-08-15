@@ -9,5 +9,5 @@ exec podman run --rm -it \
 	-e MACHINE_LEARNING_PRELOAD__FACIAL_RECOGNITION__DETECTION=buffalo_l \
 	-e MACHINE_LEARNING_PRELOAD__OCR__RECOGNITION=PP-OCRv5_mobile \
 	-e MACHINE_LEARNING_PRELOAD__OCR__DETECTION=PP-OCRv5_mobile \
-	ghcr.io/immich-app/immich-machine-learning:v2.4.1 \
+	ghcr.io/immich-app/immich-machine-learning:v3.1.0 \
 	python -m immich_ml
