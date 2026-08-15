@@ -78,6 +78,7 @@ install() {
 		googledrive-backup.timer \
 		hdparm.service \
 		podman-auto-update.timer \
+		mbsync.timer \
 		netavark-dhcp-proxy.socket \
 		nftables.service \
 		prometheus-node-exporter.service \
