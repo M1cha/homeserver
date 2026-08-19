@@ -14,5 +14,5 @@ UserNS=auto
 ContainerName=uosserver-image-update
 Image=localhost/homeserver-universal:latest
 Volume=uosserver_image:/run/media/cache:idmap,z
-Volume=/usr/local/share/uosserver-image-update:/run/media/config:idmap,ro
+Volume=/usr/local/share/uosserver-image-update/download:/run/media/config/download:idmap,ro
 Exec=/run/media/config/download
