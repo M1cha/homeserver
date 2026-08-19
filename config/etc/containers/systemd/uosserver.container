@@ -12,6 +12,9 @@ Network=brunifi:host_interface_name=veth_uoss,ip6=fd33:1491:4cfa:f003::8002,ip=1
 DNS=none
 Exec=/run/media/config/entry
 Environment=UOS_UUID=3c0bb5ed-5c07-5e28-ac16-ef7dcd4dc205
+Environment=PRODUCT_NAME=uosserver
+Environment=APP_VERSION=5.1.21
+Environment=APP_MODEL=UOSSERVER
 Volume=/usr/local/share/uosserver:/run/media/config:idmap,ro,z
 Volume=uosserver_unifi:/var/lib/unifi:idmap,z
 Volume=uosserver_mongodb:/var/lib/mongodb:idmap,z

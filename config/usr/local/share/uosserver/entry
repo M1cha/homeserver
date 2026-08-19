@@ -2,8 +2,6 @@
 
 set -euo pipefail
 
-export UOS_SERVER_VERSION=$(dpkg-query -W -f='${Version}' uos-agent)
-
 machine=$(uname -m)
 case $machine in
 	x86_64)
