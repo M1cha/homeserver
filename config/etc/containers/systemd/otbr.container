@@ -1,6 +1,5 @@
 [Unit]
 Description=OpenThread Border Router
-BindsTo=dev-serial-by\x2did-usb\x2dNordic_Semiconductor_ASA_OpenThread_CoProcessor_3804D0A373C4BD19\x2dif00.device
 After=dev-serial-by\x2did-usb\x2dNordic_Semiconductor_ASA_OpenThread_CoProcessor_3804D0A373C4BD19\x2dif00.device network.target
 
 [Container]
@@ -16,10 +15,12 @@ AddDevice=/dev/serial/by-id/usb-Nordic_Semiconductor_ASA_OpenThread_CoProcessor_
 Volume=otbr_data:/var/lib/thread:idmap,z
 Volume=/usr/local/share/otbr:/run/media/config:ro,idmap,z
 Entrypoint=/run/media/config/run
+HealthCmd=timeout 1s curl http://localhost:8081
+HealthOnFailure=kill
 
 [Service]
 Restart=always
 RestartSec=10
 
 [Install]
-WantedBy=dev-serial-by\x2did-usb\x2dNordic_Semiconductor_ASA_OpenThread_CoProcessor_3804D0A373C4BD19\x2dif00.device multi-user.target
+WantedBy=multi-user.target
