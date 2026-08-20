@@ -28,8 +28,9 @@ ip6tables -A $otbr_forward_egress_chain -j ACCEPT
 
 ip6tables -A INPUT -i "$thread_if" -p tcp --dport 8081 -j DROP
 
-/usr/sbin/mdnsd -debug &
-sleep 2
+ln -sf "/opt/otbr-stable/sbin/otbr-agent" /usr/sbin/otbr-agent
+ln -sf "/opt/otbr-stable/sbin/otbr-web" /usr/sbin/otbr-web
+ln -sf "/opt/otbr-stable/sbin/ot-ctl" /usr/sbin/ot-ctl
 
 exec otbr-agent \
 	-v \
