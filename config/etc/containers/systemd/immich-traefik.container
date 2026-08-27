@@ -13,6 +13,8 @@ Volume=/usr/local/share/immich-traefik:/etc/traefik:ro,idmap,z
 Volume=immich_traefik:/run/storage:idmap,z,nocopy
 Secret=immich_traefik_cf_dns_api_token,type=env,target=CF_DNS_API_TOKEN
 Secret=immich_traefik_cf_zone_api_token,type=env,target=CF_ZONE_API_TOKEN
+Secret=immich_https_cert
+Secret=immich_https_key
 
 [Service]
 Restart=always
