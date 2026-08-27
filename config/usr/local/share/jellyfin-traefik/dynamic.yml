@@ -1,12 +1,24 @@
+tls:
+  certificates:
+    - certFile: /run/secrets/jellyfin_https_cert
+      keyFile: /run/secrets/jellyfin_https_key
+
 http:
   routers:
-    router0:
+    router-mzimmermanninfo:
       entryPoints:
         - websecure
       service: service-jellyfin
       rule: Host(`jellyfin.mzimmermann.info`)
       tls:
         certResolver: myresolver
+
+    router-homearpa:
+      entryPoints:
+        - websecure
+      service: service-jellyfin
+      rule: Host(`jellyfin.home.arpa`)
+      tls: {}
 
   services:
     service-jellyfin:

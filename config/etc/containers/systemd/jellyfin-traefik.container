@@ -13,6 +13,8 @@ Volume=/usr/local/share/jellyfin-traefik:/etc/traefik:ro,idmap,z
 Volume=jellyfin_traefik:/run/storage:idmap,z,nocopy
 Secret=jellyfin_traefik_cf_dns_api_token,type=env,target=CF_DNS_API_TOKEN
 Secret=jellyfin_traefik_cf_zone_api_token,type=env,target=CF_ZONE_API_TOKEN
+Secret=jellyfin_https_cert
+Secret=jellyfin_https_key
 
 [Service]
 Restart=always
