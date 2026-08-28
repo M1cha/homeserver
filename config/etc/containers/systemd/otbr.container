@@ -21,6 +21,7 @@ HealthOnFailure=kill
 [Service]
 Restart=always
 RestartSec=10
+LogNamespace=volatile
 
 [Install]
 WantedBy=multi-user.target

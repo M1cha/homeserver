@@ -61,6 +61,7 @@ install() {
 	tmp2sys etc/udev/rules.d --delete
 	tmp2sys etc/pki/ca-trust/source/anchors --delete
 	tmp2sys usr/local/bin --delete
+	tmp2sys usr/local/lib --delete
 	tmp2sys usr/local/share --delete
 
 	# This is needed for forwarding devices to containers.
