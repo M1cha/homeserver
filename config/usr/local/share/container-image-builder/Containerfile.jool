@@ -1,4 +1,4 @@
-FROM docker.io/alpine:3.23
+FROM docker.io/alpine:3.24
 
 RUN apk upgrade --no-cache
 RUN apk add --no-cache \
