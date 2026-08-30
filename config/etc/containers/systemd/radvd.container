@@ -7,7 +7,7 @@ ContainerName=radvd
 Image=localhost/radvd:latest
 AutoUpdate=local
 Volume=/usr/local/share/radvd/radvd.conf:/etc/radvd.conf:ro,idmap,z
-Exec=radvd --nodaemon
+Exec=radvd --nodaemon --pidfile=/run/radvd.pid
 Network=host
 AddCapability=NET_ADMIN,NET_RAW,SYS_ADMIN
 UserNS=host

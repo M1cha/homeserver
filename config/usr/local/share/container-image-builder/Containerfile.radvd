@@ -1,30 +1,5 @@
-# Since radvd didn't create a tag for a very long time, all distros ship an
-# ancient version. We need the lastest version for pref64 support.
-
-FROM docker.io/alpine:3.24 AS builder
-
-RUN apk upgrade --no-cache
-RUN apk add --no-cache \
-	automake \
-	autoconf \
-	bison \
-	build-base \
-	flex \
-	git \
-	libbsd-dev \
-	linux-headers
-
-COPY . /opt/builder
-RUN /opt/builder/radvd/download-latest
-
-RUN cd /opt/radvd-src && ./autogen.sh && ./configure && make -j1
-RUN git -C /opt/radvd-src rev-parse HEAD > /etc/radvd_version
-
 FROM docker.io/alpine:3.24
 
-COPY --from=builder /opt/radvd-src/radvd /usr/local/bin/
-COPY --from=builder /etc/radvd_version /etc/
-
 RUN apk upgrade --no-cache
 RUN apk add --no-cache \
-	git
+	radvd
