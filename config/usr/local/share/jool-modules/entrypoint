@@ -18,6 +18,7 @@ git clone https://github.com/NICMx/Jool.git -b v4.1.15 /opt/jool
 
 pushd /opt/jool
 patch -p1 < /run/media/jool/jool.patch
+patch -p1 < /run/media/jool/47a8c7426f08e50505e69eef7ff607a04fbab52e.patch
 popd
 
 make -C "/usr/src/kernels/$kernel_revision" M=/opt/jool/src/mod/common modules
