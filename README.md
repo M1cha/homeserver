@@ -109,6 +109,14 @@ This allows receiving security updates without causing breaking changes.
 - share-media-webdav
 - victoriametrics
 
+### Manual Containerfile update
+
+These are images I build locally, which fix base image or source code versions.
+
+- jool
+- libvirt
+- radvd
+
 ### Manual code and image update
 
 The are tools I maintain myself and need to be updated and built on their
