@@ -8,6 +8,7 @@ Image=docker.io/library/nginx:latest
 AutoUpdate=registry
 Network=brvirt:host_interface_name=veth_zbotapx,mac=8e:cc:7e:8a:4e:12
 DNS=none
+Volume=/usr/local/share/resolv-inet.conf:/etc/resolv.conf:ro,idmap,z
 Volume=/usr/local/share/zigbee-ota-proxy/default.conf:/etc/nginx/conf.d/default.conf:ro,idmap,z
 
 [Service]
