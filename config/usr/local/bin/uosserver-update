@@ -19,8 +19,10 @@ if [ "${container:-}" != "podman" ]; then
 		localhost/uosserver:latest
 fi
 
-export UOS_SERVER_VERSION=$(dpkg-query -W -f='${Version}' uos-agent)
-echo "UOSSERVER.0000000.$UOS_SERVER_VERSION.0000000.000000.0000" > /usr/lib/version
+export PRODUCT_NAME="UniFi OS Server"
+export APP_VERSION=5.1.42
+export APP_MODEL=UOSSERVER
+echo "$APP_MODEL.0000000.$APP_VERSION.0000000.000000.0000" > /usr/lib/version
 
 echo -e '#!/bin/sh\nshift 1; exec "$@"' > /usr/bin/systemd-cat
 
