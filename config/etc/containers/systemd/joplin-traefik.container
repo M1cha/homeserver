@@ -1,0 +1,20 @@
+[Unit]
+Description=joplin traefik
+After=network.target joplin-server.service
+
+[Container]
+ContainerName=joplin
+Image=docker.io/traefik:latest
+AutoUpdate=registry
+Network=brvirt:host_interface_name=veth_joplin_prx
+Volume=/usr/local/share/joplin-traefik:/etc/traefik:ro,idmap,z
+Secret=joplin_https_key
+Secret=joplin_https_cert
+
+[Service]
+Restart=always
+RestartMode=direct
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
